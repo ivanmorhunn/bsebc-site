@@ -35,6 +35,44 @@ body {
 body.no-scroll { overflow: hidden; }
 body.page-enter { opacity: 0; transform: translateY(6px); }
 body.page-leave { opacity: 0; transform: translateY(6px); }
+
+/* Language transition (RU ↔ EN) */
+.lang-fade-target {
+  transition: opacity 190ms ease, transform 240ms ease, filter 240ms ease;
+  will-change: opacity, transform, filter;
+}
+body.lang-switching:not(.lang-lettering) .lang-fade-target {
+  opacity: 0;
+  transform: translateY(6px);
+  filter: blur(1.5px);
+}
+
+/* Per-letter replacement animation (used on lang switch) */
+.letter-swap {
+  display: inline-block;
+  white-space: pre-wrap;
+}
+.letter-swap > span {
+  display: inline-block;
+  transition:
+    transform 520ms cubic-bezier(.2,.9,.2,1),
+    opacity 420ms ease,
+    filter 520ms ease;
+  will-change: transform, opacity, filter;
+}
+.letter-swap.is-out > span {
+  opacity: 0;
+  transform:
+    translate(calc(var(--dx, 0px)), calc(var(--dy, -12px)))
+    rotate(var(--rot, -10deg))
+    scale(0.92);
+  filter: blur(3px);
+}
+.letter-swap.is-in > span {
+  opacity: 1;
+  transform: translateY(0) rotate(0deg);
+  filter: blur(0);
+}
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 

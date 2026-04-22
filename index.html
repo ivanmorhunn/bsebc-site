@@ -58,7 +58,7 @@
 </nav>
 
 <!-- HERO -->
-<section id="hero">
+<section id="hero" class="lang-fade-target">
   <div class="hero-bg" id="hero-bg"></div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
@@ -80,19 +80,19 @@
   </div>
 </section>
 
-<div class="gold-rule"></div>
+<div class="gold-rule lang-fade-target"></div>
 
 <!-- SCHEDULE -->
-<section id="schedule">
+<section id="schedule" class="lang-fade-target">
   <div class="sec-label"><span id="sch-label"></span></div>
   <h2 class="sec-title reveal" id="sch-heading"></h2>
   <div class="schedule-grid" id="schedule-grid"></div>
 </section>
 
-<div class="gold-rule"></div>
+<div class="gold-rule lang-fade-target"></div>
 
 <!-- VERSE BANNER -->
-<section id="verse">
+<section id="verse" class="lang-fade-target">
   <svg class="verse-rings" viewBox="0 0 520 520" fill="none" preserveAspectRatio="xMidYMid meet">
     <circle cx="260" cy="260" r="250" stroke="#B8913A" stroke-width="0.7"/>
     <circle cx="260" cy="260" r="210" stroke="#B8913A" stroke-width="0.5" stroke-dasharray="4 10"/>
@@ -108,16 +108,16 @@
 </section>
 
 <!-- ARCHIVE -->
-<section id="archive">
+<section id="archive" class="lang-fade-target">
   <div class="sec-label"><span id="arc-label"></span></div>
   <h2 class="sec-title reveal" id="arc-heading"></h2>
   <div class="archive-grid reveal" id="archive-grid"></div>
 </section>
 
-<div class="gold-rule"></div>
+<div class="gold-rule lang-fade-target"></div>
 
 <!-- ABOUT -->
-<section id="about">
+<section id="about" class="lang-fade-target">
   <div class="about-left">
     <div class="sec-label"><span id="abt-label"></span></div>
     <h2 class="reveal" id="abt-heading"></h2>
@@ -135,7 +135,7 @@
 </section>
 
 <!-- GALLERY -->
-<section id="gallery">
+<section id="gallery" class="lang-fade-target">
   <div class="sec-label"><span id="gal-label"></span></div>
   <h2 class="sec-title reveal" id="gal-heading"></h2>
   <p class="gal-notice reveal" id="gal-notice"></p>
@@ -154,10 +154,10 @@
   </div>
 </section>
 
-<div class="gold-rule"></div>
+<div class="gold-rule lang-fade-target"></div>
 
 <!-- DONATE -->
-<section id="donate">
+<section id="donate" class="lang-fade-target">
   <div class="donate-left reveal">
     <div class="sec-label"><span id="don-label"></span></div>
     <h2 id="don-heading"></h2>
@@ -170,10 +170,10 @@
   </div>
 </section>
 
-<div class="gold-rule"></div>
+<div class="gold-rule lang-fade-target"></div>
 
 <!-- CONTACT -->
-<section id="contact">
+<section id="contact" class="lang-fade-target">
   <div class="contact-inner">
     <div class="contact-left reveal">
       <div class="sec-label"><span id="con-label"></span></div>
@@ -241,7 +241,7 @@
 </section>
 
 <!-- FOOTER -->
-<footer>
+<footer class="lang-fade-target">
   <div class="footer-top">
     <div class="f-brand">
       <div class="f-brand-name">
@@ -314,12 +314,152 @@ document.addEventListener('click', (e) => {
 });
 
 function setLang(l) {
-  lang = l;
-  localStorage.setItem('bsebc-lang', l);
-  document.querySelectorAll('.lang-btn').forEach(b =>
-    b.classList.toggle('active', b.dataset.lang === l));
-  document.documentElement.lang = l==='ru'?'ru':'en';
-  render();
+  if (lang === l) return;
+  if (document.body.classList.contains('lang-switching')) return;
+
+  normalizeLetterSwap();
+  const before = snapshotSimpleText();
+  document.body.classList.add('lang-switching','lang-lettering');
+  window.setTimeout(() => {
+    lang = l;
+    localStorage.setItem('bsebc-lang', l);
+    document.querySelectorAll('.lang-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.lang === l));
+    document.documentElement.lang = l==='ru'?'ru':'en';
+    render();
+    animateTextDiff(before);
+    window.setTimeout(() => {
+      document.body.classList.remove('lang-switching','lang-lettering');
+    }, 320);
+  }, 110);
+}
+
+function normalizeLetterSwap() {
+  // Ensure previous animation doesn't prevent future snapshots (e.g. EN -> RU)
+  document.querySelectorAll('.letter-swap').forEach(el => {
+    const plain = el.getAttribute('data-plain-text') || (el.textContent || '');
+    el.classList.remove('letter-swap','is-in','is-out');
+    el.removeAttribute('data-plain-text');
+    el.style.removeProperty('minWidth');
+    el.textContent = plain;
+  });
+}
+
+function snapshotSimpleText() {
+  // Only animate plain-text elements (no child elements) to avoid breaking layouts.
+  const out = new Map();
+  document.querySelectorAll('[id]').forEach(el => {
+    if (!(el instanceof HTMLElement)) return;
+    if (el.children && el.children.length) return;
+    const txt = (el.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!txt) return;
+    // Skip numerals + tiny tokens that look weird per-letter
+    if (txt.length < 3) return;
+    out.set(el.id, txt);
+  });
+  return out;
+}
+
+function animateTextDiff(before) {
+  if (!before || typeof before.get !== 'function') return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  before.forEach((oldTxt, id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.children && el.children.length) return;
+    const newTxt = (el.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!newTxt || newTxt === oldTxt) return;
+    // Avoid animating long paragraphs; keep it crisp.
+    if (newTxt.length > 140 || oldTxt.length > 140) return;
+    letterMorph(el, oldTxt, newTxt);
+  });
+}
+
+function letterMorph(el, oldText, newText) {
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    el.textContent = newText;
+    return;
+  }
+
+  const oldLetters = Array.from(String(oldText));
+  const newLetters = Array.from(String(newText));
+
+  // Keep layout stable while letters fly around
+  const w = el.getBoundingClientRect().width;
+  if (w) el.style.minWidth = `${Math.ceil(w)}px`;
+
+  el.classList.add('letter-swap');
+  el.setAttribute('data-plain-text', String(newText));
+
+  const makeSpan = (ch) => {
+    const s = document.createElement('span');
+    s.innerHTML = escapeHtml(ch === ' ' ? '\u00A0' : ch);
+    // Random-ish fly vectors
+    const dx = (Math.random() * 26 - 13).toFixed(1);
+    const dy = (Math.random() * 22 - 18).toFixed(1);
+    const rot = (Math.random() * 28 - 14).toFixed(1);
+    s.style.setProperty('--dx', `${dx}px`);
+    s.style.setProperty('--dy', `${dy}px`);
+    s.style.setProperty('--rot', `${rot}deg`);
+    return s;
+  };
+
+  // Out: render old letters
+  el.innerHTML = '';
+  oldLetters.forEach(ch => el.appendChild(makeSpan(ch)));
+  const outSpans = Array.from(el.querySelectorAll('span'));
+  outSpans.forEach((s, i) => {
+    s.style.transitionDelay = `${Math.min(160, i * 8)}ms`;
+  });
+
+  requestAnimationFrame(() => {
+    el.classList.remove('is-in');
+    el.classList.add('is-out');
+  });
+
+  // Swap to new letters and fly-in
+  window.setTimeout(() => {
+    el.classList.remove('is-out');
+    el.innerHTML = '';
+    newLetters.forEach(ch => el.appendChild(makeSpan(ch)));
+    const inSpans = Array.from(el.querySelectorAll('span'));
+    inSpans.forEach((s, i) => {
+      s.style.transitionDelay = `${Math.min(260, i * 12)}ms`;
+      // start slightly "broken apart" then settle
+      s.style.opacity = '0';
+      s.style.transform = 'translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.96)';
+      s.style.filter = 'blur(3px)';
+    });
+
+    requestAnimationFrame(() => {
+      el.classList.add('is-in');
+      inSpans.forEach(s => {
+        s.style.opacity = '';
+        s.style.transform = '';
+        s.style.filter = '';
+      });
+    });
+
+    // Cleanup back to plain text so the next toggle (back to RU) can animate too
+    window.setTimeout(() => {
+      el.classList.remove('letter-swap','is-in','is-out');
+      el.style.removeProperty('minWidth');
+      el.textContent = String(newText);
+      el.removeAttribute('data-plain-text');
+    }, 900);
+  }, 240);
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function render() {

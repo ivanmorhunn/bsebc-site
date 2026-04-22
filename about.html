@@ -245,7 +245,7 @@
 </nav>
 
 <!-- HERO -->
-<div class="about-page-hero">
+<div class="about-page-hero lang-fade-target">
   <!-- BACK -->
   <div class="back-bar">
     <a href="index.html" id="abt-back-link">← Вернуться на главную</a>
@@ -258,7 +258,7 @@
 </div>
 
 <!-- HISTORY -->
-<div class="abt-bg-white">
+<div class="abt-bg-white lang-fade-target">
   <div class="abt-section">
     <div class="sec-label"><span id="abt-hist-label">История</span></div>
     <h2 id="abt-hist-title">Наш путь в <em>Брукхейвене</em></h2>
@@ -274,7 +274,7 @@
 </div>
 
 <!-- LEADERSHIP -->
-<div class="abt-bg-parchment">
+<div class="abt-bg-parchment lang-fade-target">
   <div class="abt-section">
     <div class="sec-label"><span id="abt-lead-label">Служители</span></div>
     <h2 id="abt-lead-title">Руководство <em>церкви</em></h2>
@@ -302,7 +302,7 @@
 </div>
 
 <!-- BELIEFS ACCORDION -->
-<div class="abt-bg-white">
+<div class="abt-bg-white lang-fade-target">
   <div class="abt-section">
     <div class="sec-label"><span id="abt-beliefs-label">Вероучение</span></div>
     <h2 id="abt-beliefs-title">Во что мы <em>верим</em></h2>
@@ -423,7 +423,7 @@
 </div>
 
 <!-- CHARTER PDF -->
-<div class="abt-bg-parchment">
+<div class="abt-bg-parchment lang-fade-target">
   <div class="abt-section-wide">
     <div class="sec-label"><span id="abt-charter-label">Устав церкви</span></div>
     <h2 style="font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:400;color:var(--night);line-height:1.15;margin-bottom:0.5rem;" id="abt-charter-title">Устав <em style="font-style:italic;color:var(--gold);">BSEBC</em></h2>
@@ -445,7 +445,7 @@
 </div>
 
 <!-- FOOTER — matches index.html footer style -->
-<footer>
+<footer class="lang-fade-target">
   <div class="footer-top">
     <div class="f-brand">
       <div class="f-brand-name">
@@ -695,13 +695,142 @@ function renderAboutPage(){
 }
 
 function setLang(l) {
-  lang = l;
-  localStorage.setItem('bsebc-lang', l);
-  document.querySelectorAll('.lang-btn').forEach(b =>
-    b.classList.toggle('active', b.dataset.lang === l));
-  document.documentElement.lang = l === 'ru' ? 'ru' : 'en';
-  renderNavFooter();
-  renderAboutPage();
+  if (lang === l) return;
+  if (document.body.classList.contains('lang-switching')) return;
+
+  normalizeLetterSwap();
+  const before = snapshotSimpleText();
+  document.body.classList.add('lang-switching','lang-lettering');
+  window.setTimeout(() => {
+    lang = l;
+    localStorage.setItem('bsebc-lang', l);
+    document.querySelectorAll('.lang-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.lang === l));
+    document.documentElement.lang = l === 'ru' ? 'ru' : 'en';
+    renderNavFooter();
+    renderAboutPage();
+    animateTextDiff(before);
+    window.setTimeout(() => {
+      document.body.classList.remove('lang-switching','lang-lettering');
+    }, 320);
+  }, 110);
+}
+
+function normalizeLetterSwap() {
+  document.querySelectorAll('.letter-swap').forEach(el => {
+    const plain = el.getAttribute('data-plain-text') || (el.textContent || '');
+    el.classList.remove('letter-swap','is-in','is-out');
+    el.removeAttribute('data-plain-text');
+    el.style.removeProperty('minWidth');
+    el.textContent = plain;
+  });
+}
+
+function snapshotSimpleText() {
+  const out = new Map();
+  document.querySelectorAll('[id]').forEach(el => {
+    if (!(el instanceof HTMLElement)) return;
+    if (el.children && el.children.length) return;
+    const txt = (el.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!txt) return;
+    if (txt.length < 3) return;
+    out.set(el.id, txt);
+  });
+  return out;
+}
+
+function animateTextDiff(before) {
+  if (!before || typeof before.get !== 'function') return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  before.forEach((oldTxt, id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.children && el.children.length) return;
+    const newTxt = (el.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!newTxt || newTxt === oldTxt) return;
+    if (newTxt.length > 140 || oldTxt.length > 140) return;
+    letterMorph(el, oldTxt, newTxt);
+  });
+}
+
+function letterMorph(el, oldText, newText) {
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    el.textContent = newText;
+    return;
+  }
+
+  const oldLetters = Array.from(String(oldText));
+  const newLetters = Array.from(String(newText));
+  const w = el.getBoundingClientRect().width;
+  if (w) el.style.minWidth = `${Math.ceil(w)}px`;
+
+  el.classList.add('letter-swap');
+  el.setAttribute('data-plain-text', String(newText));
+
+  const makeSpan = (ch) => {
+    const s = document.createElement('span');
+    s.innerHTML = escapeHtml(ch === ' ' ? '\u00A0' : ch);
+    const dx = (Math.random() * 26 - 13).toFixed(1);
+    const dy = (Math.random() * 22 - 18).toFixed(1);
+    const rot = (Math.random() * 28 - 14).toFixed(1);
+    s.style.setProperty('--dx', `${dx}px`);
+    s.style.setProperty('--dy', `${dy}px`);
+    s.style.setProperty('--rot', `${rot}deg`);
+    return s;
+  };
+
+  el.innerHTML = '';
+  oldLetters.forEach(ch => el.appendChild(makeSpan(ch)));
+  const outSpans = Array.from(el.querySelectorAll('span'));
+  outSpans.forEach((s, i) => {
+    s.style.transitionDelay = `${Math.min(160, i * 8)}ms`;
+  });
+
+  requestAnimationFrame(() => {
+    el.classList.remove('is-in');
+    el.classList.add('is-out');
+  });
+
+  window.setTimeout(() => {
+    el.classList.remove('is-out');
+    el.innerHTML = '';
+    newLetters.forEach(ch => el.appendChild(makeSpan(ch)));
+    const inSpans = Array.from(el.querySelectorAll('span'));
+    inSpans.forEach((s, i) => {
+      s.style.transitionDelay = `${Math.min(260, i * 12)}ms`;
+      s.style.opacity = '0';
+      s.style.transform = 'translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.96)';
+      s.style.filter = 'blur(3px)';
+    });
+
+    requestAnimationFrame(() => {
+      el.classList.add('is-in');
+      inSpans.forEach(s => {
+        s.style.opacity = '';
+        s.style.transform = '';
+        s.style.filter = '';
+      });
+    });
+
+    window.setTimeout(() => {
+      el.classList.remove('letter-swap','is-in','is-out');
+      el.style.removeProperty('minWidth');
+      el.textContent = String(newText);
+      el.removeAttribute('data-plain-text');
+    }, 900);
+  }, 240);
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function renderNavFooter() {
