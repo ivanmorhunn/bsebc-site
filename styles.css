@@ -50,17 +50,22 @@ body.lang-switching:not(.lang-lettering) .lang-fade-target {
 /* Per-letter replacement animation (used on lang switch) */
 .letter-swap {
   display: inline-block;
-  white-space: pre-wrap;
+  white-space: normal;
 }
-.letter-swap > span {
+.letter-word {
+  display: inline-block;
+  white-space: nowrap;
+}
+.letter-swap .letter {
   display: inline-block;
   transition:
-    transform 520ms cubic-bezier(.2,.9,.2,1),
+    transform 680ms cubic-bezier(.16,1,.3,1),
     opacity 420ms ease,
     filter 520ms ease;
   will-change: transform, opacity, filter;
+  transform-origin: 50% 70%;
 }
-.letter-swap.is-out > span {
+.letter-swap.is-out .letter {
   opacity: 0;
   transform:
     translate(calc(var(--dx, 0px)), calc(var(--dy, -12px)))
@@ -68,7 +73,7 @@ body.lang-switching:not(.lang-lettering) .lang-fade-target {
     scale(0.92);
   filter: blur(3px);
 }
-.letter-swap.is-in > span {
+.letter-swap.is-in .letter {
   opacity: 1;
   transform: translateY(0) rotate(0deg);
   filter: blur(0);

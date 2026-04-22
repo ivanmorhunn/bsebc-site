@@ -373,8 +373,16 @@ function animateTextDiff(before) {
     if (!newTxt || newTxt === oldTxt) return;
     // Avoid animating long paragraphs; keep it crisp.
     if (newTxt.length > 140 || oldTxt.length > 140) return;
+    // Performance: only animate elements currently visible.
+    if (!isInViewport(el, 120)) return;
     letterMorph(el, oldTxt, newTxt);
   });
+}
+
+function isInViewport(el, pad = 0) {
+  const r = el.getBoundingClientRect();
+  const vh = window.innerHeight || document.documentElement.clientHeight || 0;
+  return r.bottom >= -pad && r.top <= vh + pad;
 }
 
 function letterMorph(el, oldText, newText) {
@@ -394,9 +402,10 @@ function letterMorph(el, oldText, newText) {
   el.classList.add('letter-swap');
   el.setAttribute('data-plain-text', String(newText));
 
-  const makeSpan = (ch) => {
+  const makeLetter = (ch) => {
     const s = document.createElement('span');
-    s.innerHTML = escapeHtml(ch === ' ' ? '\u00A0' : ch);
+    s.className = 'letter';
+    s.innerHTML = escapeHtml(ch);
     // Random-ish fly vectors
     const dx = (Math.random() * 26 - 13).toFixed(1);
     const dy = (Math.random() * 22 - 18).toFixed(1);
@@ -407,11 +416,36 @@ function letterMorph(el, oldText, newText) {
     return s;
   };
 
-  // Out: render old letters
-  el.innerHTML = '';
-  oldLetters.forEach(ch => el.appendChild(makeSpan(ch)));
-  const outSpans = Array.from(el.querySelectorAll('span'));
-  outSpans.forEach((s, i) => {
+  const renderWords = (text) => {
+    el.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    const letters = [];
+    const parts = String(text).split(/(\s+)/);
+    let letterIdx = 0;
+    parts.forEach(part => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) {
+        frag.appendChild(document.createTextNode(part));
+        return;
+      }
+      const word = document.createElement('span');
+      word.className = 'letter-word';
+      Array.from(part).forEach(ch => {
+        const letter = makeLetter(ch === ' ' ? '\u00A0' : ch);
+        word.appendChild(letter);
+        letter.style.transitionDelay = `${Math.min(260, letterIdx * 12)}ms`;
+        letters.push(letter);
+        letterIdx++;
+      });
+      frag.appendChild(word);
+    });
+    el.appendChild(frag);
+    return letters;
+  };
+
+  // Out: render old text (word-grouped so no mid-word wrapping)
+  const outLetters = renderWords(oldText);
+  outLetters.forEach((s, i) => {
     s.style.transitionDelay = `${Math.min(160, i * 8)}ms`;
   });
 
@@ -423,25 +457,23 @@ function letterMorph(el, oldText, newText) {
   // Swap to new letters and fly-in
   window.setTimeout(() => {
     el.classList.remove('is-out');
-    el.innerHTML = '';
-    newLetters.forEach(ch => el.appendChild(makeSpan(ch)));
-    const inSpans = Array.from(el.querySelectorAll('span'));
-    inSpans.forEach((s, i) => {
-      s.style.transitionDelay = `${Math.min(260, i * 12)}ms`;
+    const inSpans = renderWords(newText);
+    inSpans.forEach((s) => {
       // start slightly "broken apart" then settle
       s.style.opacity = '0';
       s.style.transform = 'translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.96)';
       s.style.filter = 'blur(3px)';
     });
 
-    requestAnimationFrame(() => {
+    // Two frames ensures the browser commits "from" styles before animating "to"
+    requestAnimationFrame(() => requestAnimationFrame(() => {
       el.classList.add('is-in');
       inSpans.forEach(s => {
-        s.style.opacity = '';
-        s.style.transform = '';
-        s.style.filter = '';
+        s.style.opacity = '1';
+        s.style.transform = 'translate(0px, 0px) rotate(0deg) scale(1)';
+        s.style.filter = 'blur(0px)';
       });
-    });
+    }));
 
     // Cleanup back to plain text so the next toggle (back to RU) can animate too
     window.setTimeout(() => {

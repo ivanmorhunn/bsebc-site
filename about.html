@@ -557,6 +557,18 @@ function setI18nBody(key, html){
   if(!el) return;
   el.innerHTML = html;
 }
+
+// Cache original RU accordion bodies so EN->RU restores correctly
+const RU_BA_BODIES = {};
+function cacheRuBodiesOnce() {
+  if (cacheRuBodiesOnce.done) return;
+  cacheRuBodiesOnce.done = true;
+  document.querySelectorAll('[data-ba-body]').forEach(el => {
+    const k = el.getAttribute('data-ba-body');
+    if (k == null) return;
+    RU_BA_BODIES[String(k)] = el.innerHTML;
+  });
+}
 function renderAboutPage(){
   const copy = {
     ru: {
@@ -689,7 +701,13 @@ function renderAboutPage(){
     const idx = Number(el.getAttribute('data-ba-title'));
     if (Number.isFinite(idx) && C.baTitles && C.baTitles[idx]) el.textContent = C.baTitles[idx];
   });
-  if (C.baBodies) {
+  if (lang === 'ru') {
+    // Restore original RU bodies (they get overwritten when EN is applied)
+    for (let i = 0; i < 10; i++) {
+      const html = RU_BA_BODIES[String(i)];
+      if (typeof html === 'string') setI18nBody(String(i), html);
+    }
+  } else if (C.baBodies) {
     for (let i=0;i<C.baBodies.length;i++) setI18nBody(String(i), C.baBodies[i]);
   }
 }
@@ -727,38 +745,103 @@ function normalizeLetterSwap() {
 }
 
 function snapshotSimpleText() {
-  const out = new Map();
-  document.querySelectorAll('[id]').forEach(el => {
+  // About page uses markup (<em>, <a>) and accordion titles without ids.
+  // Snapshot by element reference + visible text, not only by id.
+  const items = [];
+  const els = Array.from(document.querySelectorAll('[id], [data-ba-title]'));
+  els.forEach(el => {
     if (!(el instanceof HTMLElement)) return;
-    if (el.children && el.children.length) return;
-    const txt = (el.textContent || '').replace(/\s+/g, ' ').trim();
+    // Skip language buttons themselves
+    if (el.classList && el.classList.contains('lang-btn')) return;
+    const txt = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
     if (!txt) return;
     if (txt.length < 3) return;
-    out.set(el.id, txt);
+    items.push({ el, txt });
   });
-  return out;
+  return items;
 }
 
 function animateTextDiff(before) {
-  if (!before || typeof before.get !== 'function') return;
+  if (!before || !Array.isArray(before)) return;
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) return;
 
-  before.forEach((oldTxt, id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    if (el.children && el.children.length) return;
-    const newTxt = (el.textContent || '').replace(/\s+/g, ' ').trim();
+  before.forEach(({ el, txt: oldTxt }) => {
+    if (!el || !(el instanceof HTMLElement)) return;
+    const newTxt = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
     if (!newTxt || newTxt === oldTxt) return;
-    if (newTxt.length > 140 || oldTxt.length > 140) return;
-    letterMorph(el, oldTxt, newTxt);
+    if (!isInViewport(el, 140)) return;
+
+    const finalHTML = el.innerHTML;
+    // Long paragraphs: keep it smooth with a quick crossfade (no per-letter chaos)
+    if (oldTxt.length > 140 || newTxt.length > 140) {
+      longFade(el, oldTxt, finalHTML);
+      return;
+    }
+    letterMorph(el, oldTxt, newTxt, finalHTML);
   });
 }
 
-function letterMorph(el, oldText, newText) {
+function isInViewport(el, pad = 0) {
+  const r = el.getBoundingClientRect();
+  const vh = window.innerHeight || document.documentElement.clientHeight || 0;
+  return r.bottom >= -pad && r.top <= vh + pad;
+}
+
+function longFade(el, oldTxt, finalHTML) {
+  // We want an actual perceived transition:
+  // old text visible → fade out → swap to new → fade in
+  const oldText = String(oldTxt || '');
+  const newHTML = typeof finalHTML === 'string' ? finalHTML : null;
+
+  // Restore old text for the fade-out phase (otherwise swap looks instant)
+  if (oldText) el.textContent = oldText;
+
+  el.style.willChange = 'opacity, transform, filter';
+  el.style.transition = 'opacity 220ms ease, transform 260ms cubic-bezier(.16,1,.3,1), filter 260ms ease';
+  el.style.opacity = '1';
+  el.style.transform = 'translateY(0px)';
+  el.style.filter = 'blur(0px)';
+
+  // Fade OUT
+  el.getBoundingClientRect();
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(-4px)';
+    el.style.filter = 'blur(2px)';
+  }));
+
+  // Swap to new + fade IN
+  window.setTimeout(() => {
+    if (newHTML != null) el.innerHTML = newHTML;
+
+    // reset "from" for fade-in
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(6px)';
+    el.style.filter = 'blur(2px)';
+
+    el.getBoundingClientRect();
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0px)';
+      el.style.filter = 'blur(0px)';
+    }));
+  }, 230);
+
+  window.setTimeout(() => {
+    el.style.willChange = '';
+    el.style.transition = '';
+    el.style.opacity = '';
+    el.style.transform = '';
+    el.style.filter = '';
+  }, 600);
+}
+
+function letterMorph(el, oldText, newText, finalHTML) {
   const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) {
-    el.textContent = newText;
+    if (typeof finalHTML === 'string') el.innerHTML = finalHTML;
+    else el.textContent = newText;
     return;
   }
 
@@ -770,9 +853,10 @@ function letterMorph(el, oldText, newText) {
   el.classList.add('letter-swap');
   el.setAttribute('data-plain-text', String(newText));
 
-  const makeSpan = (ch) => {
+  const makeLetter = (ch) => {
     const s = document.createElement('span');
-    s.innerHTML = escapeHtml(ch === ' ' ? '\u00A0' : ch);
+    s.className = 'letter';
+    s.innerHTML = escapeHtml(ch);
     const dx = (Math.random() * 26 - 13).toFixed(1);
     const dy = (Math.random() * 22 - 18).toFixed(1);
     const rot = (Math.random() * 28 - 14).toFixed(1);
@@ -782,10 +866,35 @@ function letterMorph(el, oldText, newText) {
     return s;
   };
 
-  el.innerHTML = '';
-  oldLetters.forEach(ch => el.appendChild(makeSpan(ch)));
-  const outSpans = Array.from(el.querySelectorAll('span'));
-  outSpans.forEach((s, i) => {
+  const renderWords = (text) => {
+    el.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    const letters = [];
+    const parts = String(text).split(/(\s+)/);
+    let letterIdx = 0;
+    parts.forEach(part => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) {
+        frag.appendChild(document.createTextNode(part));
+        return;
+      }
+      const word = document.createElement('span');
+      word.className = 'letter-word';
+      Array.from(part).forEach(ch => {
+        const letter = makeLetter(ch === ' ' ? '\u00A0' : ch);
+        word.appendChild(letter);
+        letter.style.transitionDelay = `${Math.min(260, letterIdx * 12)}ms`;
+        letters.push(letter);
+        letterIdx++;
+      });
+      frag.appendChild(word);
+    });
+    el.appendChild(frag);
+    return letters;
+  };
+
+  const outLetters = renderWords(oldText);
+  outLetters.forEach((s, i) => {
     s.style.transitionDelay = `${Math.min(160, i * 8)}ms`;
   });
 
@@ -796,29 +905,27 @@ function letterMorph(el, oldText, newText) {
 
   window.setTimeout(() => {
     el.classList.remove('is-out');
-    el.innerHTML = '';
-    newLetters.forEach(ch => el.appendChild(makeSpan(ch)));
-    const inSpans = Array.from(el.querySelectorAll('span'));
-    inSpans.forEach((s, i) => {
-      s.style.transitionDelay = `${Math.min(260, i * 12)}ms`;
+    const inSpans = renderWords(newText);
+    inSpans.forEach((s) => {
       s.style.opacity = '0';
       s.style.transform = 'translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.96)';
       s.style.filter = 'blur(3px)';
     });
 
-    requestAnimationFrame(() => {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
       el.classList.add('is-in');
       inSpans.forEach(s => {
-        s.style.opacity = '';
-        s.style.transform = '';
-        s.style.filter = '';
+        s.style.opacity = '1';
+        s.style.transform = 'translate(0px, 0px) rotate(0deg) scale(1)';
+        s.style.filter = 'blur(0px)';
       });
-    });
+    }));
 
-    window.setTimeout(() => {
+  window.setTimeout(() => {
       el.classList.remove('letter-swap','is-in','is-out');
       el.style.removeProperty('minWidth');
-      el.textContent = String(newText);
+    if (typeof finalHTML === 'string') el.innerHTML = finalHTML;
+    else el.textContent = String(newText);
       el.removeAttribute('data-plain-text');
     }, 900);
   }, 240);
@@ -894,6 +1001,7 @@ function closeMobile() {
 document.querySelectorAll('.lang-btn').forEach(b =>
   b.classList.toggle('active', b.dataset.lang === lang));
 renderNavFooter();
+cacheRuBodiesOnce();
 renderAboutPage();
 
 // Init accordion heights for the opened item (if any)
