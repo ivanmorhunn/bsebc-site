@@ -1,12 +1,9 @@
 {
   "name": "bsebc-site",
   "version": "1.0.0",
-  "description": "BSEBC Church Website — Brookhaven, PA",
+  "description": "BSEBC Church Website",
   "scripts": {
-    "dev": "npx serve . -p 3000 --no-clipboard",
+    "dev": "npx serve . -p 3000",
     "start": "npx serve . -p 3000"
-  },
-  "devDependencies": {
-    "serve": "^14.2.0"
   }
 }
