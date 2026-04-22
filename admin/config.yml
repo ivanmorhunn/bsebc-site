@@ -2,6 +2,7 @@ backend:
   name: github
   repo: ivanmorhunn/bsebc-site
   branch: main
+  base_url: https://api.netlify.com
 
 media_folder: assets
 public_folder: assets
