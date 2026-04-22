@@ -1,10 +1,6 @@
 backend:
-  name: github
-  repo: ivanmorhunn/bsebc-site
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
-  site_domain: glowing-boba-e569d9.netlify.app
+  name: git-gateway
 
 media_folder: assets
 public_folder: assets
