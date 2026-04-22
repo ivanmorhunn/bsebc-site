@@ -496,12 +496,17 @@ html:lang(en) .ac-sub { font-size: 14px; }
 .belief-item:last-child { border-bottom: none; }
 /* FIX #3 — roman numerals bigger and bolder, clearly readable */
 .belief-num {
-  font-family: var(--serif); font-size: 1.1rem; font-weight: 400;
-  color: var(--gold); line-height: 1.3; flex-shrink: 0;
-  width: 32px; opacity: 1;
+  font-family: var(--serif);
+  font-size: 1.45rem;
+  font-weight: 400;
+  color: var(--gold);
+  line-height: 1.15;
+  flex-shrink: 0;
+  width: 42px;
+  opacity: 1;
 }
 /* FIX #2 — belief text larger */
-.belief-text { font-size: 14px; color: rgba(13,13,13,0.8); line-height: 1.55; padding-top: 2px; }
+.belief-text { font-size: 16px; color: rgba(13,13,13,0.8); line-height: 1.55; padding-top: 2px; }
 
 /* ── GALLERY ─────────────────────────────────────────── */
 #gallery { background: var(--night); padding: 6rem 3.5rem; }
