@@ -547,6 +547,13 @@ observeReveals();
         });
       }
     });
+
+    // Ensure widget initializes and handles invite links.
+    // When a user clicks an invite link, Netlify adds #invite_token=... to the URL.
+    window.netlifyIdentity.init();
+    if (window.location.hash && window.location.hash.includes("invite_token=")) {
+      window.netlifyIdentity.open("signup");
+    }
   }
 </script>
 </body>
