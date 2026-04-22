@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Славянская Евангельская Баптистская Церковь — г. Брукхейвен, Пенсильвания" />
-  <title>BSEBC — Baptist Slavic Evangelical Baptist Church</title>
+  <title>BSEBC — Brookhaven Slavic Evangelical Baptist Church</title>
   <link rel="icon" href="assets/logo.png" type="image/png" />
   <link rel="apple-touch-icon" href="assets/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -27,7 +27,7 @@
   <ul class="nav-links" id="nav-links">
     <li><a href="#schedule" id="nl-schedule"></a></li>
     <li><a href="#archive"  id="nl-archive"></a></li>
-    <li><a href="#about"    id="nl-about"></a></li>
+    <li><a href="about.html" id="nl-about"></a></li>
     <li><a href="#gallery"  id="nl-gallery"></a></li>
     <li><a href="#donate"   id="nl-donate"></a></li>
     <li><a href="#contact"  id="nl-contact"></a></li>
@@ -50,7 +50,7 @@
 <nav class="nav-mobile" id="nav-mobile">
   <a href="#schedule" onclick="closeMobile()" id="nm-schedule"></a>
   <a href="#archive"  onclick="closeMobile()" id="nm-archive"></a>
-  <a href="#about"    onclick="closeMobile()" id="nm-about"></a>
+  <a href="about.html" onclick="closeMobile()" id="nm-about"></a>
   <a href="#gallery"  onclick="closeMobile()" id="nm-gallery"></a>
   <a href="#donate"   onclick="closeMobile()" id="nm-donate"></a>
   <a href="#contact"  onclick="closeMobile()" id="nm-contact"></a>
@@ -125,6 +125,7 @@
     <a class="charter-link reveal" id="abt-charter" href="#" target="_blank">
       <span id="abt-charter-label"></span> →
     </a>
+    <a class="btn-primary reveal" href="about.html" id="abt-more" style="align-self:flex-start;margin-top:1rem"></a>
     <a class="btn-ghost reveal" href="#contact" id="abt-contact-btn" style="align-self:flex-start;margin-top:1rem"></a>
   </div>
   <div class="about-right">
@@ -173,42 +174,69 @@
 
 <!-- CONTACT -->
 <section id="contact">
-  <div class="contact-form-wrap">
-    <div class="sec-label"><span id="con-label"></span></div>
-    <h2 class="sec-title reveal" id="con-heading"></h2>
-    <form class="contact-form reveal" onsubmit="handleSubmit(event)">
-      <div class="form-field">
-        <label id="con-name-label"></label>
-        <input type="text" id="con-name-input" required />
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <div class="sec-label"><span id="con-label"></span></div>
+      <h2 class="sec-title" id="con-heading"></h2>
+      <div class="map-card">
+        <iframe
+          src="https://www.google.com/maps?q=415+Edwards+Dr,+Brookhaven,+PA+19015&output=embed"
+          allowfullscreen loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          title="BSEBC Church Location — 415 Edwards Dr, Brookhaven PA">
+        </iframe>
       </div>
-      <div class="form-field">
-        <label id="con-email-label"></label>
-        <input type="email" id="con-email-input" required />
-      </div>
-      <div class="form-field">
-        <label id="con-msg-label"></label>
-        <textarea id="con-msg-input" required></textarea>
-      </div>
-      <button type="submit" class="btn-dark" id="con-send"></button>
-    </form>
-  </div>
-  <div class="contact-map-wrap reveal">
-    <div class="sec-label" style="margin-bottom:1rem"><span id="con-map-label"></span></div>
-    <div class="map-wrap">
-      <iframe
-        src="https://www.google.com/maps?q=415+Edwards+Dr,+Brookhaven,+PA+19015&output=embed"
-        allowfullscreen loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade"
-        title="BSEBC Church Location — 415 Edwards Dr, Brookhaven PA">
-      </iframe>
     </div>
-    <p class="map-address">
-      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
-      <span>415 Edwards Dr, Brookhaven, PA 19015</span>
-    </p>
-    <a class="directions-link"
-       href="https://maps.google.com/?q=415+Edwards+Dr,+Brookhaven,+PA+19015"
-       target="_blank" id="con-directions"></a>
+    <div class="contact-right reveal">
+      <div class="info-block">
+        <h3 id="con-address-title"></h3>
+        <a class="info-link" id="con-address-link" href="#" target="_blank">
+          <span id="con-address-value"></span>
+        </a>
+      </div>
+
+      <div class="info-block">
+        <h3 id="con-contact-title"></h3>
+        <div class="info-lines">
+          <div class="info-line">
+            <span class="info-k" id="con-phone-k"></span>
+            <a class="info-v" id="con-phone" href="#">(267) 266-9829</a>
+          </div>
+          <div class="info-line">
+            <span class="info-k" id="con-email-k"></span>
+            <a class="info-v" id="con-email" href="#">brookhavensbc@gmail.com</a>
+          </div>
+        </div>
+        <p class="info-note" id="con-note"></p>
+      </div>
+
+      <div class="directions-row">
+        <a class="btn-primary" id="con-directions" href="#" target="_blank">
+          <svg class="dir-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/></svg>
+          <span id="con-directions-label"></span>
+        </a>
+        <div class="dir-divider" aria-hidden="true">
+          <svg viewBox="0 0 120 28">
+            <defs>
+              <marker id="dirArrowHead" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto-start-reverse" markerUnits="strokeWidth">
+                <path d="M0,0 L10,5 L0,10" fill="none" stroke="rgba(184,145,58,0.85)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </marker>
+            </defs>
+            <path d="M2 14c18-12 36-12 54 0s36 12 60 0"
+                  fill="none"
+                  stroke="rgba(184,145,58,0.55)"
+                  stroke-width="1.4"
+                  stroke-linecap="round"
+                  marker-start="url(#dirArrowHead)"
+                  marker-end="url(#dirArrowHead)"/>
+          </svg>
+        </div>
+        <a class="btn-primary" id="con-directions-apple" href="#" target="_blank">
+          <svg class="dir-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 12 8 12s8-6.75 8-12a8 8 0 0 0-8-8zm0 10.2a2.2 2.2 0 1 1 0-4.4 2.2 2.2 0 0 1 0 4.4z"/></svg>
+          <span id="con-directions-apple-label"></span>
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -224,10 +252,10 @@
     </div>
     <div class="f-col">
       <h5 id="ft-nav-col"></h5>
-      <a href="#hero"     id="ft-home"></a>
-      <a href="#schedule" id="ft-schedule"></a>
-      <a href="#about"    id="ft-about"></a>
-      <a href="#contact"  id="ft-contact"></a>
+      <a href="#hero"      id="ft-home"></a>
+      <a href="#schedule"  id="ft-schedule"></a>
+      <a href="about.html" id="ft-about"></a>
+      <a href="#contact"   id="ft-contact"></a>
     </div>
     <div class="f-col">
       <h5 id="ft-arc-col"></h5>
@@ -263,11 +291,31 @@
 </div>
 
 <script>
-let lang = 'ru';
+let lang = localStorage.getItem('bsebc-lang') || 'ru';
 function t(obj){ return (obj&&obj[lang])||(obj&&obj['ru'])||''; }
+
+// Page transition (fade between HTML pages)
+document.body.classList.add('page-enter');
+window.addEventListener('pageshow', () => {
+  requestAnimationFrame(() => document.body.classList.remove('page-enter'));
+});
+document.addEventListener('click', (e) => {
+  const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+  if (!a) return;
+  const href = a.getAttribute('href') || '';
+  if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+  if (a.target && a.target !== '_self') return;
+  const url = new URL(a.href, window.location.href);
+  if (url.origin !== window.location.origin) return;
+  if (url.pathname === window.location.pathname && url.search === window.location.search && url.hash) return;
+  e.preventDefault();
+  document.body.classList.add('page-leave');
+  window.setTimeout(() => { window.location.href = url.href; }, 180);
+});
 
 function setLang(l) {
   lang = l;
+  localStorage.setItem('bsebc-lang', l);
   document.querySelectorAll('.lang-btn').forEach(b =>
     b.classList.toggle('active', b.dataset.lang === l));
   document.documentElement.lang = l==='ru'?'ru':'en';
@@ -341,6 +389,7 @@ function render() {
   document.getElementById('abt-body').textContent            = t(C.about.body);
   document.getElementById('abt-charter').href               = s.charter;
   document.getElementById('abt-charter-label').textContent   = t(C.about.charterLabel);
+  document.getElementById('abt-more').textContent            = lang==='ru'?'Подробнее →':'Learn more →';
   document.getElementById('abt-contact-btn').textContent    = t(C.nav.contact);
   document.getElementById('abt-beliefs-heading').textContent = t(C.about.beliefs.heading);
   const bl=document.getElementById('belief-list');
@@ -375,15 +424,24 @@ function render() {
   // CONTACT
   document.getElementById('con-label').textContent       = t(C.contact.label);
   document.getElementById('con-heading').textContent     = t(C.contact.heading);
-  document.getElementById('con-name-label').textContent  = t(C.contact.emailPlaceholder.name);
-  document.getElementById('con-name-input').placeholder  = t(C.contact.emailPlaceholder.name);
-  document.getElementById('con-email-label').textContent = t(C.contact.emailPlaceholder.email);
-  document.getElementById('con-email-input').placeholder = t(C.contact.emailPlaceholder.email);
-  document.getElementById('con-msg-label').textContent   = t(C.contact.emailPlaceholder.message);
-  document.getElementById('con-msg-input').placeholder   = t(C.contact.emailPlaceholder.message);
-  document.getElementById('con-send').textContent        = t(C.contact.emailPlaceholder.send);
-  document.getElementById('con-map-label').textContent   = lang==='ru'?'Как нас найти':'Find Us';
-  document.getElementById('con-directions').textContent  = lang==='ru'?'Открыть в Google Maps →':'Get Directions →';
+  document.getElementById('con-address-title').textContent = lang==='ru'?'Адрес':'Address';
+  document.getElementById('con-contact-title').textContent = lang==='ru'?'Контакты':'Contact';
+  document.getElementById('con-phone-k').textContent       = lang==='ru'?'Телефон:':'Phone:';
+  document.getElementById('con-email-k').textContent       = lang==='ru'?'Email:':'Email:';
+  document.getElementById('con-note').textContent          = lang==='ru'
+    ? 'Пастор — Олег Григоренко'
+    : 'Pastor — Oleg Grigorenko';
+
+  const addr = '415 Edwards Dr, Brookhaven, PA 19015';
+  document.getElementById('con-address-value').textContent = addr;
+  document.getElementById('con-address-link').href         = `https://maps.google.com/?q=${encodeURIComponent(addr)}`;
+
+  document.getElementById('con-phone').href              = 'tel:+12672669829';
+  document.getElementById('con-email').href              = 'mailto:brookhavensbc@gmail.com';
+  document.getElementById('con-directions-label').textContent  = lang==='ru'?'Google Maps':'Google Maps';
+  document.getElementById('con-directions').href         = `https://maps.google.com/?q=${encodeURIComponent(addr)}`;
+  document.getElementById('con-directions-apple-label').textContent = lang==='ru'?'Apple Maps':'Apple Maps';
+  document.getElementById('con-directions-apple').href        = `https://maps.apple.com/?q=${encodeURIComponent(addr)}`;
 
   // FOOTER
   document.getElementById('ft-name').textContent     = t(s.name);
@@ -425,8 +483,18 @@ window.addEventListener('load',()=>{
   bg.style.backgroundImage="url('assets/church.webp')";
   setTimeout(()=>bg.classList.add('loaded'),100);
 });
-function toggleMobile(){document.getElementById('nav-mobile').classList.toggle('open');}
-function closeMobile(){document.getElementById('nav-mobile').classList.remove('open');}
+function toggleMobile(){
+  const menu = document.getElementById('nav-mobile');
+  const btn = document.querySelector('.nav-hamburger');
+  const isOpen = menu.classList.toggle('open');
+  if (btn) btn.classList.toggle('active', isOpen);
+}
+function closeMobile(){
+  const menu = document.getElementById('nav-mobile');
+  const btn = document.querySelector('.nav-hamburger');
+  menu.classList.remove('open');
+  if (btn) btn.classList.remove('active');
+}
 function openGallery(){window.open(CONTENT.site.photos,'_blank');}
 function openLightbox(src, alt){
   const lb = document.getElementById('lightbox');
@@ -459,13 +527,12 @@ function observeReveals(){
   const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:0.1});
   document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));
 }
-function handleSubmit(e){
-  e.preventDefault();
-  const btn=document.getElementById('con-send');
-  btn.textContent=lang==='ru'?'Отправлено ✓':'Sent ✓';
-  btn.style.background='#2a6e3f';
-  setTimeout(()=>{btn.textContent=lang==='ru'?'Отправить':'Send';btn.style.background='';},3000);
-}
+function handleSubmit(e){ e.preventDefault(); }
+// Init persisted language state
+document.querySelectorAll('.lang-btn').forEach(b =>
+  b.classList.toggle('active', b.dataset.lang === lang));
+document.documentElement.lang = lang==='ru'?'ru':'en';
+
 render();
 observeReveals();
 </script>

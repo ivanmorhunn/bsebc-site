@@ -14,9 +14,17 @@
   <script src="content.js"></script>
   <style>
     /* About-page-only styles — no overrides to existing styles.css */
+    body { padding-top: 64px; }
+    /* Keep nav readable on the light top area */
+    #nav {
+      background: rgba(10,15,30,0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+
     .about-page-hero {
       background: var(--night);
-      padding: 10rem 3.5rem 5rem;
+      padding: 7.5rem 3.5rem 5rem;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -44,9 +52,12 @@
     }
 
     .back-bar {
-      background: var(--white);
-      border-bottom: 1px solid var(--gold-pale);
-      padding: 0.9rem 3.5rem;
+      position: absolute;
+      top: 64px; left: 0; right: 0;
+      z-index: 2;
+      background: transparent;
+      padding: 1rem 3.5rem;
+      text-align: center;
     }
     .back-bar a {
       font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
@@ -113,9 +124,11 @@
     .ba-item.open .ba-icon { transform: rotate(45deg); color: var(--gold); }
     .ba-body {
       max-height: 0; overflow: hidden;
-      transition: max-height 0.35s ease;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: max-height 420ms ease, opacity 220ms ease, transform 220ms ease;
     }
-    .ba-item.open .ba-body { max-height: 1200px; }
+    .ba-item.open .ba-body { opacity: 1; transform: translateY(0); }
     .ba-body-inner {
       font-size: 14px; font-weight: 300; line-height: 1.8;
       color: var(--stone); padding-bottom: 1.25rem;
@@ -179,8 +192,8 @@
     }
 
     @media (max-width: 700px) {
-      .about-page-hero { padding: 8rem 1.5rem 4rem; }
-      .back-bar { padding: 0.9rem 1.5rem; }
+      .about-page-hero { padding: 6.75rem 1.5rem 4rem; }
+      .back-bar { padding: 0.9rem 1.5rem; top: 64px; }
       .abt-section, .abt-section-wide { padding: 3.5rem 1.5rem; }
       .leader-grid { grid-template-columns: 1fr 1fr; }
       .charter-pdf { height: 460px; }
@@ -231,32 +244,31 @@
   <a href="#" id="nm-live" target="_blank" class="nm-live-link"></a>
 </nav>
 
-<!-- BACK -->
-<div class="back-bar">
-  <a href="index.html">← Вернуться на главную</a>
-</div>
-
 <!-- HERO -->
 <div class="about-page-hero">
+  <!-- BACK -->
+  <div class="back-bar">
+    <a href="index.html" id="abt-back-link">← Вернуться на главную</a>
+  </div>
   <div class="about-hero-inner">
-    <p class="about-hero-eyebrow">Brookhaven, Pennsylvania</p>
-    <h1>О нашей <em>церкви</em></h1>
-    <p>Добровольное объединение верующих для совместного поклонения Живому, Истинному, Вечному Богу на основании Священного Писания — Библии.</p>
+    <p class="about-hero-eyebrow" id="abt-hero-eyebrow">Brookhaven, Pennsylvania</p>
+    <h1 id="abt-hero-title">О нашей <em>церкви</em></h1>
+    <p id="abt-hero-sub">Добровольное объединение верующих для совместного поклонения Живому, Истинному, Вечному Богу на основании Священного Писания — Библии.</p>
   </div>
 </div>
 
 <!-- HISTORY -->
 <div class="abt-bg-white">
   <div class="abt-section">
-    <div class="sec-label"><span>История</span></div>
-    <h2>Наш путь в <em>Брукхейвене</em></h2>
+    <div class="sec-label"><span id="abt-hist-label">История</span></div>
+    <h2 id="abt-hist-title">Наш путь в <em>Брукхейвене</em></h2>
     <div class="history-note">
-      <p>История основания и роста нашей общины будет добавлена здесь. Если вы хотите поделиться историей — <a href="index.html#contact">свяжитесь с нами</a>.</p>
+      <p id="abt-hist-note">История основания и роста нашей общины будет добавлена здесь. Если вы хотите поделиться историей — <a href="index.html#contact">свяжитесь с нами</a>.</p>
     </div>
     <div class="abt-body">
-      <p>Славянская Евангельская Баптистская Церковь г. Брукхейвен, Пенсильвания — это добровольное объединение верующих Евангельско-Баптистского вероисповедания для совместного общения и поклонения Богу.</p>
-      <p>Церковь придерживается библейского принципа уважения законов и подчинения властям (Рим. 13:1-7; Тит.3:1-2; Деян.5:29). Мы верим в силу молитвы, Слова Божия и братского единства.</p>
-      <p>На протяжении всей нашей истории Господь верно вёл Свою церковь — через испытания и радости, через рост и обновление.</p>
+      <p id="abt-hist-p1">Славянская Евангельская Баптистская Церковь г. Брукхейвен, Пенсильвания — это добровольное объединение верующих Евангельско-Баптистского вероисповедания для совместного общения и поклонения Богу.</p>
+      <p id="abt-hist-p2">Церковь придерживается библейского принципа уважения законов и подчинения властям (Рим. 13:1-7; Тит.3:1-2; Деян.5:29). Мы верим в силу молитвы, Слова Божия и братского единства.</p>
+      <p id="abt-hist-p3">На протяжении всей нашей истории Господь верно вёл Свою церковь — через испытания и радости, через рост и обновление.</p>
     </div>
   </div>
 </div>
@@ -264,26 +276,26 @@
 <!-- LEADERSHIP -->
 <div class="abt-bg-parchment">
   <div class="abt-section">
-    <div class="sec-label"><span>Служители</span></div>
-    <h2>Руководство <em>церкви</em></h2>
+    <div class="sec-label"><span id="abt-lead-label">Служители</span></div>
+    <h2 id="abt-lead-title">Руководство <em>церкви</em></h2>
     <div class="leader-grid">
       <div class="leader-card">
         <div class="leader-avatar"><span>П</span></div>
-        <div class="leader-name">Пастор / Пресвитер</div>
-        <div class="leader-role">Духовный руководитель</div>
+        <div class="leader-name" id="abt-lead-card1-name">Пастор / Пресвитер</div>
+        <div class="leader-role" id="abt-lead-card1-role">Духовный руководитель</div>
       </div>
       <div class="leader-card">
         <div class="leader-avatar"><span>Д</span></div>
-        <div class="leader-name">Диаконы</div>
-        <div class="leader-role">Служители церкви</div>
+        <div class="leader-name" id="abt-lead-card2-name">Диаконы</div>
+        <div class="leader-role" id="abt-lead-card2-role">Служители церкви</div>
       </div>
       <div class="leader-card">
         <div class="leader-avatar"><span>С</span></div>
-        <div class="leader-name">Совет церкви</div>
-        <div class="leader-role">Братский совет</div>
+        <div class="leader-name" id="abt-lead-card3-name">Совет церкви</div>
+        <div class="leader-role" id="abt-lead-card3-role">Братский совет</div>
       </div>
     </div>
-    <p style="font-size:13px;color:var(--stone);margin-top:1.5rem;font-style:italic;">
+    <p style="font-size:13px;color:var(--stone);margin-top:1.5rem;font-style:italic;" id="abt-lead-note">
       Имена служителей будут добавлены. <a href="index.html#contact" style="color:var(--gold);">Напишите нам</a>, чтобы обновить эту информацию.
     </p>
   </div>
@@ -292,18 +304,18 @@
 <!-- BELIEFS ACCORDION -->
 <div class="abt-bg-white">
   <div class="abt-section">
-    <div class="sec-label"><span>Вероучение</span></div>
-    <h2>Во что мы <em>верим</em></h2>
-    <p style="font-size:15px;color:var(--stone);line-height:1.7;">Основой нашей веры является Библия — каноническая книга Священного Писания, как единственное полное откровение Бога.</p>
+    <div class="sec-label"><span id="abt-beliefs-label">Вероучение</span></div>
+    <h2 id="abt-beliefs-title">Во что мы <em>верим</em></h2>
+    <p style="font-size:15px;color:var(--stone);line-height:1.7;" id="abt-beliefs-intro">Основой нашей веры является Библия — каноническая книга Священного Писания, как единственное полное откровение Бога.</p>
 
     <div class="ba-list">
 
       <div class="ba-item">
         <button class="ba-trigger" onclick="toggleBA(this)">
-          <div class="ba-left"><span class="ba-num">01</span><span class="ba-title">О Слове Божием — Священном Писании</span></div>
+          <div class="ba-left"><span class="ba-num">01</span><span class="ba-title" data-ba-title="0">О Слове Божием — Священном Писании</span></div>
           <span class="ba-icon">+</span>
         </button>
-        <div class="ba-body"><div class="ba-body-inner">
+        <div class="ba-body"><div class="ba-body-inner" data-ba-body="0">
           <p>Мы верим, что Библия является Словом Божиим, написанным под вдохновением Духа Святого.</p>
           <p>Библия — совершенное откровение Бога людям — является истинным источником познания Бога, открывает волю Бога, содержит заповеди Бога, законы и пророчества, указывает путь ко спасению (2 Тим. 3:16; 2 Пет. 1:21).</p>
         </div></div>
@@ -311,20 +323,20 @@
 
       <div class="ba-item">
         <button class="ba-trigger" onclick="toggleBA(this)">
-          <div class="ba-left"><span class="ba-num">02</span><span class="ba-title">О Боге</span></div>
+          <div class="ba-left"><span class="ba-num">02</span><span class="ba-title" data-ba-title="1">О Боге</span></div>
           <span class="ba-icon">+</span>
         </button>
-        <div class="ba-body"><div class="ba-body-inner">
+        <div class="ba-body"><div class="ba-body-inner" data-ba-body="1">
           <p>Мы верим в единого, живого, истинного и вечного Бога. Бог совершен, праведен и свят. Бог есть любовь, явленная человечеству в Иисусе Христе (1 Ин. 4:16; Втор. 4:35).</p>
         </div></div>
       </div>
 
       <div class="ba-item">
         <button class="ba-trigger" onclick="toggleBA(this)">
-          <div class="ba-left"><span class="ba-num">03</span><span class="ba-title">О Троице Божией</span></div>
+          <div class="ba-left"><span class="ba-num">03</span><span class="ba-title" data-ba-title="2">О Троице Божией</span></div>
           <span class="ba-icon">+</span>
         </button>
-        <div class="ba-body"><div class="ba-body-inner">
+        <div class="ba-body"><div class="ba-body-inner" data-ba-body="2">
           <p>Мы верим в триединого, единосущного Бога Отца и Сына и Духа Святого (1 Ин. 5:7; Мф. 28:19).</p>
           <p>а) Бог Отец. б) Бог Сын — Иисус Христос. в) Бог Дух Святой (Деян. 5:3-4; 1 Кор. 3:16).</p>
         </div></div>
@@ -332,7 +344,7 @@
 
       <div class="ba-item">
         <button class="ba-trigger" onclick="toggleBA(this)">
-          <div class="ba-left"><span class="ba-num">04</span><span class="ba-title">Об Иисусе Христе — Сыне Божием</span></div>
+          <div class="ba-left"><span class="ba-num">04</span><span class="ba-title" data-ba-title="3">Об Иисусе Христе — Сыне Божием</span></div>
           <span class="ba-icon">+</span>
         </button>
         <div class="ba-body"><div class="ba-body-inner">
@@ -343,10 +355,10 @@
 
       <div class="ba-item">
         <button class="ba-trigger" onclick="toggleBA(this)">
-          <div class="ba-left"><span class="ba-num">05</span><span class="ba-title">О Духе Святом</span></div>
+          <div class="ba-left"><span class="ba-num">05</span><span class="ba-title" data-ba-title="4">О Духе Святом</span></div>
           <span class="ba-icon">+</span>
         </button>
-        <div class="ba-body"><div class="ba-body-inner">
+        <div class="ba-body"><div class="ba-body-inner" data-ba-body="4">
           <p>Мы верим, что Дух Святой обладает всеми Божественными свойствами: всемогуществом, всеведением, вездесущием и святостью (Деян. 5:3-4).</p>
           <p>Дух Святой учит, ведёт, наставляет, обличает, ободряет и утешает верующего (Ин. 14:26).</p>
         </div></div>
@@ -354,10 +366,10 @@
 
       <div class="ba-item">
         <button class="ba-trigger" onclick="toggleBA(this)">
-          <div class="ba-left"><span class="ba-num">06</span><span class="ba-title">О спасении и покаянии</span></div>
+          <div class="ba-left"><span class="ba-num">06</span><span class="ba-title" data-ba-title="5">О спасении и покаянии</span></div>
           <span class="ba-icon">+</span>
         </button>
-        <div class="ba-body"><div class="ba-body-inner">
+        <div class="ba-body"><div class="ba-body-inner" data-ba-body="5">
           <p>Мы верим, что искупление человека совершилось на кресте Голгофы через добровольную жертву Иисуса Христа за наши грехи (Ин. 1:29).</p>
           <p>Спасение даётся Богом по вере в Иисуса Христа — не по делам, но по благодати (Еф. 2:8).</p>
         </div></div>
@@ -365,20 +377,20 @@
 
       <div class="ba-item">
         <button class="ba-trigger" onclick="toggleBA(this)">
-          <div class="ba-left"><span class="ba-num">07</span><span class="ba-title">О Церкви Христовой</span></div>
+          <div class="ba-left"><span class="ba-num">07</span><span class="ba-title" data-ba-title="6">О Церкви Христовой</span></div>
           <span class="ba-icon">+</span>
         </button>
-        <div class="ba-body"><div class="ba-body-inner">
+        <div class="ba-body"><div class="ba-body-inner" data-ba-body="6">
           <p>Мы верим, что Иисус Христос создал Церковь (Мф. 16:18). Поместная церковь — это собрание возрождённых душ, соединённых единой верой, любовью и надеждой, добровольно объединившихся для совместного служения Господу (Деян. 2:42).</p>
         </div></div>
       </div>
 
       <div class="ba-item">
         <button class="ba-trigger" onclick="toggleBA(this)">
-          <div class="ba-left"><span class="ba-num">08</span><span class="ba-title">О Водном Крещении и Вечере Господней</span></div>
+          <div class="ba-left"><span class="ba-num">08</span><span class="ba-title" data-ba-title="7">О Водном Крещении и Вечере Господней</span></div>
           <span class="ba-icon">+</span>
         </button>
-        <div class="ba-body"><div class="ba-body-inner">
+        <div class="ba-body"><div class="ba-body-inner" data-ba-body="7">
           <p>Водное крещение по вере является исполнением заповеди Иисуса Христа. Совершается погружением над искренне покаявшимся человеком (Мк. 16:15-16; Деян. 2:38).</p>
           <p>Вечеря Господня совершается каждое первое воскресенье месяца в воспоминание страданий и смерти Христа на кресте (1 Кор. 11:23-26).</p>
         </div></div>
@@ -386,10 +398,10 @@
 
       <div class="ba-item">
         <button class="ba-trigger" onclick="toggleBA(this)">
-          <div class="ba-left"><span class="ba-num">09</span><span class="ba-title">О браке и семье</span></div>
+          <div class="ba-left"><span class="ba-num">09</span><span class="ba-title" data-ba-title="8">О браке и семье</span></div>
           <span class="ba-icon">+</span>
         </button>
-        <div class="ba-body"><div class="ba-body-inner">
+        <div class="ba-body"><div class="ba-body-inner" data-ba-body="8">
           <p>Мы верим, что брак установлен Богом (Быт. 2:18) — это союз между мужчиной и женщиной для взаимной помощи, поддержки и продолжения рода.</p>
           <p>Дети в семье — драгоценный дар от Бога (Пс. 126:3). Родители несут ответственность за воспитание своих детей (Кол. 3:21; Еф. 6:4).</p>
         </div></div>
@@ -397,10 +409,10 @@
 
       <div class="ba-item">
         <button class="ba-trigger" onclick="toggleBA(this)">
-          <div class="ba-left"><span class="ba-num">10</span><span class="ba-title">О Втором пришествии Иисуса Христа</span></div>
+          <div class="ba-left"><span class="ba-num">10</span><span class="ba-title" data-ba-title="9">О Втором пришествии Иисуса Христа</span></div>
           <span class="ba-icon">+</span>
         </button>
-        <div class="ba-body"><div class="ba-body-inner">
+        <div class="ba-body"><div class="ba-body-inner" data-ba-body="9">
           <p>Мы верим во второе пришествие Господа нашего Иисуса Христа в силе и славе (Деян. 1:11; Мф. 25:31).</p>
           <p>После суда наступит вечность: для одних — блаженная со Христом, для других — вечное отделение от Бога (Ин. 5:29).</p>
         </div></div>
@@ -413,18 +425,18 @@
 <!-- CHARTER PDF -->
 <div class="abt-bg-parchment">
   <div class="abt-section-wide">
-    <div class="sec-label"><span>Устав церкви</span></div>
-    <h2 style="font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:400;color:var(--night);line-height:1.15;margin-bottom:0.5rem;">Устав <em style="font-style:italic;color:var(--gold);">BSEBC</em></h2>
-    <p style="font-size:14px;color:var(--stone);margin-bottom:2rem;">Полный устав Славянской Евангельской Баптистской Церкви г. Брукхейвен, принятый на Собрании Членов Церкви.</p>
+    <div class="sec-label"><span id="abt-charter-label">Устав церкви</span></div>
+    <h2 style="font-family:var(--serif);font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:400;color:var(--night);line-height:1.15;margin-bottom:0.5rem;" id="abt-charter-title">Устав <em style="font-style:italic;color:var(--gold);">BSEBC</em></h2>
+    <p style="font-size:14px;color:var(--stone);margin-bottom:2rem;" id="abt-charter-sub">Полный устав Славянской Евангельской Баптистской Церкви г. Брукхейвен, принятый на Собрании Членов Церкви.</p>
     <div class="charter-box">
       <div class="charter-header">
         <div>
-          <h3>Устав церкви BSEBC</h3>
-          <p>Slavic Evangelical Baptist Church of Brookhaven · 2024</p>
+          <h3 id="abt-charter-box-title">Устав церкви BSEBC</h3>
+          <p id="abt-charter-box-meta">Brookhaven Slavic Evangelical Baptist Church · 2024</p>
         </div>
         <a class="charter-dl" href="assets/charter.pdf" download="BSEBC-Ustav-2024.pdf">
           <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
-          Скачать PDF
+          <span id="abt-charter-dl">Скачать PDF</span>
         </a>
       </div>
       <iframe class="charter-pdf" src="assets/charter.pdf" title="Устав BSEBC"></iframe>
@@ -465,6 +477,7 @@
   </div>
   <div class="footer-bottom">
     <p id="ft-copy"></p>
+    <p id="ft-year"></p>
     <p id="ft-rights"></p>
   </div>
 </footer>
@@ -474,13 +487,212 @@
 function toggleBA(btn) {
   const item = btn.closest('.ba-item');
   const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.ba-item.open').forEach(i => i.classList.remove('open'));
-  if (!isOpen) item.classList.add('open');
+  const openItems = Array.from(document.querySelectorAll('.ba-item.open'));
+  openItems.forEach(i => {
+    if (i === item) return;
+    animateAccordion(i, false);
+    i.classList.remove('open');
+  });
+
+  if (isOpen) {
+    animateAccordion(item, false);
+    item.classList.remove('open');
+  } else {
+    item.classList.add('open');
+    animateAccordion(item, true);
+  }
+}
+
+function animateAccordion(item, opening) {
+  const body = item.querySelector('.ba-body');
+  if (!body) return;
+  const inner = body.firstElementChild || body;
+
+  if (opening) {
+    const target = inner.scrollHeight;
+    requestAnimationFrame(() => {
+      body.style.maxHeight = `${target}px`;
+    });
+  } else {
+    // Set current height first so we can animate down to 0
+    const current = body.scrollHeight;
+    body.style.maxHeight = `${current}px`;
+    requestAnimationFrame(() => {
+      body.style.maxHeight = '0px';
+    });
+  }
 }
 
 // Reuse content.js render logic for nav + footer
 let lang = localStorage.getItem('bsebc-lang') || 'ru';
 function t(obj){ return (obj&&obj[lang])||(obj&&obj['ru'])||''; }
+
+// Page transition (fade between HTML pages)
+document.body.classList.add('page-enter');
+window.addEventListener('pageshow', () => {
+  requestAnimationFrame(() => document.body.classList.remove('page-enter'));
+});
+document.addEventListener('click', (e) => {
+  const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+  if (!a) return;
+  const href = a.getAttribute('href') || '';
+  if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+  if (a.target && a.target !== '_self') return;
+  const url = new URL(a.href, window.location.href);
+  if (url.origin !== window.location.origin) return;
+  if (url.pathname === window.location.pathname && url.search === window.location.search && url.hash) return;
+  e.preventDefault();
+  document.body.classList.add('page-leave');
+  window.setTimeout(() => { window.location.href = url.href; }, 180);
+});
+
+function setI18nText(id, value, asHtml=false){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(asHtml) el.innerHTML = value;
+  else el.textContent = value;
+}
+function setI18nBody(key, html){
+  const el = document.querySelector(`[data-ba-body="${key}"]`);
+  if(!el) return;
+  el.innerHTML = html;
+}
+function renderAboutPage(){
+  const copy = {
+    ru: {
+      back: '← Вернуться на главную',
+      heroTitle: 'О нашей <em>церкви</em>',
+      heroSub: 'Добровольное объединение верующих для совместного поклонения Живому, Истинному, Вечному Богу на основании Священного Писания — Библии.',
+      histLabel: 'История',
+      histTitle: 'Наш путь в <em>Брукхейвене</em>',
+      histNote: 'История основания и роста нашей общины будет добавлена здесь. Если вы хотите поделиться историей — <a href="index.html#contact">свяжитесь с нами</a>.',
+      histP1: 'Славянская Евангельская Баптистская Церковь г. Брукхейвен, Пенсильвания — это добровольное объединение верующих Евангельско-Баптистского вероисповедания для совместного общения и поклонения Богу.',
+      histP2: 'Церковь придерживается библейского принципа уважения законов и подчинения властям (Рим. 13:1-7; Тит.3:1-2; Деян.5:29). Мы верим в силу молитвы, Слова Божия и братского единства.',
+      histP3: 'На протяжении всей нашей истории Господь верно вёл Свою церковь — через испытания и радости, через рост и обновление.',
+      leadLabel: 'Служители',
+      leadTitle: 'Руководство <em>церкви</em>',
+      lead1Name: 'Пастор / Пресвитер',
+      lead1Role: 'Духовный руководитель',
+      lead2Name: 'Диаконы',
+      lead2Role: 'Служители церкви',
+      lead3Name: 'Совет церкви',
+      lead3Role: 'Братский совет',
+      leadNote: 'Имена служителей будут добавлены. <a href="index.html#contact" style="color:var(--gold);">Напишите нам</a>, чтобы обновить эту информацию.',
+      beliefsLabel: 'Вероучение',
+      beliefsTitle: 'Во что мы <em>верим</em>',
+      beliefsIntro: 'Основой нашей веры является Библия — каноническая книга Священного Писания, как единственное полное откровение Бога.',
+      charterLabel: 'Устав церкви',
+      charterTitle: 'Устав <em style="font-style:italic;color:var(--gold);">BSEBC</em>',
+      charterSub: 'Полный устав Славянской Евангельской Баптистской Церкви г. Брукхейвен, принятый на Собрании Членов Церкви.',
+      charterBoxTitle: 'Устав церкви BSEBC',
+      charterBoxMeta: 'Brookhaven Slavic Evangelical Baptist Church · 2024',
+      charterDl: 'Скачать PDF',
+      baTitles: [
+        'О Слове Божием — Священном Писании',
+        'О Боге',
+        'О Троице Божией',
+        'Об Иисусе Христе — Сыне Божием',
+        'О Духе Святом',
+        'О спасении и покаянии',
+        'О Церкви Христовой',
+        'О Водном Крещении и Вечере Господней',
+        'О браке и семье',
+        'О Втором пришествии Иисуса Христа',
+      ],
+      baBodies: null
+    },
+    en: {
+      back: '← Back to home',
+      heroTitle: 'About our <em>church</em>',
+      heroSub: 'A voluntary fellowship of believers united to worship the Living, True, Eternal God, founded on Holy Scripture — the Bible.',
+      histLabel: 'History',
+      histTitle: 'Our journey in <em>Brookhaven</em>',
+      histNote: 'Our story of growth will be added here. If you would like to share history— <a href="index.html#contact">contact us</a>.',
+      histP1: 'The Brookhaven Slavic Evangelical Baptist Church of Brookhaven, Pennsylvania is a voluntary fellowship of Evangelical Baptist believers for worship and fellowship.',
+      histP2: 'We hold to the biblical principle of respecting the laws of the land and submitting to authorities (Romans 13:1–7; Titus 3:1–2; Acts 5:29). We believe in prayer, God’s Word, and brotherly unity.',
+      histP3: 'Throughout our history, the Lord has faithfully led His church—through trials and joys, growth and renewal.',
+      leadLabel: 'Leadership',
+      leadTitle: 'Church <em>leadership</em>',
+      lead1Name: 'Pastor / Elder',
+      lead1Role: 'Spiritual shepherd',
+      lead2Name: 'Deacons',
+      lead2Role: 'Church servants',
+      lead3Name: 'Church Council',
+      lead3Role: 'Brotherhood council',
+      leadNote: 'Names will be added. <a href="index.html#contact" style="color:var(--gold);">Message us</a> to update this information.',
+      beliefsLabel: 'Beliefs',
+      beliefsTitle: 'What we <em>believe</em>',
+      beliefsIntro: 'The foundation of our faith is the Bible — the canonical Holy Scriptures — God’s complete revelation.',
+      charterLabel: 'Church Charter',
+      charterTitle: 'Charter <em style="font-style:italic;color:var(--gold);">BSEBC</em>',
+      charterSub: 'The full charter of the Brookhaven Slavic Evangelical Baptist Church, adopted at a meeting of church members.',
+      charterBoxTitle: 'BSEBC Church Charter',
+      charterBoxMeta: 'Brookhaven Slavic Evangelical Baptist Church · 2024',
+      charterDl: 'Download PDF',
+      baTitles: [
+        'God’s Word — Holy Scripture',
+        'God',
+        'The Trinity',
+        'Jesus Christ — the Son of God',
+        'The Holy Spirit',
+        'Salvation and repentance',
+        'The Church of Christ',
+        'Baptism and the Lord’s Supper',
+        'Marriage and family',
+        'The Second Coming of Christ',
+      ],
+      baBodies: [
+        `<p>We believe the Bible is the Word of God, written by inspiration of the Holy Spirit.</p><p>Scripture reveals God’s will and points the way of salvation (2 Tim. 3:16; 2 Pet. 1:21).</p>`,
+        `<p>We believe in the one, living, true, and eternal God.</p><p>God is holy, righteous, and love revealed in Jesus Christ (1 John 4:16).</p>`,
+        `<p>We believe in the triune God: Father, Son, and Holy Spirit (Matt. 28:19).</p><p>God is one in essence and three in persons.</p>`,
+        `<p>We believe Jesus Christ is the Son of God and God from eternity (John 5:20; Rom. 9:5).</p><p>We preach Christ crucified, risen, and coming again (1 Cor. 15:3–4).</p>`,
+        `<p>We believe the Holy Spirit has all divine attributes (Acts 5:3–4).</p><p>He teaches, guides, convicts, and comforts the believer (John 14:26).</p>`,
+        `<p>We believe redemption was accomplished at Calvary through Christ’s sacrifice (John 1:29).</p><p>Salvation is by grace through faith, not by works (Eph. 2:8).</p>`,
+        `<p>We believe Jesus Christ founded His Church and is its Head (Matt. 16:18).</p><p>The local church is a fellowship of regenerated believers devoted to worship and service (Acts 2:42).</p>`,
+        `<p>Believer’s baptism is Christ’s command and testimony of repentance (Mark 16:15–16; Acts 2:38).</p><p>The Lord’s Supper is observed in remembrance of Christ’s death (1 Cor. 11:23–26).</p>`,
+        `<p>We believe marriage is ordained by God as a union of one man and one woman.</p><p>Children are a gift from God; parents are responsible for their spiritual upbringing.</p>`,
+        `<p>We believe in the second coming of our Lord Jesus Christ in power and glory (Acts 1:11).</p><p>After judgment comes eternity—life with Christ or separation from God (John 5:29).</p>`,
+      ]
+    }
+  };
+
+  const C = copy[lang] || copy.ru;
+  setI18nText('abt-back-link', C.back);
+  setI18nText('abt-hero-title', C.heroTitle, true);
+  setI18nText('abt-hero-sub', C.heroSub);
+  setI18nText('abt-hist-label', C.histLabel);
+  setI18nText('abt-hist-title', C.histTitle, true);
+  setI18nText('abt-hist-note', C.histNote, true);
+  setI18nText('abt-hist-p1', C.histP1);
+  setI18nText('abt-hist-p2', C.histP2);
+  setI18nText('abt-hist-p3', C.histP3);
+  setI18nText('abt-lead-label', C.leadLabel);
+  setI18nText('abt-lead-title', C.leadTitle, true);
+  setI18nText('abt-lead-card1-name', C.lead1Name);
+  setI18nText('abt-lead-card1-role', C.lead1Role);
+  setI18nText('abt-lead-card2-name', C.lead2Name);
+  setI18nText('abt-lead-card2-role', C.lead2Role);
+  setI18nText('abt-lead-card3-name', C.lead3Name);
+  setI18nText('abt-lead-card3-role', C.lead3Role);
+  setI18nText('abt-lead-note', C.leadNote, true);
+  setI18nText('abt-beliefs-label', C.beliefsLabel);
+  setI18nText('abt-beliefs-title', C.beliefsTitle, true);
+  setI18nText('abt-beliefs-intro', C.beliefsIntro);
+  setI18nText('abt-charter-label', C.charterLabel);
+  setI18nText('abt-charter-title', C.charterTitle, true);
+  setI18nText('abt-charter-sub', C.charterSub);
+  setI18nText('abt-charter-box-title', C.charterBoxTitle);
+  setI18nText('abt-charter-box-meta', C.charterBoxMeta);
+  setI18nText('abt-charter-dl', C.charterDl);
+
+  document.querySelectorAll('[data-ba-title]').forEach(el=>{
+    const idx = Number(el.getAttribute('data-ba-title'));
+    if (Number.isFinite(idx) && C.baTitles && C.baTitles[idx]) el.textContent = C.baTitles[idx];
+  });
+  if (C.baBodies) {
+    for (let i=0;i<C.baBodies.length;i++) setI18nBody(String(i), C.baBodies[i]);
+  }
+}
 
 function setLang(l) {
   lang = l;
@@ -489,6 +701,7 @@ function setLang(l) {
     b.classList.toggle('active', b.dataset.lang === l));
   document.documentElement.lang = l === 'ru' ? 'ru' : 'en';
   renderNavFooter();
+  renderAboutPage();
 }
 
 function renderNavFooter() {
@@ -525,7 +738,9 @@ function renderNavFooter() {
   document.getElementById('ft-write').textContent    = t(C.nav.contact);
   document.getElementById('ft-give').textContent     = t(C.nav.donate);
   document.getElementById('ft-live').textContent     = t(C.nav.live);
-  document.getElementById('ft-copy').textContent     = `© ${new Date().getFullYear()} BSEBC · Brookhaven, PA`;
+  document.getElementById('ft-copy').textContent     = '© BSEBC';
+  const yearEl = document.getElementById('ft-year');
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
   document.getElementById('ft-rights').textContent   = t(C.footer.copyright);
 }
 
@@ -533,13 +748,27 @@ function renderNavFooter() {
 window.addEventListener('scroll', () =>
   document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60));
 
-function toggleMobile() { document.getElementById('nav-mobile').classList.toggle('open'); }
-function closeMobile()   { document.getElementById('nav-mobile').classList.remove('open'); }
+function toggleMobile() {
+  const menu = document.getElementById('nav-mobile');
+  const btn = document.querySelector('.nav-hamburger');
+  const isOpen = menu.classList.toggle('open');
+  if (btn) btn.classList.toggle('active', isOpen);
+}
+function closeMobile() {
+  const menu = document.getElementById('nav-mobile');
+  const btn = document.querySelector('.nav-hamburger');
+  menu.classList.remove('open');
+  if (btn) btn.classList.remove('active');
+}
 
 // Init
 document.querySelectorAll('.lang-btn').forEach(b =>
   b.classList.toggle('active', b.dataset.lang === lang));
 renderNavFooter();
+renderAboutPage();
+
+// Init accordion heights for the opened item (if any)
+document.querySelectorAll('.ba-item.open').forEach(i => animateAccordion(i, true));
 </script>
 </body>
 </html>

@@ -6,7 +6,7 @@ const CONTENT = {
 
   site: {
     name:     { ru: "BSEBC", en: "BSEBC" },
-    tagline:  { ru: "Славянская Евангельская Баптистская Церковь", en: "Baptist Slavic Evangelical Baptist Church" },
+    tagline:  { ru: "Славянская Евангельская Баптистская Церковь", en: "Brookhaven Slavic Evangelical Baptist Church" },
     location: { ru: "г. Брукхейвен, Пенсильвания", en: "Brookhaven, Pennsylvania" },
     youtubeChannel: "https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ",
     youtubeLive:    "https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/live",
@@ -25,7 +25,7 @@ const CONTENT = {
     about:    { ru: "О нас",        en: "About" },
     gallery:  { ru: "Фото",         en: "Gallery" },
     donate:   { ru: "Пожертвовать", en: "Donate" },
-    contact:  { ru: "Контакты",     en: "Contact" },
+    contact:  { ru: "Как нас найти", en: "Find Us" },
     live:     { ru: "Прямой эфир",  en: "Live Stream" },
   },
 
@@ -92,7 +92,7 @@ const CONTENT = {
     heading: { ru: "Церковь, основанная\nна Слове Божием", en: "A Church Built\non the Word of God" },
     body: {
       ru: "Мы — Славянская Евангельская Баптистская Церковь в Брукхейвене, Пенсильвания. Наши двери открыты для всех, кто ищет Бога, живое общение и духовную семью. Мы верим в силу молитвы, Слова Божия и братского единства.",
-      en: "We are the Baptist Slavic Evangelical Baptist Church of Brookhaven, Pennsylvania. Our doors are open to all who seek God, living fellowship, and a spiritual family. We believe in the power of prayer, the Word of God, and brotherly unity."
+      en: "We are the Brookhaven Slavic Evangelical Baptist Church of Brookhaven, Pennsylvania. Our doors are open to all who seek God, living fellowship, and a spiritual family. We believe in the power of prayer, the Word of God, and brotherly unity."
     },
     charterLabel: { ru: "Читать устав церкви", en: "Read Church Charter" },
     beliefs: {
@@ -126,7 +126,7 @@ const CONTENT = {
 
   contact: {
     label:   { ru: "Контакты", en: "Contact" },
-    heading: { ru: "Свяжитесь с нами", en: "Get in Touch" },
+    heading: { ru: "Как нас найти", en: "Find Us" },
     address: { ru: "415 Edwards Dr, Brookhaven, PA 19015", en: "415 Edwards Dr, Brookhaven, PA 19015" },
     emailPlaceholder: {
       name:    { ru: "Ваше имя",        en: "Your name" },
