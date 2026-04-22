@@ -1,0 +1,191 @@
+// ============================================================
+//  BSEBC CONTENT FILE
+//  Edit this file to update all text on the website.
+//  No HTML or CSS knowledge needed.
+//  Each section has RU (Russian) and EN (English) versions.
+// ============================================================
+
+const CONTENT = {
+
+  // ── SITE META ─────────────────────────────────────────────
+  site: {
+    name: { ru: "BSEBC", en: "BSEBC" },
+    tagline: {
+      ru: "Славянская Евангельская Баптистская Церковь",
+      en: "Slavic Evangelical Baptist Church"
+    },
+    location: { ru: "г. Брукхейвен, Пенсильвания", en: "Brookhaven, Pennsylvania" },
+    youtubeChannel: "https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ",
+    youtubeLive: "https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/live",
+    vimeo: "https://vimeo.com/bsebc",
+    soundcloud: "https://soundcloud.com/bsebc",
+    photos: "http://bsebc.zenfolio.com/f781568629",
+    venmo: "https://www.venmo.com/u/bsebc",
+    charter: "https://drive.google.com/file/d/1Y_Ifss3Tri7w-Wrjmes3FUVg1Pn3xHEi/view?usp=sharing",
+  },
+
+  // ── NAV ───────────────────────────────────────────────────
+  nav: {
+    home:     { ru: "Главная",       en: "Home" },
+    schedule: { ru: "Расписание",    en: "Schedule" },
+    archive:  { ru: "Архив",         en: "Archive" },
+    about:    { ru: "О нас",         en: "About" },
+    gallery:  { ru: "Фото",          en: "Gallery" },
+    donate:   { ru: "Пожертвовать",  en: "Donate" },
+    contact:  { ru: "Написать нам",  en: "Contact" },
+    live:     { ru: "Прямой эфир",   en: "Live Stream" },
+  },
+
+  // ── HERO ──────────────────────────────────────────────────
+  hero: {
+    heading:  { ru: "Добро пожаловать\nв дом Божий",    en: "Welcome to\nthe House of God" },
+    sub:      { ru: "Славянская Евангельская Баптистская Церковь · Брукхейвен, PA", en: "Slavic Evangelical Baptist Church · Brookhaven, PA" },
+    verse:    { ru: "Мы проповедуем Христа распятого, воскресшего и вновь грядущего", en: "We preach Christ crucified, risen, and coming again" },
+    cta1:     { ru: "Расписание служений", en: "Service Schedule" },
+    cta2:     { ru: "Смотреть онлайн",     en: "Watch Live" },
+  },
+
+  // ── SCHEDULE ──────────────────────────────────────────────
+  schedule: {
+    label:   { ru: "Расписание служений", en: "Service Schedule" },
+    heading: { ru: "Приходите поклониться вместе с нами", en: "Join Us in Worship" },
+    days: [
+      {
+        name: { ru: "Воскресенье", en: "Sunday" },
+        services: [
+          { time: "10:00 AM", name: { ru: "Утреннее богослужение",  en: "Morning Service" } },
+          { time: "6:00 PM",  name: { ru: "Вечернее богослужение",  en: "Evening Service" } },
+        ]
+      },
+      {
+        name: { ru: "Среда", en: "Wednesday" },
+        services: [
+          { time: "7:00 PM", name: { ru: "Разбор Слова Божия",  en: "Bible Study" } },
+          { time: "7:30 PM", name: { ru: "Воскресная школа",    en: "Sunday School" } },
+        ]
+      },
+      {
+        name: { ru: "Пятница", en: "Friday" },
+        services: [
+          { time: "6:00 AM", name: { ru: "Братская молитва",      en: "Men's Prayer" } },
+          { time: "7:00 PM", name: { ru: "Русская школа",          en: "Russian School" } },
+          { time: "9:00 PM", name: { ru: "Молодёжное общение",     en: "Youth Fellowship" } },
+        ]
+      }
+    ]
+  },
+
+  // ── VERSE BANNER ──────────────────────────────────────────
+  verseBanner: {
+    text: {
+      ru: "Ибо так возлюбил Бог мир, что отдал Сына Своего единородного, дабы всякий верующий в Него не погиб, но имел жизнь вечную.",
+      en: "For God so loved the world that he gave his one and only Son, that whoever believes in him shall not perish but have eternal life."
+    },
+    ref: { ru: "Иоанна 3:16", en: "John 3:16" }
+  },
+
+  // ── ARCHIVE ───────────────────────────────────────────────
+  archive: {
+    label:   { ru: "Медиа архив", en: "Media Archive" },
+    heading: { ru: "Записи служений", en: "Service Recordings" },
+    items: [
+      {
+        title:    { ru: "Аудио архив",    en: "Audio Archive" },
+        sub:      { ru: "Служения, проповеди, песни", en: "Services, sermons, songs" },
+        url:      "https://soundcloud.com/bsebc/sets",
+        icon:     "audio"
+      },
+      {
+        title:    { ru: "Проповеди",      en: "Sermons" },
+        sub:      { ru: "SoundCloud — разбор Слова", en: "SoundCloud — Bible studies" },
+        url:      "https://soundcloud.com/bsebc/albums",
+        icon:     "book"
+      },
+      {
+        title:    { ru: "YouTube архив",  en: "YouTube Archive" },
+        sub:      { ru: "Видеозаписи служений", en: "Video recordings" },
+        url:      "https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/videos",
+        icon:     "youtube"
+      },
+      {
+        title:    { ru: "Vimeo архив",    en: "Vimeo Archive" },
+        sub:      { ru: "Дополнительные записи", en: "Additional recordings" },
+        url:      "https://vimeo.com/bsebc",
+        icon:     "video"
+      },
+      {
+        title:    { ru: "Хоровое пение",  en: "Choir" },
+        sub:      { ru: "Записи хора", en: "Choir recordings" },
+        url:      "https://soundcloud.com/bsebc/sets/vywqy64m3exb",
+        icon:     "choir"
+      },
+      {
+        title:    { ru: "Фотогалерея",    en: "Photo Gallery" },
+        sub:      { ru: "Zenfolio — фото архив", en: "Zenfolio — photo archive" },
+        url:      "http://bsebc.zenfolio.com/f781568629",
+        icon:     "photo"
+      },
+    ]
+  },
+
+  // ── ABOUT ─────────────────────────────────────────────────
+  about: {
+    label:   { ru: "О нас", en: "About Us" },
+    heading: { ru: "Церковь, основанная\nна Слове Божием", en: "A Church Built\non the Word of God" },
+    body: {
+      ru: "Мы — Славянская Евангельская Баптистская Церковь города Брукхейвен, Пенсильвания. Наши двери открыты для всех, кто ищет Бога, живое общение и духовную семью. Мы верим в силу молитвы, Слова Божия и братского единства.",
+      en: "We are the Slavic Evangelical Baptist Church of Brookhaven, Pennsylvania. Our doors are open to all who seek God, living fellowship, and a spiritual family. We believe in the power of prayer, the Word of God, and brotherly unity."
+    },
+    charterLabel: { ru: "Читать устав церкви", en: "Read Church Charter" },
+    beliefs: {
+      heading: { ru: "Во что мы верим", en: "What We Believe" },
+      items: [
+        { ru: "Библия — богодухновенное и непогрешимое Слово Божие",     en: "The Bible is the inspired and infallible Word of God" },
+        { ru: "Христос — единственный Спаситель и Господь",               en: "Christ is the only Savior and Lord" },
+        { ru: "Спасение только по вере в Иисуса Христа",                  en: "Salvation is by faith in Jesus Christ alone" },
+        { ru: "Церковь — тело Христово, собрание верующих",               en: "The Church is the body of Christ, a gathering of believers" },
+        { ru: "Воскресение Христа и Его второе пришествие",               en: "The resurrection of Christ and His second coming" },
+      ]
+    }
+  },
+
+  // ── DONATE ────────────────────────────────────────────────
+  donate: {
+    label:   { ru: "Пожертвования", en: "Giving" },
+    heading: { ru: "Поддержите служение церкви", en: "Support the Church's Ministry" },
+    body: {
+      ru: "Ваши пожертвования помогают нам распространять Слово Божие, служить ближним и поддерживать церковное служение в нашем городе и по всему миру.",
+      en: "Your gifts help us spread the Word of God, serve our neighbors, and support the church's ministry in our city and around the world."
+    },
+    cta: { ru: "Пожертвовать через Venmo", en: "Give via Venmo" },
+  },
+
+  // ── CONTACT ───────────────────────────────────────────────
+  contact: {
+    label:   { ru: "Контакты", en: "Contact" },
+    heading: { ru: "Свяжитесь с нами", en: "Get in Touch" },
+    address: { ru: "Брукхейвен, Пенсильвания", en: "Brookhaven, Pennsylvania" },
+    mapQuery: "Slavic Evangelical Baptist Church Brookhaven PA",
+    emailLabel:   { ru: "Написать нам", en: "Send us a message" },
+    emailPlaceholder: {
+      name:    { ru: "Ваше имя",        en: "Your name" },
+      email:   { ru: "Ваш email",       en: "Your email" },
+      message: { ru: "Ваше сообщение",  en: "Your message" },
+      send:    { ru: "Отправить",       en: "Send" },
+    }
+  },
+
+  // ── FOOTER ────────────────────────────────────────────────
+  footer: {
+    tagline: {
+      ru: "Служим Господу с любовью и верой с любовью к ближнему.",
+      en: "Serving the Lord with love and faith, loving our neighbors."
+    },
+    copyright: { ru: "Все права защищены", en: "All rights reserved" },
+    cols: {
+      nav:     { ru: "Навигация",  en: "Navigation" },
+      archive: { ru: "Архив",      en: "Archive" },
+      connect: { ru: "Связь",      en: "Connect" },
+    }
+  }
+};

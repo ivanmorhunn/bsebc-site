@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Славянская Евангельская Баптистская Церковь — г. Брукхейвен, Пенсильвания" />
+  <title>BSEBC — Slavic Evangelical Baptist Church</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="content.js"></script>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════════════════
+     NAV
+═══════════════════════════════════════════════════════════ -->
+<nav id="nav">
+  <a class="nav-brand" href="#hero">
+    <div class="brand-emblem">
+      <svg viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="17" cy="17" r="16" stroke="#B8913A" stroke-width="1"/>
+        <rect x="14" y="4"  width="6" height="26" fill="#B8913A" rx="1"/>
+        <rect x="6"  y="11" width="22" height="6"  fill="#B8913A" rx="1"/>
+      </svg>
+    </div>
+    <div class="brand-words">
+      <strong id="nav-name"></strong>
+      <span id="nav-tagline"></span>
+    </div>
+  </a>
+
+  <ul class="nav-links" id="nav-links">
+    <li><a href="#schedule" id="nl-schedule"></a></li>
+    <li><a href="#archive"  id="nl-archive"></a></li>
+    <li><a href="#about"    id="nl-about"></a></li>
+    <li><a href="#gallery"  id="nl-gallery"></a></li>
+    <li><a href="#donate"   id="nl-donate"></a></li>
+    <li><a href="#contact"  id="nl-contact"></a></li>
+  </ul>
+
+  <div style="display:flex;align-items:center;gap:0">
+    <a class="nav-live" id="nav-live" href="#" target="_blank">
+      <span class="live-dot"></span>
+      <span id="nl-live"></span>
+    </a>
+    <div class="nav-lang">
+      <button class="lang-btn active" onclick="setLang('ru')">РУ</button>
+      <button class="lang-btn"        onclick="setLang('en')">EN</button>
+    </div>
+    <button class="nav-hamburger" onclick="toggleMobile()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<nav class="nav-mobile" id="nav-mobile">
+  <a href="#schedule" onclick="closeMobile()" id="nm-schedule"></a>
+  <a href="#archive"  onclick="closeMobile()" id="nm-archive"></a>
+  <a href="#about"    onclick="closeMobile()" id="nm-about"></a>
+  <a href="#gallery"  onclick="closeMobile()" id="nm-gallery"></a>
+  <a href="#donate"   onclick="closeMobile()" id="nm-donate"></a>
+  <a href="#contact"  onclick="closeMobile()" id="nm-contact"></a>
+  <a href="#"         id="nm-live" target="_blank" style="color:#FF7575"></a>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════════
+     HERO
+═══════════════════════════════════════════════════════════ -->
+<section id="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-line"></div>
+      <span id="hero-eyebrow"></span>
+    </div>
+    <h1 id="hero-h1"></h1>
+    <p class="hero-location" id="hero-location"></p>
+    <p class="hero-verse" id="hero-verse"></p>
+    <div class="hero-ctas">
+      <a class="btn-primary" href="#schedule" id="hero-cta1"></a>
+      <a class="btn-ghost"   href="#" id="hero-cta2" target="_blank"></a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-track"></div>
+    <span id="hero-scroll-label"></span>
+  </div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     SCHEDULE
+═══════════════════════════════════════════════════════════ -->
+<section id="schedule">
+  <div class="sec-label"><span id="sch-label"></span></div>
+  <h2 class="sec-title reveal" id="sch-heading"></h2>
+  <div class="schedule-grid" id="schedule-grid"></div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     VERSE BANNER
+═══════════════════════════════════════════════════════════ -->
+<section id="verse">
+  <svg class="verse-rings" width="520" height="520" viewBox="0 0 520 520" fill="none">
+    <circle cx="260" cy="260" r="250" stroke="#B8913A" stroke-width="0.7"/>
+    <circle cx="260" cy="260" r="210" stroke="#B8913A" stroke-width="0.5" stroke-dasharray="4 10"/>
+    <circle cx="260" cy="260" r="170" stroke="#B8913A" stroke-width="0.5"/>
+  </svg>
+  <blockquote class="reveal" id="verse-text"></blockquote>
+  <p class="verse-ref" id="verse-ref"></p>
+  <div class="orn-row">
+    <div class="orn-line"></div>
+    <div class="orn-diamond"></div>
+    <div class="orn-line"></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     ARCHIVE
+═══════════════════════════════════════════════════════════ -->
+<section id="archive">
+  <div class="sec-label"><span id="arc-label"></span></div>
+  <h2 class="sec-title reveal" id="arc-heading"></h2>
+  <div class="archive-grid reveal" id="archive-grid"></div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ABOUT
+═══════════════════════════════════════════════════════════ -->
+<section id="about">
+  <div class="about-left">
+    <div class="sec-label"><span id="abt-label"></span></div>
+    <h2 class="reveal" id="abt-heading"></h2>
+    <p class="reveal" id="abt-body"></p>
+    <a class="charter-link reveal" id="abt-charter" href="#" target="_blank">
+      <span id="abt-charter-label"></span> →
+    </a>
+    <a class="btn-ghost reveal" href="#contact" id="abt-contact-btn" style="align-self:flex-start"></a>
+  </div>
+  <div class="about-right">
+    <h3 id="abt-beliefs-heading"></h3>
+    <ul class="belief-list" id="belief-list"></ul>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     GALLERY
+═══════════════════════════════════════════════════════════ -->
+<section id="gallery">
+  <div class="sec-label"><span id="gal-label"></span></div>
+  <h2 class="sec-title reveal" id="gal-heading"></h2>
+  <div class="gallery-grid reveal">
+    <!-- 8 placeholder tiles — replace src with real photos -->
+    <div class="gallery-placeholder" onclick="openGallery()">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      <span id="gal-ph"></span>
+    </div>
+    <div class="gallery-placeholder" onclick="openGallery()">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      <span id="gal-ph2"></span>
+    </div>
+    <div class="gallery-placeholder" onclick="openGallery()">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      <span></span>
+    </div>
+    <div class="gallery-placeholder" onclick="openGallery()">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      <span></span>
+    </div>
+    <div class="gallery-placeholder" onclick="openGallery()">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      <span></span>
+    </div>
+    <div class="gallery-placeholder" onclick="openGallery()">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      <span></span>
+    </div>
+    <div class="gallery-placeholder" onclick="openGallery()">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      <span></span>
+    </div>
+    <div class="gallery-placeholder" onclick="openGallery()">
+      <svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+      <span></span>
+    </div>
+  </div>
+  <div class="gallery-cta reveal" style="margin-top:2.5rem">
+    <a class="btn-primary" id="gal-cta" href="#" target="_blank"></a>
+  </div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     DONATE
+═══════════════════════════════════════════════════════════ -->
+<section id="donate">
+  <div class="donate-left reveal">
+    <div class="sec-label"><span id="don-label"></span></div>
+    <h2 id="don-heading"></h2>
+    <p id="don-body"></p>
+    <a class="btn-dark" id="don-cta" href="#" target="_blank"></a>
+  </div>
+  <div class="donate-right reveal">
+    <p id="don-verse"></p>
+    <span id="don-verse-ref"></span>
+  </div>
+</section>
+
+<div class="gold-rule"></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════════════════════════ -->
+<section id="contact">
+  <div class="contact-form-wrap">
+    <div class="sec-label"><span id="con-label"></span></div>
+    <h2 class="sec-title reveal" id="con-heading"></h2>
+    <form class="contact-form reveal" onsubmit="handleSubmit(event)">
+      <div class="form-field">
+        <label id="con-name-label"></label>
+        <input type="text" id="con-name-input" required />
+      </div>
+      <div class="form-field">
+        <label id="con-email-label"></label>
+        <input type="email" id="con-email-input" required />
+      </div>
+      <div class="form-field">
+        <label id="con-msg-label"></label>
+        <textarea id="con-msg-input" required></textarea>
+      </div>
+      <button type="submit" class="btn-dark" id="con-send" style="align-self:flex-start"></button>
+    </form>
+  </div>
+  <div class="contact-map-wrap reveal">
+    <div class="sec-label" style="margin-bottom:1rem"><span id="con-map-label"></span></div>
+    <div class="map-wrap">
+      <iframe
+        src="https://www.google.com/maps/embed/v1/search?q=Slavic+Evangelical+Baptist+Church+Brookhaven+PA&key=AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFmBWY"
+        allowfullscreen loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
+    </div>
+    <p class="map-address">
+      <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+      <span id="con-address"></span>
+    </p>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════
+     FOOTER
+═══════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-top">
+    <div class="f-brand">
+      <div class="f-brand-name">
+        <svg viewBox="0 0 34 34" fill="none">
+          <circle cx="17" cy="17" r="16" stroke="#B8913A" stroke-width="1"/>
+          <rect x="14" y="4"  width="6" height="26" fill="#B8913A" rx="1"/>
+          <rect x="6"  y="11" width="22" height="6"  fill="#B8913A" rx="1"/>
+        </svg>
+        <span id="ft-name"></span>
+      </div>
+      <p id="ft-tagline"></p>
+    </div>
+    <div class="f-col">
+      <h5 id="ft-nav-col"></h5>
+      <a href="#hero"     id="ft-home"></a>
+      <a href="#schedule" id="ft-schedule"></a>
+      <a href="#about"    id="ft-about"></a>
+      <a href="#contact"  id="ft-contact"></a>
+    </div>
+    <div class="f-col">
+      <h5 id="ft-arc-col"></h5>
+      <a href="#" id="ft-audio"  target="_blank"></a>
+      <a href="#" id="ft-video"  target="_blank"></a>
+      <a href="#" id="ft-vimeo"  target="_blank">Vimeo</a>
+      <a href="#" id="ft-photos" target="_blank"></a>
+    </div>
+    <div class="f-col">
+      <h5 id="ft-con-col"></h5>
+      <a href="#contact" id="ft-write"></a>
+      <a href="#donate"  id="ft-give"></a>
+      <a href="#"        id="ft-live" target="_blank"></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p id="ft-copy"></p>
+    <p id="ft-rights"></p>
+  </div>
+</footer>
+
+<!-- ══════════════════════════════════════════════════════════
+     JAVASCRIPT
+═══════════════════════════════════════════════════════════ -->
+<script>
+// ── Language state ────────────────────────────────────────
+let lang = 'ru';
+
+function t(obj) {
+  return obj[lang] || obj['ru'] || '';
+}
+
+function setLang(l) {
+  lang = l;
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.textContent.trim().toLowerCase().startsWith(l));
+  });
+  document.documentElement.lang = l === 'ru' ? 'ru' : 'en';
+  render();
+}
+
+// ── Render all content ────────────────────────────────────
+function render() {
+  const C = CONTENT;
+  const site = C.site;
+
+  // NAV
+  document.getElementById('nav-name').textContent    = t(site.name);
+  document.getElementById('nav-tagline').textContent = t(site.tagline);
+  document.getElementById('nl-schedule').textContent = t(C.nav.schedule);
+  document.getElementById('nl-archive').textContent  = t(C.nav.archive);
+  document.getElementById('nl-about').textContent    = t(C.nav.about);
+  document.getElementById('nl-gallery').textContent  = t(C.nav.gallery);
+  document.getElementById('nl-donate').textContent   = t(C.nav.donate);
+  document.getElementById('nl-contact').textContent  = t(C.nav.contact);
+  document.getElementById('nl-live').textContent     = t(C.nav.live);
+  document.getElementById('nav-live').href           = site.youtubeLive;
+
+  // Mobile nav
+  document.getElementById('nm-schedule').textContent = t(C.nav.schedule);
+  document.getElementById('nm-archive').textContent  = t(C.nav.archive);
+  document.getElementById('nm-about').textContent    = t(C.nav.about);
+  document.getElementById('nm-gallery').textContent  = t(C.nav.gallery);
+  document.getElementById('nm-donate').textContent   = t(C.nav.donate);
+  document.getElementById('nm-contact').textContent  = t(C.nav.contact);
+  document.getElementById('nm-live').textContent     = '▶ ' + t(C.nav.live);
+  document.getElementById('nm-live').href            = site.youtubeLive;
+
+  // HERO
+  document.getElementById('hero-eyebrow').textContent    = t(site.tagline);
+  document.getElementById('hero-h1').textContent         = t(C.hero.heading);
+  document.getElementById('hero-location').textContent   = t(site.location);
+  document.getElementById('hero-verse').textContent      = t(C.hero.verse);
+  document.getElementById('hero-cta1').textContent       = t(C.hero.cta1);
+  document.getElementById('hero-cta2').textContent       = t(C.hero.cta2);
+  document.getElementById('hero-cta2').href              = site.youtubeLive;
+  document.getElementById('hero-scroll-label').textContent = lang === 'ru' ? 'Прокрутить вниз' : 'Scroll down';
+
+  // SCHEDULE
+  document.getElementById('sch-label').textContent   = t(C.schedule.label);
+  document.getElementById('sch-heading').textContent = t(C.schedule.heading);
+  const grid = document.getElementById('schedule-grid');
+  grid.innerHTML = '';
+  C.schedule.days.forEach((day, i) => {
+    if (i > 0) {
+      const div = document.createElement('div');
+      div.className = 'sched-divider';
+      grid.appendChild(div);
+    }
+    const block = document.createElement('div');
+    block.className = 'day-block reveal';
+    block.innerHTML = `
+      <div class="day-header">
+        <div class="day-num">0${i+1}</div>
+        <div>
+          <div class="day-name">${t(day.name)}</div>
+          <div class="day-en">${lang === 'ru' ? (day.name.en || '') : (day.name.ru || '')}</div>
+        </div>
+      </div>
+      ${day.services.map(s => `
+        <div class="service-row">
+          <span class="s-time">${s.time}</span>
+          <span class="s-name">${t(s.name)}</span>
+        </div>
+      `).join('')}
+    `;
+    grid.appendChild(block);
+  });
+
+  // VERSE
+  document.getElementById('verse-text').textContent = '\u00AB' + t(C.verseBanner.text) + '\u00BB';
+  document.getElementById('verse-ref').textContent  = t(C.verseBanner.ref);
+
+  // ARCHIVE
+  document.getElementById('arc-label').textContent   = t(C.archive.label);
+  document.getElementById('arc-heading').textContent = t(C.archive.heading);
+  const arcGrid = document.getElementById('archive-grid');
+  arcGrid.innerHTML = '';
+  C.archive.items.forEach(item => {
+    const card = document.createElement('a');
+    card.className = 'archive-card';
+    card.href = item.url;
+    card.target = '_blank';
+    card.innerHTML = `
+      <div class="ac-ring">${getIcon(item.icon)}</div>
+      <div class="ac-title">${t(item.title)}</div>
+      <div class="ac-sub">${t(item.sub)}</div>
+      <span class="ac-arrow">↗</span>
+    `;
+    arcGrid.appendChild(card);
+  });
+
+  // ABOUT
+  document.getElementById('abt-label').textContent         = t(C.about.label);
+  document.getElementById('abt-heading').innerHTML         = t(C.about.heading).replace('\n','<br>');
+  document.getElementById('abt-body').textContent          = t(C.about.body);
+  document.getElementById('abt-charter').href             = site.charter;
+  document.getElementById('abt-charter-label').textContent = t(C.about.charterLabel);
+  document.getElementById('abt-contact-btn').textContent  = t(C.nav.contact);
+  document.getElementById('abt-beliefs-heading').textContent = t(C.about.beliefs.heading);
+  const bl = document.getElementById('belief-list');
+  bl.innerHTML = '';
+  C.about.beliefs.items.forEach((item, i) => {
+    const li = document.createElement('li');
+    li.className = 'belief-item';
+    li.innerHTML = `<span class="belief-num">${['I','II','III','IV','V'][i]}</span><span class="belief-text">${t(item)}</span>`;
+    bl.appendChild(li);
+  });
+
+  // GALLERY
+  document.getElementById('gal-label').textContent    = t(C.nav.gallery);
+  document.getElementById('gal-heading').textContent  = lang === 'ru' ? 'Фотогалерея' : 'Photo Gallery';
+  document.getElementById('gal-ph').textContent       = lang === 'ru' ? 'Фото' : 'Photo';
+  document.getElementById('gal-ph2').textContent      = lang === 'ru' ? 'Фото' : 'Photo';
+  document.getElementById('gal-cta').textContent      = lang === 'ru' ? 'Открыть полный архив фото' : 'Open full photo archive';
+  document.getElementById('gal-cta').href             = site.photos;
+
+  // DONATE
+  document.getElementById('don-label').textContent   = t(C.donate.label);
+  document.getElementById('don-heading').textContent = t(C.donate.heading);
+  document.getElementById('don-body').textContent    = t(C.donate.body);
+  document.getElementById('don-cta').textContent     = t(C.donate.cta);
+  document.getElementById('don-cta').href            = site.venmo;
+  document.getElementById('don-verse').textContent   = '\u00AB' + t(C.verseBanner.text).slice(0,80) + '...\u00BB';
+  document.getElementById('don-verse-ref').textContent = t(C.verseBanner.ref);
+
+  // CONTACT
+  document.getElementById('con-label').textContent        = t(C.contact.label);
+  document.getElementById('con-heading').textContent      = t(C.contact.heading);
+  document.getElementById('con-name-label').textContent   = t(C.contact.emailPlaceholder.name);
+  document.getElementById('con-name-input').placeholder   = t(C.contact.emailPlaceholder.name);
+  document.getElementById('con-email-label').textContent  = t(C.contact.emailPlaceholder.email);
+  document.getElementById('con-email-input').placeholder  = t(C.contact.emailPlaceholder.email);
+  document.getElementById('con-msg-label').textContent    = t(C.contact.emailPlaceholder.message);
+  document.getElementById('con-msg-input').placeholder    = t(C.contact.emailPlaceholder.message);
+  document.getElementById('con-send').textContent         = t(C.contact.emailPlaceholder.send);
+  document.getElementById('con-map-label').textContent    = lang === 'ru' ? 'Мы на карте' : 'Find us';
+  document.getElementById('con-address').textContent      = t(C.contact.address);
+
+  // FOOTER
+  document.getElementById('ft-name').textContent     = t(site.name);
+  document.getElementById('ft-tagline').textContent  = t(C.footer.tagline);
+  document.getElementById('ft-nav-col').textContent  = t(C.footer.cols.nav);
+  document.getElementById('ft-arc-col').textContent  = t(C.footer.cols.archive);
+  document.getElementById('ft-con-col').textContent  = t(C.footer.cols.connect);
+  document.getElementById('ft-home').textContent     = t(C.nav.home);
+  document.getElementById('ft-schedule').textContent = t(C.nav.schedule);
+  document.getElementById('ft-about').textContent    = t(C.nav.about);
+  document.getElementById('ft-contact').textContent  = t(C.nav.contact);
+  document.getElementById('ft-audio').textContent    = lang === 'ru' ? 'Аудио' : 'Audio';
+  document.getElementById('ft-audio').href           = site.soundcloud;
+  document.getElementById('ft-video').textContent    = 'YouTube';
+  document.getElementById('ft-video').href           = site.youtubeChannel;
+  document.getElementById('ft-vimeo').href           = site.vimeo;
+  document.getElementById('ft-photos').textContent   = lang === 'ru' ? 'Фотогалерея' : 'Photos';
+  document.getElementById('ft-photos').href          = site.photos;
+  document.getElementById('ft-write').textContent    = t(C.nav.contact);
+  document.getElementById('ft-give').textContent     = t(C.nav.donate);
+  document.getElementById('ft-live').textContent     = t(C.nav.live);
+  document.getElementById('ft-live').href            = site.youtubeLive;
+  document.getElementById('ft-copy').textContent     = `© ${new Date().getFullYear()} BSEBC · Brookhaven, PA`;
+  document.getElementById('ft-rights').textContent   = t(C.footer.copyright);
+
+  // Re-observe reveals after dynamic content
+  observeReveals();
+}
+
+// ── Icons ─────────────────────────────────────────────────
+function getIcon(type) {
+  const icons = {
+    audio:   '<svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>',
+    book:    '<svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 15H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>',
+    youtube: '<svg viewBox="0 0 24 24"><path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"/></svg>',
+    video:   '<svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
+    choir:   '<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm-1 14H9V8h2v9zm4 0h-2V8h2v9z"/></svg>',
+    photo:   '<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
+  };
+  return icons[type] || icons.audio;
+}
+
+// ── Nav scroll behavior ───────────────────────────────────
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── Hero image load ───────────────────────────────────────
+window.addEventListener('load', () => {
+  document.getElementById('hero-bg').style.backgroundImage = "url('assets/church.webp')";
+  setTimeout(() => document.getElementById('hero-bg').classList.add('loaded'), 100);
+});
+
+// ── Mobile nav ────────────────────────────────────────────
+function toggleMobile() {
+  document.getElementById('nav-mobile').classList.toggle('open');
+}
+function closeMobile() {
+  document.getElementById('nav-mobile').classList.remove('open');
+}
+
+// ── Gallery link ──────────────────────────────────────────
+function openGallery() {
+  window.open(CONTENT.site.photos, '_blank');
+}
+
+// ── Scroll reveal ─────────────────────────────────────────
+function observeReveals() {
+  const els = document.querySelectorAll('.reveal:not(.visible)');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(el => obs.observe(el));
+}
+
+// ── Contact form ──────────────────────────────────────────
+function handleSubmit(e) {
+  e.preventDefault();
+  const btn = document.getElementById('con-send');
+  btn.textContent = lang === 'ru' ? 'Отправлено ✓' : 'Sent ✓';
+  btn.style.background = '#2a6e3f';
+  setTimeout(() => { btn.textContent = lang === 'ru' ? 'Отправить' : 'Send'; btn.style.background = ''; }, 3000);
+}
+
+// ── Init ──────────────────────────────────────────────────
+render();
+observeReveals();
+</script>
+</body>
+</html>
