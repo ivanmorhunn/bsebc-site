@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="О церкви BSEBC — история, вероучение и устав Славянской Евангельской Баптистской Церкви г. Брукхейвен" />
+  <title>О нас — BSEBC</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    /* ── ABOUT PAGE SPECIFIC ─────────────────────────── */
+    .about-hero {
+      background: var(--night);
+      padding: 10rem 3.5rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url('assets/church.webp');
+      background-size: cover; background-position: center 30%;
+      opacity: 0.18;
+    }
+    .about-hero-content { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .about-hero-tag {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.22em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem;
+    }
+    .about-hero h1 {
+      font-family: var(--serif); font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      font-weight: 400; color: var(--white); line-height: 1.1; margin-bottom: 1rem;
+    }
+    .about-hero h1 em { font-style: italic; color: var(--gold-light); }
+    .about-hero p {
+      font-size: 16px; color: rgba(255,255,255,0.6); line-height: 1.75;
+    }
+
+    /* ── PAGE LAYOUT ─────────────────────────────────── */
+    .page-section { max-width: 800px; margin: 0 auto; padding: 5rem 2.5rem; }
+    .page-section-wide { max-width: 1040px; margin: 0 auto; padding: 5rem 2.5rem; }
+    .section-alt { background: var(--white); }
+    .section-parchment { background: #F5F0E8; }
+
+    /* ── HISTORY ─────────────────────────────────────── */
+    .history-body p {
+      font-size: 15px; font-weight: 300; line-height: 1.85;
+      color: var(--mid, #555); margin-bottom: 1.25rem;
+    }
+    .history-body p:last-child { margin-bottom: 0; }
+    .history-placeholder {
+      background: var(--white); border: 1px solid var(--gold-pale, #EFE0B8);
+      border-left: 3px solid var(--gold, #B8913A);
+      padding: 1.5rem 2rem; margin-bottom: 2rem; border-radius: 0 4px 4px 0;
+    }
+    .history-placeholder p {
+      font-size: 13px; color: var(--stone, #7A7060); font-style: italic; margin: 0;
+    }
+
+    /* ── BELIEFS ACCORDION ───────────────────────────── */
+    .belief-accordion { display: flex; flex-direction: column; gap: 0; margin-top: 2.5rem; }
+    .ba-item {
+      border-bottom: 1px solid var(--gold-pale, #EFE0B8);
+    }
+    .ba-item:first-child { border-top: 1px solid var(--gold-pale, #EFE0B8); }
+    .ba-trigger {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 0; cursor: pointer; background: none; border: none;
+      width: 100%; text-align: left; font-family: var(--sans, 'Inter', sans-serif);
+    }
+    .ba-trigger:hover .ba-title { color: var(--gold, #B8913A); }
+    .ba-title {
+      font-family: var(--serif, 'Instrument Serif', serif);
+      font-size: 1.1rem; font-weight: 400; color: var(--night, #0A0F1E);
+      transition: color 0.2s;
+    }
+    .ba-num {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+      color: var(--gold, #B8913A); margin-right: 1rem; flex-shrink: 0;
+    }
+    .ba-left { display: flex; align-items: center; }
+    .ba-icon {
+      font-size: 18px; color: var(--stone, #7A7060); font-weight: 300;
+      transition: transform 0.25s; flex-shrink: 0; line-height: 1;
+    }
+    .ba-item.open .ba-icon { transform: rotate(45deg); color: var(--gold, #B8913A); }
+    .ba-body {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.35s ease, padding 0.25s ease;
+      padding: 0;
+    }
+    .ba-item.open .ba-body { max-height: 2000px; padding-bottom: 1.25rem; }
+    .ba-body-inner {
+      font-size: 14px; font-weight: 300; line-height: 1.8;
+      color: var(--mid, #555); padding-top: 0.25rem;
+    }
+    .ba-body-inner p { margin-bottom: 0.75rem; }
+    .ba-body-inner p:last-child { margin-bottom: 0; }
+
+    /* ── CHARTER PDF ─────────────────────────────────── */
+    .charter-wrap {
+      border: 1px solid var(--gold-pale, #EFE0B8);
+      border-radius: 4px; overflow: hidden; background: var(--white);
+    }
+    .charter-header {
+      padding: 1.5rem 2rem; border-bottom: 1px solid var(--gold-pale, #EFE0B8);
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      background: var(--white);
+    }
+    .charter-header h3 {
+      font-family: var(--serif, serif); font-size: 1.25rem; font-weight: 400;
+      color: var(--night, #0A0F1E);
+    }
+    .charter-header p { font-size: 13px; color: var(--stone, #7A7060); margin-top: 3px; }
+    .charter-download {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--night, #0A0F1E); color: var(--white);
+      padding: 8px 18px; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      text-decoration: none; flex-shrink: 0;
+      transition: opacity 0.15s;
+    }
+    .charter-download:hover { opacity: 0.8; }
+    .charter-download svg { width: 14px; height: 14px; fill: var(--white); }
+    .charter-pdf {
+      width: 100%; height: 700px; border: none; display: block;
+      background: #f0f0f0;
+    }
+    .charter-fallback {
+      padding: 3rem 2rem; text-align: center;
+      font-size: 14px; color: var(--stone, #7A7060);
+    }
+
+    /* ── LEADERSHIP PLACEHOLDER ──────────────────────── */
+    .leadership-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 2.5rem;
+    }
+    .leader-card {
+      background: var(--white); border: 1px solid var(--gold-pale, #EFE0B8);
+      padding: 2rem 1.5rem; text-align: center;
+    }
+    .leader-avatar {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: var(--night, #0A0F1E); margin: 0 auto 1rem;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .leader-avatar span {
+      font-family: var(--serif, serif); font-size: 1.5rem;
+      font-style: italic; color: var(--gold-light, #D4AE6A);
+    }
+    .leader-name {
+      font-family: var(--serif, serif); font-size: 1.1rem;
+      color: var(--night, #0A0F1E); margin-bottom: 0.2rem;
+    }
+    .leader-role {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gold, #B8913A);
+    }
+
+    /* ── BACK LINK ───────────────────────────────────── */
+    .back-link {
+      display: inline-flex; align-items: center; gap: 7px;
+      font-size: 12px; font-weight: 600; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--gold, #B8913A);
+      text-decoration: none; padding: 1.25rem 3.5rem;
+      border-bottom: 1px solid var(--gold-pale, #EFE0B8);
+      background: var(--white); width: 100%; display: flex;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--gold-light, #D4AE6A); }
+    .back-link svg { width: 14px; height: 14px; fill: currentColor; }
+
+    :root {
+      --gold: #B8913A; --gold-light: #D4AE6A; --gold-pale: #EFE0B8;
+      --night: #0A0F1E; --night-mid: #111827; --night-soft: #1C2537;
+      --parchment: #F5F0E8; --white: #FFFFFF; --ink: #0D0D0D;
+      --stone: #7A7060; --mid: #555555;
+      --serif: 'Instrument Serif', Georgia, serif;
+      --sans: 'Inter', system-ui, sans-serif;
+      --transition: 0.22s ease;
+    }
+
+    @media (max-width: 700px) {
+      .about-hero { padding: 8rem 1.5rem 4rem; }
+      .page-section, .page-section-wide { padding: 3.5rem 1.5rem; }
+      .leadership-grid { grid-template-columns: 1fr 1fr; }
+      .charter-pdf { height: 480px; }
+      .back-link { padding: 1rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV (simplified for about page) -->
+<nav id="nav" style="position:sticky;top:0;z-index:300;background:rgba(10,15,30,0.97);border-bottom:1px solid rgba(184,145,58,0.18);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;height:64px;backdrop-filter:blur(14px);">
+  <a href="index.html" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+    <img src="assets/logo.png" alt="BSEBC Logo" style="width:32px;height:32px;object-fit:contain;filter:invert(1) brightness(2);" />
+    <div style="display:flex;flex-direction:column;line-height:1.1;">
+      <strong style="font-family:'Instrument Serif',serif;font-size:15px;font-weight:400;color:#fff;font-style:italic;">BSEBC</strong>
+      <span style="font-size:8px;font-weight:400;letter-spacing:0.18em;text-transform:uppercase;color:#D4AE6A;">Brookhaven, PA</span>
+    </div>
+  </a>
+  <div style="display:flex;gap:1.5rem;align-items:center;">
+    <a href="index.html#schedule" style="font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.6);text-decoration:none;">Расписание</a>
+    <a href="index.html#donate" style="font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.6);text-decoration:none;">Пожертвовать</a>
+    <a href="index.html#contact" style="font-size:10px;font-weight:500;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.6);text-decoration:none;">Контакты</a>
+    <a href="https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/live" target="_blank" style="display:flex;align-items:center;gap:6px;background:rgba(180,30,30,0.85);border:1px solid rgba(255,80,80,0.5);border-radius:2px;padding:6px 12px;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#fff;text-decoration:none;">
+      <span style="width:6px;height:6px;border-radius:50%;background:#FF4444;"></span> Live
+    </a>
+  </div>
+</nav>
+
+<!-- BACK BREADCRUMB -->
+<a class="back-link" href="index.html">
+  <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+  Вернуться на главную
+</a>
+
+<!-- HERO -->
+<div class="about-hero">
+  <div class="about-hero-content">
+    <p class="about-hero-tag">Brookhaven, Pennsylvania</p>
+    <h1>О нашей <em>церкви</em></h1>
+    <p>Мы — добровольное объединение верующих для совместного поклонения Живому, Истинному, Вечному Богу на основании Священного Писания — Библии.</p>
+  </div>
+</div>
+
+<!-- HISTORY -->
+<div class="section-alt">
+  <div class="page-section">
+    <div class="sec-label"><span>История церкви</span></div>
+    <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:400;color:#0A0F1E;margin-bottom:2rem;line-height:1.15;">Наш путь в <em style="font-style:italic;color:#B8913A;">Брукхейвене</em></h2>
+
+    <div class="history-placeholder">
+      <p>Раздел об истории церкви находится в разработке. Если вы хотите поделиться историей основания и роста нашей общины, пожалуйста, <a href="index.html#contact" style="color:#B8913A;">свяжитесь с нами</a>.</p>
+    </div>
+
+    <div class="history-body">
+      <p>Славянская Евангельская Баптистская Церковь г. Брукхейвен, Пенсильвания — это добровольное объединение верующих Евангельско-Баптистского вероисповедания для совместного общения и поклонения Богу.</p>
+      <p>Наша церковь придерживается библейского принципа уважения законов и подчинения властям (Рим. 13:1-7; Тит.3:1-2; Деян.5:29). Мы верим в силу молитвы, Слова Божия и братского единства.</p>
+      <p>На протяжении всей нашей истории Господь верно вёл Свою церковь — через испытания и радости, через рост и обновление. Мы благодарны Богу за каждого человека, которого Он привёл в нашу общину.</p>
+    </div>
+  </div>
+</div>
+
+<!-- LEADERSHIP PLACEHOLDER -->
+<div class="section-parchment">
+  <div class="page-section">
+    <div class="sec-label"><span>Служители</span></div>
+    <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:400;color:#0A0F1E;margin-bottom:0.5rem;line-height:1.15;">Руководство <em style="font-style:italic;color:#B8913A;">церкви</em></h2>
+    <p style="font-size:14px;color:#7A7060;margin-bottom:0;">Согласно уставу, церковь избирает пастора, помощников и диаконов для духовного служения.</p>
+    <div class="leadership-grid">
+      <div class="leader-card">
+        <div class="leader-avatar"><span>П</span></div>
+        <div class="leader-name">Пастор</div>
+        <div class="leader-role">Пресвитер церкви</div>
+      </div>
+      <div class="leader-card">
+        <div class="leader-avatar"><span>Д</span></div>
+        <div class="leader-name">Диаконы</div>
+        <div class="leader-role">Служители церкви</div>
+      </div>
+      <div class="leader-card">
+        <div class="leader-avatar"><span>С</span></div>
+        <div class="leader-name">Совет церкви</div>
+        <div class="leader-role">Братский совет</div>
+      </div>
+    </div>
+    <p style="font-size:13px;color:#7A7060;margin-top:1.5rem;font-style:italic;">Имена служителей будут добавлены. Если вы хотите обновить эту информацию — <a href="index.html#contact" style="color:#B8913A;">напишите нам</a>.</p>
+  </div>
+</div>
+
+<!-- BELIEFS ACCORDION -->
+<div class="section-alt">
+  <div class="page-section">
+    <div class="sec-label"><span>Вероучение</span></div>
+    <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:400;color:#0A0F1E;margin-bottom:0.5rem;line-height:1.15;">Во что мы <em style="font-style:italic;color:#B8913A;">верим</em></h2>
+    <p style="font-size:14px;color:#7A7060;margin-bottom:0;">Основой нашей веры является Библия — каноническая книга Священного Писания, как единственное полное откровение Бога.</p>
+
+    <div class="belief-accordion" id="accordion">
+
+      <div class="ba-item">
+        <button class="ba-trigger" onclick="toggleAccordion(this)">
+          <div class="ba-left">
+            <span class="ba-num">01</span>
+            <span class="ba-title">О Слове Божием — Священном Писании</span>
+          </div>
+          <span class="ba-icon">+</span>
+        </button>
+        <div class="ba-body">
+          <div class="ba-body-inner">
+            <p>Мы верим, что Библия (канонические книги Ветхого и Нового Заветов) является Словом Божиим, написанным под вдохновением Духа Святого.</p>
+            <p>Библия — совершенное откровение Бога людям — является истинным источником познания Бога, открывает волю Бога, содержит заповеди Бога, законы и пророчества, указывает путь ко спасению (2 Тим. 3:16; 2 Пет. 1:21).</p>
+            <p>Священное Писание является источником христианской веры и духовного руководства верующих (Рим. 10:17; 2 Пет. 1:19).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-item">
+        <button class="ba-trigger" onclick="toggleAccordion(this)">
+          <div class="ba-left">
+            <span class="ba-num">02</span>
+            <span class="ba-title">О Боге</span>
+          </div>
+          <span class="ba-icon">+</span>
+        </button>
+        <div class="ba-body">
+          <div class="ba-body-inner">
+            <p>Мы верим в единого, живого, истинного и вечного Бога (Втор. 4:35; Ис. 44:6).</p>
+            <p>Мы верим в безначального, всемудрого, вездесущего, всезнающего и всемогущего Бога (Пс. 146:5).</p>
+            <p>Мы верим в Бога-Творца, создавшего небо и землю и всё, что их наполняет. Бог совершен, праведен и свят. Бог есть любовь, явленная человечеству в Иисусе Христе (1 Ин. 4:16).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-item">
+        <button class="ba-trigger" onclick="toggleAccordion(this)">
+          <div class="ba-left">
+            <span class="ba-num">03</span>
+            <span class="ba-title">О Троице Божией</span>
+          </div>
+          <span class="ba-icon">+</span>
+        </button>
+        <div class="ba-body">
+          <div class="ba-body-inner">
+            <p>Мы верим в триединого, единосущного Бога Отца и Сына и Духа Святого (1 Ин. 5:7; Мф. 28:19).</p>
+            <p>а) Бог Отец (1 Пет. 1:12; 1 Кор. 8:6).<br>б) Бог Сын — Иисус Христос (Ин. 6:27; Рим. 9:5; 1 Тим. 3:16).<br>в) Бог Дух Святой (Деян. 5:3-4; 1 Кор. 3:16).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-item">
+        <button class="ba-trigger" onclick="toggleAccordion(this)">
+          <div class="ba-left">
+            <span class="ba-num">04</span>
+            <span class="ba-title">Об Иисусе Христе — Сыне Божием</span>
+          </div>
+          <span class="ba-icon">+</span>
+        </button>
+        <div class="ba-body">
+          <div class="ba-body-inner">
+            <p>Мы верим, что Иисус Христос является Сыном Божиим и Богом от вечности (Ин. 5:20; Рим. 9:5).</p>
+            <p>Мы верим, что Христос — обещанный Помазанник Бога, Мессия и единственный Спаситель мира (Деян. 2:36; Деян. 4:12).</p>
+            <p>Мы верим, что «Христос умер за грехи наши по Писанию, и что Он погребён был и что воскрес в третий день по Писанию» (1 Кор. 15:3-4). Мы проповедуем Христа распятого, воскресшего и вновь грядущего.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-item">
+        <button class="ba-trigger" onclick="toggleAccordion(this)">
+          <div class="ba-left">
+            <span class="ba-num">05</span>
+            <span class="ba-title">О Духе Святом</span>
+          </div>
+          <span class="ba-icon">+</span>
+        </button>
+        <div class="ba-body">
+          <div class="ba-body-inner">
+            <p>Мы верим, что Дух Святой обладает всеми Божественными свойствами: всемогуществом, всеведением, вездесущием и святостью (Деян. 5:3-4).</p>
+            <p>Дух Святой был ниспослан в день Пятидесятницы для свидетельства о Христе, прославления Его и созидания Церкви (Деян. 1:8; Ин. 15:26).</p>
+            <p>Дух Святой учит, ведёт, наставляет, обличает, ободряет и утешает верующего (Ин. 14:26; 1 Кор. 2:12-13).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-item">
+        <button class="ba-trigger" onclick="toggleAccordion(this)">
+          <div class="ba-left">
+            <span class="ba-num">06</span>
+            <span class="ba-title">О спасении и покаянии</span>
+          </div>
+          <span class="ba-icon">+</span>
+        </button>
+        <div class="ba-body">
+          <div class="ba-body-inner">
+            <p>Мы верим, что искупление человека совершилось на кресте Голгофы через добровольную жертву Иисуса Христа за наши грехи (Ин. 1:29; Мф. 20:28).</p>
+            <p>Покаяние и обращение включают сокрушение о грехе, исповедание перед Господом и оставление греха, принятие Иисуса Христа как своего личного Спасителя.</p>
+            <p>Спасение даётся Богом по вере в Иисуса Христа — не по делам, но по благодати (Еф. 2:8).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-item">
+        <button class="ba-trigger" onclick="toggleAccordion(this)">
+          <div class="ba-left">
+            <span class="ba-num">07</span>
+            <span class="ba-title">О Церкви Христовой</span>
+          </div>
+          <span class="ba-icon">+</span>
+        </button>
+        <div class="ba-body">
+          <div class="ba-body-inner">
+            <p>Мы верим, что Иисус Христос создал Церковь (Мф. 16:18; Кол. 1:18; Еф. 1:22-23).</p>
+            <p>Поместная церковь — это собрание возрождённых душ, соединённых единой верой, единой любовью и надеждой, добровольно объединившихся для совместного служения Господу (Деян. 2:42).</p>
+            <p>Задачи поместной церкви: проповедь Евангелия, воспитание верующих к достижению святости и умножение христианской любви (Мф. 28:19-20).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-item">
+        <button class="ba-trigger" onclick="toggleAccordion(this)">
+          <div class="ba-left">
+            <span class="ba-num">08</span>
+            <span class="ba-title">О Водном Крещении и Вечере Господней</span>
+          </div>
+          <span class="ba-icon">+</span>
+        </button>
+        <div class="ba-body">
+          <div class="ba-body-inner">
+            <p>Мы верим, что водное крещение по вере является исполнением заповеди Иисуса Христа. Крещение совершается погружением над искренне покаявшимся человеком (Мк. 16:15-16; Деян. 2:38).</p>
+            <p>Вечеря Господня — заповедь Иисуса Христа о воспоминании и возвещении Его страданий и смерти на кресте (1 Кор. 11:23-26). Вечеря совершается каждое первое воскресенье месяца.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-item">
+        <button class="ba-trigger" onclick="toggleAccordion(this)">
+          <div class="ba-left">
+            <span class="ba-num">09</span>
+            <span class="ba-title">О браке и семье</span>
+          </div>
+          <span class="ba-icon">+</span>
+        </button>
+        <div class="ba-body">
+          <div class="ba-body-inner">
+            <p>Мы верим, что брак установлен Богом (Быт. 2:18, 24). Брак — это союз между мужчиной и женщиной для взаимной помощи и поддержки, продолжения человеческого рода и совместного пути в любви и согласии.</p>
+            <p>Мы верим, что дети в семье — драгоценный дар от Бога (Пс. 126:3). Родители несут ответственность за всестороннее воспитание своих детей (Кол. 3:21; Еф. 6:4).</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ba-item">
+        <button class="ba-trigger" onclick="toggleAccordion(this)">
+          <div class="ba-left">
+            <span class="ba-num">10</span>
+            <span class="ba-title">О Втором пришествии Иисуса Христа</span>
+          </div>
+          <span class="ba-icon">+</span>
+        </button>
+        <div class="ba-body">
+          <div class="ba-body-inner">
+            <p>Мы верим во второе пришествие Господа нашего Иисуса Христа в силе и славе (Деян. 1:11; Мф. 25:31; 1 Фес. 1:10).</p>
+            <p>После суда наступит вечность: для одних она будет блаженной со Христом, для других — вечным мучением (Ин. 5:29; Дан. 12:2).</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- CHARTER PDF -->
+<div class="section-parchment">
+  <div class="page-section-wide">
+    <div class="sec-label"><span>Устав церкви</span></div>
+    <h2 style="font-family:'Instrument Serif',serif;font-size:clamp(1.8rem,3.5vw,2.6rem);font-weight:400;color:#0A0F1E;margin-bottom:0.5rem;line-height:1.15;">Устав <em style="font-style:italic;color:#B8913A;">BSEBC</em></h2>
+    <p style="font-size:14px;color:#7A7060;margin-bottom:2rem;">Полный устав Славянской Евангельской Баптистской Церкви г. Брукхейвен, принятый на Собрании Членов Церкви.</p>
+
+    <div class="charter-wrap">
+      <div class="charter-header">
+        <div>
+          <h3>Устав церкви BSEBC</h3>
+          <p>Slavic Evangelical Baptist Church of Brookhaven · 2024</p>
+        </div>
+        <a class="charter-download" href="assets/charter.pdf" download="BSEBC-Ustav-2024.pdf">
+          <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+          Скачать PDF
+        </a>
+      </div>
+      <iframe
+        class="charter-pdf"
+        src="assets/charter.pdf"
+        title="Устав Славянской Евангельской Баптистской Церкви г. Брукхейвен">
+        <div class="charter-fallback">
+          <p>Ваш браузер не поддерживает отображение PDF.</p>
+          <a href="assets/charter.pdf" download style="color:#B8913A;">Нажмите здесь, чтобы скачать устав</a>
+        </div>
+      </iframe>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer style="background:#0A0F1E;padding:2.5rem 3.5rem;border-top:1px solid rgba(184,145,58,0.18);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;">
+  <p style="font-size:11px;color:rgba(255,255,255,0.2);">© 2025 BSEBC · Brookhaven, PA · bsebc.ivanmorhun.com</p>
+  <div style="display:flex;gap:1.5rem;">
+    <a href="index.html" style="font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Главная</a>
+    <a href="index.html#contact" style="font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Контакты</a>
+    <a href="index.html#donate" style="font-size:12px;color:rgba(255,255,255,0.4);text-decoration:none;">Пожертвовать</a>
+  </div>
+</footer>
+
+<script>
+function toggleAccordion(btn) {
+  const item = btn.closest('.ba-item');
+  const isOpen = item.classList.contains('open');
+  // close all
+  document.querySelectorAll('.ba-item.open').forEach(i => i.classList.remove('open'));
+  // open clicked if it was closed
+  if (!isOpen) item.classList.add('open');
+}
+</script>
+</body>
+</html>

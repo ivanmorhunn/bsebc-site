@@ -1,0 +1,37 @@
+backend:
+  name: github
+  repo: ivanmorhunn/bsebc-site
+  branch: main
+
+media_folder: assets
+public_folder: assets
+
+collections:
+  - name: "schedule"
+    label: "Service Schedule"
+    files:
+      - label: "Weekly Schedule"
+        name: "schedule"
+        file: "content.js"
+        fields:
+          - label: "Sunday Services"
+            name: "sunday"
+            widget: "list"
+            fields:
+              - { label: "Time", name: "time", widget: "string" }
+              - { label: "Name (Russian)", name: "name_ru", widget: "string" }
+              - { label: "Name (English)", name: "name_en", widget: "string" }
+          - label: "Wednesday Services"
+            name: "wednesday"
+            widget: "list"
+            fields:
+              - { label: "Time", name: "time", widget: "string" }
+              - { label: "Name (Russian)", name: "name_ru", widget: "string" }
+              - { label: "Name (English)", name: "name_en", widget: "string" }
+          - label: "Friday Services"
+            name: "friday"
+            widget: "list"
+            fields:
+              - { label: "Time", name: "time", widget: "string" }
+              - { label: "Name (Russian)", name: "name_ru", widget: "string" }
+              - { label: "Name (English)", name: "name_en", widget: "string" }

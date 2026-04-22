@@ -4,9 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Славянская Евангельская Баптистская Церковь — г. Брукхейвен, Пенсильвания" />
-  <title>BSEBC — Baptist Slavic Evangelical Baptist Church</title>
-  <link rel="icon" href="assets/logo.png" type="image/png" />
-  <link rel="apple-touch-icon" href="assets/logo.png" />
+  <title>BSEBC — Slavic Evangelical Baptist Church</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -27,7 +25,7 @@
   <ul class="nav-links" id="nav-links">
     <li><a href="#schedule" id="nl-schedule"></a></li>
     <li><a href="#archive"  id="nl-archive"></a></li>
-    <li><a href="#about"    id="nl-about"></a></li>
+    <li><a href="about.html" id="nl-about"></a></li>
     <li><a href="#gallery"  id="nl-gallery"></a></li>
     <li><a href="#donate"   id="nl-donate"></a></li>
     <li><a href="#contact"  id="nl-contact"></a></li>
@@ -38,8 +36,8 @@
       <span id="nl-live"></span>
     </a>
     <div class="nav-lang">
-      <button class="lang-btn active" data-lang="ru" onclick="setLang('ru')">РУ</button>
-      <button class="lang-btn"        data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn active" onclick="setLang('ru')">РУ</button>
+      <button class="lang-btn"        onclick="setLang('en')">EN</button>
     </div>
     <button class="nav-hamburger" onclick="toggleMobile()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -50,7 +48,7 @@
 <nav class="nav-mobile" id="nav-mobile">
   <a href="#schedule" onclick="closeMobile()" id="nm-schedule"></a>
   <a href="#archive"  onclick="closeMobile()" id="nm-archive"></a>
-  <a href="#about"    onclick="closeMobile()" id="nm-about"></a>
+  <a href="about.html" onclick="closeMobile()" id="nm-about"></a>
   <a href="#gallery"  onclick="closeMobile()" id="nm-gallery"></a>
   <a href="#donate"   onclick="closeMobile()" id="nm-donate"></a>
   <a href="#contact"  onclick="closeMobile()" id="nm-contact"></a>
@@ -139,11 +137,11 @@
   <h2 class="sec-title reveal" id="gal-heading"></h2>
   <p class="gal-notice reveal" id="gal-notice"></p>
   <div class="gallery-grid reveal">
-    <img class="gallery-img" src="assets/Picture1.png" alt="Church photo 1" onclick="openLightbox(this.src, this.alt)" />
-    <img class="gallery-img" src="assets/Picture2.png" alt="Church photo 2" onclick="openLightbox(this.src, this.alt)" />
-    <img class="gallery-img" src="assets/Picture3.png" alt="Church photo 3" onclick="openLightbox(this.src, this.alt)" />
-    <img class="gallery-img" src="assets/Picture4.png" alt="Church photo 4" onclick="openLightbox(this.src, this.alt)" />
-    <img class="gallery-img" src="assets/Picture5.JPG" alt="Church photo 5" onclick="openLightbox(this.src, this.alt)" />
+    <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
+    <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
+    <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
+    <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
+    <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
     <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
     <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
     <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
@@ -245,22 +243,9 @@
   </div>
   <div class="footer-bottom">
     <p id="ft-copy"></p>
-    <p id="ft-year"></p>
     <p id="ft-rights"></p>
   </div>
 </footer>
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" aria-hidden="true">
-  <div class="lightbox-backdrop" onclick="closeLightbox()"></div>
-  <div class="lightbox-panel" role="dialog" aria-modal="true" aria-label="Photo preview">
-    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">×</button>
-    <img id="lightbox-img" class="lightbox-img" alt="" />
-    <div class="lightbox-actions">
-      <a class="btn-primary" id="lightbox-open-archive" href="#" target="_blank" rel="noreferrer"></a>
-    </div>
-  </div>
-</div>
 
 <script>
 let lang = 'ru';
@@ -269,7 +254,7 @@ function t(obj){ return (obj&&obj[lang])||(obj&&obj['ru'])||''; }
 function setLang(l) {
   lang = l;
   document.querySelectorAll('.lang-btn').forEach(b =>
-    b.classList.toggle('active', b.dataset.lang === l));
+    b.classList.toggle('active', b.textContent.trim().toLowerCase().startsWith(l)));
   document.documentElement.lang = l==='ru'?'ru':'en';
   render();
 }
@@ -315,7 +300,7 @@ function render() {
     if(i>0){const d=document.createElement('div');d.className='sched-divider';grid.appendChild(d);}
     const block=document.createElement('div');
     block.className='day-block reveal';
-    block.innerHTML=`<div class="day-header"><div class="day-num">0${i+1}</div><div><div class="day-name">${t(day.name)}</div><div class="day-en">${lang==='ru'?(day.name.en||''):(day.name.ru||'')}</div></div></div>${day.services.map(sv=>`<div class="service-row"><span class="s-name">${t(sv.name)}</span><span class="s-time">${sv.time}</span></div>`).join('')}`;
+    block.innerHTML=`<div class="day-header"><div class="day-num">0${i+1}</div><div><div class="day-name">${t(day.name)}</div><div class="day-en">${lang==='ru'?(day.name.en||''):(day.name.ru||'')}</div></div></div>${day.services.map(sv=>`<div class="service-row"><span class="s-time">${sv.time}</span><span class="s-name">${t(sv.name)}</span></div>`).join('')}`;
     grid.appendChild(block);
   });
 
@@ -361,7 +346,6 @@ function render() {
     : 'Photos are hosted on Zenfolio — click any tile to open the archive.';
   document.getElementById('gal-cta').textContent = lang==='ru'?'Открыть фотоархив →':'Open photo archive →';
   document.getElementById('gal-cta').href = s.photos;
-  document.getElementById('lightbox-open-archive').textContent = lang==='ru'?'Открыть фотоархив →':'Open photo archive →';
 
   // DONATE
   document.getElementById('don-label').textContent   = t(C.donate.label);
@@ -400,8 +384,7 @@ function render() {
   document.getElementById('ft-write').textContent    = t(C.nav.contact);
   document.getElementById('ft-give').textContent     = t(C.nav.donate);
   document.getElementById('ft-live').textContent     = t(C.nav.live);
-  document.getElementById('ft-copy').textContent     = '© BSEBC';
-  document.getElementById('ft-year').textContent     = String(new Date().getFullYear());
+  document.getElementById('ft-copy').textContent     = `© ${new Date().getFullYear()} BSEBC · Brookhaven, PA`;
   document.getElementById('ft-rights').textContent   = t(C.footer.copyright);
 
   observeReveals();
@@ -413,7 +396,7 @@ function getIcon(type){
     book:'<svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 15H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>',
     youtube:'<svg viewBox="0 0 24 24"><path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"/></svg>',
     video:'<svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
-    choir:'<img class="ac-icon-img" src="assets/choir.png" alt="" loading="lazy" />',
+    choir:'<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm-1 14H9V8h2v9zm4 0h-2V8h2v9z"/></svg>',
     photo:'<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
   };
   return icons[type]||icons.audio;
@@ -428,33 +411,6 @@ window.addEventListener('load',()=>{
 function toggleMobile(){document.getElementById('nav-mobile').classList.toggle('open');}
 function closeMobile(){document.getElementById('nav-mobile').classList.remove('open');}
 function openGallery(){window.open(CONTENT.site.photos,'_blank');}
-function openLightbox(src, alt){
-  const lb = document.getElementById('lightbox');
-  const img = document.getElementById('lightbox-img');
-  const open = document.getElementById('lightbox-open-archive');
-  img.src = src;
-  img.alt = alt || '';
-  open.href = CONTENT.site.photos;
-  lb.setAttribute('aria-hidden','false');
-  document.body.classList.add('no-scroll');
-  // Ensure CSS transitions fire (avoid display:none -> block timing issues)
-  requestAnimationFrame(() => lb.classList.add('open'));
-}
-function closeLightbox(){
-  const lb = document.getElementById('lightbox');
-  const img = document.getElementById('lightbox-img');
-  lb.setAttribute('aria-hidden','true');
-  document.body.classList.remove('no-scroll');
-  img.src = '';
-  lb.classList.remove('open');
-}
-
-document.addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape') return;
-  const lb = document.getElementById('lightbox');
-  if (!lb || lb.getAttribute('aria-hidden') === 'true') return;
-  closeLightbox();
-});
 function observeReveals(){
   const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:0.1});
   document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));

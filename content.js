@@ -6,7 +6,7 @@ const CONTENT = {
 
   site: {
     name:     { ru: "BSEBC", en: "BSEBC" },
-    tagline:  { ru: "Славянская Евангельская Баптистская Церковь", en: "Baptist Slavic Evangelical Baptist Church" },
+    tagline:  { ru: "Славянская Евангельская Баптистская Церковь", en: "Slavic Evangelical Baptist Church" },
     location: { ru: "г. Брукхейвен, Пенсильвания", en: "Brookhaven, Pennsylvania" },
     youtubeChannel: "https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ",
     youtubeLive:    "https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/live",
@@ -92,7 +92,7 @@ const CONTENT = {
     heading: { ru: "Церковь, основанная\nна Слове Божием", en: "A Church Built\non the Word of God" },
     body: {
       ru: "Мы — Славянская Евангельская Баптистская Церковь в Брукхейвене, Пенсильвания. Наши двери открыты для всех, кто ищет Бога, живое общение и духовную семью. Мы верим в силу молитвы, Слова Божия и братского единства.",
-      en: "We are the Baptist Slavic Evangelical Baptist Church of Brookhaven, Pennsylvania. Our doors are open to all who seek God, living fellowship, and a spiritual family. We believe in the power of prayer, the Word of God, and brotherly unity."
+      en: "We are the Slavic Evangelical Baptist Church of Brookhaven, Pennsylvania. Our doors are open to all who seek God, living fellowship, and a spiritual family. We believe in the power of prayer, the Word of God, and brotherly unity."
     },
     charterLabel: { ru: "Читать устав церкви", en: "Read Church Charter" },
     beliefs: {
