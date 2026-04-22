@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Славянская Евангельская Баптистская Церковь — г. Брукхейвен, Пенсильвания" />
   <title>BSEBC — Slavic Evangelical Baptist Church</title>
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
@@ -243,6 +245,7 @@
   </div>
   <div class="footer-bottom">
     <p id="ft-copy"></p>
+    <p id="ft-year"></p>
     <p id="ft-rights"></p>
   </div>
 </footer>
@@ -397,7 +400,8 @@ function render() {
   document.getElementById('ft-write').textContent    = t(C.nav.contact);
   document.getElementById('ft-give').textContent     = t(C.nav.donate);
   document.getElementById('ft-live').textContent     = t(C.nav.live);
-  document.getElementById('ft-copy').textContent     = `© ${new Date().getFullYear()} BSEBC · Brookhaven, PA`;
+  document.getElementById('ft-copy').textContent     = '© BSEBC';
+  document.getElementById('ft-year').textContent     = String(new Date().getFullYear());
   document.getElementById('ft-rights').textContent   = t(C.footer.copyright);
 
   observeReveals();
@@ -431,18 +435,26 @@ function openLightbox(src, alt){
   img.src = src;
   img.alt = alt || '';
   open.href = CONTENT.site.photos;
-  lb.classList.add('open');
   lb.setAttribute('aria-hidden','false');
   document.body.classList.add('no-scroll');
+  // Ensure CSS transitions fire (avoid display:none -> block timing issues)
+  requestAnimationFrame(() => lb.classList.add('open'));
 }
 function closeLightbox(){
   const lb = document.getElementById('lightbox');
   const img = document.getElementById('lightbox-img');
-  lb.classList.remove('open');
   lb.setAttribute('aria-hidden','true');
   document.body.classList.remove('no-scroll');
   img.src = '';
+  lb.classList.remove('open');
 }
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  const lb = document.getElementById('lightbox');
+  if (!lb || lb.getAttribute('aria-hidden') === 'true') return;
+  closeLightbox();
+});
 function observeReveals(){
   const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:0.1});
   document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));
