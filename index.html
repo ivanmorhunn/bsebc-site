@@ -137,11 +137,11 @@
   <h2 class="sec-title reveal" id="gal-heading"></h2>
   <p class="gal-notice reveal" id="gal-notice"></p>
   <div class="gallery-grid reveal">
-    <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
-    <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
-    <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
-    <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
-    <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
+    <img class="gallery-img" src="assets/Picture1.png" alt="Church photo 1" onclick="openLightbox(this.src, this.alt)" />
+    <img class="gallery-img" src="assets/Picture2.png" alt="Church photo 2" onclick="openLightbox(this.src, this.alt)" />
+    <img class="gallery-img" src="assets/Picture3.png" alt="Church photo 3" onclick="openLightbox(this.src, this.alt)" />
+    <img class="gallery-img" src="assets/Picture4.png" alt="Church photo 4" onclick="openLightbox(this.src, this.alt)" />
+    <img class="gallery-img" src="assets/Picture5.JPG" alt="Church photo 5" onclick="openLightbox(this.src, this.alt)" />
     <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
     <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
     <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
@@ -247,6 +247,18 @@
   </div>
 </footer>
 
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-backdrop" onclick="closeLightbox()"></div>
+  <div class="lightbox-panel" role="dialog" aria-modal="true" aria-label="Photo preview">
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">×</button>
+    <img id="lightbox-img" class="lightbox-img" alt="" />
+    <div class="lightbox-actions">
+      <a class="btn-primary" id="lightbox-open-archive" href="#" target="_blank" rel="noreferrer"></a>
+    </div>
+  </div>
+</div>
+
 <script>
 let lang = 'ru';
 function t(obj){ return (obj&&obj[lang])||(obj&&obj['ru'])||''; }
@@ -300,7 +312,7 @@ function render() {
     if(i>0){const d=document.createElement('div');d.className='sched-divider';grid.appendChild(d);}
     const block=document.createElement('div');
     block.className='day-block reveal';
-    block.innerHTML=`<div class="day-header"><div class="day-num">0${i+1}</div><div><div class="day-name">${t(day.name)}</div><div class="day-en">${lang==='ru'?(day.name.en||''):(day.name.ru||'')}</div></div></div>${day.services.map(sv=>`<div class="service-row"><span class="s-time">${sv.time}</span><span class="s-name">${t(sv.name)}</span></div>`).join('')}`;
+    block.innerHTML=`<div class="day-header"><div class="day-num">0${i+1}</div><div><div class="day-name">${t(day.name)}</div><div class="day-en">${lang==='ru'?(day.name.en||''):(day.name.ru||'')}</div></div></div>${day.services.map(sv=>`<div class="service-row"><span class="s-name">${t(sv.name)}</span><span class="s-time">${sv.time}</span></div>`).join('')}`;
     grid.appendChild(block);
   });
 
@@ -346,6 +358,7 @@ function render() {
     : 'Photos are hosted on Zenfolio — click any tile to open the archive.';
   document.getElementById('gal-cta').textContent = lang==='ru'?'Открыть фотоархив →':'Open photo archive →';
   document.getElementById('gal-cta').href = s.photos;
+  document.getElementById('lightbox-open-archive').textContent = lang==='ru'?'Открыть фотоархив →':'Open photo archive →';
 
   // DONATE
   document.getElementById('don-label').textContent   = t(C.donate.label);
@@ -411,6 +424,25 @@ window.addEventListener('load',()=>{
 function toggleMobile(){document.getElementById('nav-mobile').classList.toggle('open');}
 function closeMobile(){document.getElementById('nav-mobile').classList.remove('open');}
 function openGallery(){window.open(CONTENT.site.photos,'_blank');}
+function openLightbox(src, alt){
+  const lb = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  const open = document.getElementById('lightbox-open-archive');
+  img.src = src;
+  img.alt = alt || '';
+  open.href = CONTENT.site.photos;
+  lb.classList.add('open');
+  lb.setAttribute('aria-hidden','false');
+  document.body.classList.add('no-scroll');
+}
+function closeLightbox(){
+  const lb = document.getElementById('lightbox');
+  const img = document.getElementById('lightbox-img');
+  lb.classList.remove('open');
+  lb.setAttribute('aria-hidden','true');
+  document.body.classList.remove('no-scroll');
+  img.src = '';
+}
 function observeReveals(){
   const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:0.1});
   document.querySelectorAll('.reveal:not(.visible)').forEach(el=>obs.observe(el));
