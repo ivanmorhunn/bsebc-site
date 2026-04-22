@@ -1,6 +1,8 @@
 backend:
   branch: main
   name: git-gateway
+  identity_url: https://glowing-boba-e569d9.netlify.app/.netlify/identity
+  gateway_url: https://glowing-boba-e569d9.netlify.app/.netlify/git
 
 media_folder: assets
 public_folder: assets
