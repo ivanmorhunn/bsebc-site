@@ -364,6 +364,10 @@ a { color: inherit; text-decoration: none; }
 .archive-card:hover .ac-sub   { color: rgba(255,255,255,0.45); }
 .archive-card:hover .ac-ring  { border-color: var(--gold); background: rgba(184,145,58,0.1); }
 .archive-card:hover .ac-ring svg { fill: var(--gold); }
+.archive-card:hover .ac-ring .ac-icon-img {
+  opacity: 1;
+  filter: grayscale(1) brightness(1) sepia(1) saturate(7) hue-rotate(6deg);
+}
 .archive-card:hover .ac-arrow { opacity: 1; transform: translate(2px,-2px); }
 
 .ac-ring {
@@ -374,6 +378,14 @@ a { color: inherit; text-decoration: none; }
   transition: border-color var(--transition), background var(--transition);
 }
 .ac-ring svg { width: 20px; height: 20px; fill: var(--stone); transition: fill var(--transition); }
+.ac-ring .ac-icon-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  opacity: 0.85;
+  transition: opacity var(--transition), filter var(--transition);
+  filter: grayscale(1) brightness(0.55) contrast(1.05);
+}
 /* FIX #2 — archive card text larger */
 .ac-title {
   font-family: var(--serif); font-size: 1.2rem; font-weight: 400;
@@ -632,6 +644,10 @@ footer { background: var(--night); padding: 5rem 3.5rem 2.5rem; border-top: 1px 
   max-width: 1200px;
   margin: 0 auto;
 }
+.footer-top,
+.footer-bottom {
+  font-family: var(--sans);
+}
 .f-brand-name { display: flex; align-items: center; gap: 12px; margin-bottom: 0.75rem; }
 .f-brand-name span {
   font-family: var(--serif);
@@ -657,11 +673,12 @@ footer { background: var(--night); padding: 5rem 3.5rem 2.5rem; border-top: 1px 
 }
 .f-col a {
   display: block;
-  font-size: 22px;
-  font-weight: 450;
-  letter-spacing: -0.01em;
-  color: rgba(255,255,255,0.82);
-  margin-bottom: 0.65rem;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 0.75rem;
   transition: color var(--transition), transform var(--transition);
 }
 .f-col a:hover { color: rgba(212,174,106,0.95); transform: translateX(2px); }
@@ -674,7 +691,7 @@ footer { background: var(--night); padding: 5rem 3.5rem 2.5rem; border-top: 1px 
   align-items: center;
   gap: 0.75rem;
 }
-.footer-bottom p { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
+.footer-bottom p { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.28); }
 #ft-copy { justify-self: start; }
 #ft-year { justify-self: center; }
 #ft-rights { justify-self: end; }
@@ -711,7 +728,7 @@ footer { background: var(--night); padding: 5rem 3.5rem 2.5rem; border-top: 1px 
   .archive-grid { grid-template-columns: 1fr; }
   .archive-card { border-right: none !important; }
   .footer-top { grid-template-columns: 1fr; }
-  .f-col a { font-size: 18px; }
+  .f-col a { font-size: 13px; }
   .footer-bottom { grid-template-columns: 1fr; justify-items: center; text-align: center; }
   #ft-copy, #ft-year, #ft-rights { justify-self: center; }
   .gallery-grid { grid-template-columns: repeat(2,1fr); }

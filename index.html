@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Славянская Евангельская Баптистская Церковь — г. Брукхейвен, Пенсильвания" />
-  <title>BSEBC — Slavic Evangelical Baptist Church</title>
+  <title>BSEBC — Baptist Slavic Evangelical Baptist Church</title>
   <link rel="icon" href="assets/logo.png" type="image/png" />
   <link rel="apple-touch-icon" href="assets/logo.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -38,8 +38,8 @@
       <span id="nl-live"></span>
     </a>
     <div class="nav-lang">
-      <button class="lang-btn active" onclick="setLang('ru')">РУ</button>
-      <button class="lang-btn"        onclick="setLang('en')">EN</button>
+      <button class="lang-btn active" data-lang="ru" onclick="setLang('ru')">РУ</button>
+      <button class="lang-btn"        data-lang="en" onclick="setLang('en')">EN</button>
     </div>
     <button class="nav-hamburger" onclick="toggleMobile()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -269,7 +269,7 @@ function t(obj){ return (obj&&obj[lang])||(obj&&obj['ru'])||''; }
 function setLang(l) {
   lang = l;
   document.querySelectorAll('.lang-btn').forEach(b =>
-    b.classList.toggle('active', b.textContent.trim().toLowerCase().startsWith(l)));
+    b.classList.toggle('active', b.dataset.lang === l));
   document.documentElement.lang = l==='ru'?'ru':'en';
   render();
 }
@@ -413,7 +413,7 @@ function getIcon(type){
     book:'<svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 15H7v-2h10v2zm0-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>',
     youtube:'<svg viewBox="0 0 24 24"><path d="M21.58 7.19c-.23-.86-.91-1.54-1.77-1.77C18.25 5 12 5 12 5s-6.25 0-7.81.42c-.86.23-1.54.91-1.77 1.77C2 8.75 2 12 2 12s0 3.25.42 4.81c.23.86.91 1.54 1.77 1.77C5.75 19 12 19 12 19s6.25 0 7.81-.42c.86-.23 1.54-.91 1.77-1.77C22 15.25 22 12 22 12s0-3.25-.42-4.81zM10 15V9l5.2 3-5.2 3z"/></svg>',
     video:'<svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>',
-    choir:'<svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm-1 14H9V8h2v9zm4 0h-2V8h2v9z"/></svg>',
+    choir:'<img class="ac-icon-img" src="assets/choir.png" alt="" loading="lazy" />',
     photo:'<svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>',
   };
   return icons[type]||icons.audio;
