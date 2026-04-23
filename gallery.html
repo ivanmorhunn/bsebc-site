@@ -460,7 +460,8 @@
 <script>
 // ── CONFIG ────────────────────────────────────────────
 const CLOUD_NAME = 'dboyuj209';
-// Year list API uses tag = year. Split into folders by public_id path: "2024/a.jpg" = root, "2024/Разное/b.jpg" = folder "Разное".
+// Photo lists come from same-origin `/api/photos` (Vercel) — Cloudinary folder prefix, no per-image tags.
+// Thumbnails/full images still use delivery URLs below.
 const YEARS = ['2024', '2023', '2022', '2021', '2020']; // add more as you upload
 let currentYear = '2024';
 /** @type {Map<string, string[]>} folder key → public_ids (key "" = year root) */
@@ -519,20 +520,17 @@ function downloadGalleryPhoto(ev) {
   downloadPhotoByIndex(lbIndex);
 }
 
-/** Group by first subfolder under `YEAR/` in each public_id (e.g. 2024/a.jpg vs 2024/Разное/b.jpg). */
-function groupPublicIdsIntoFolders(publicIds, year) {
+/**
+ * `/api/photos` returns { folders: { General: [...ids], AlbumName: [...] } } (see api/photos.js).
+ * "General" = images directly under the year prefix (e.g. 2024/photo); map to "" for i18n folderRoot.
+ */
+function foldersResponseToMap(foldersObj) {
   const map = new Map();
-  const prefix = String(year) + '/';
-
-  publicIds.forEach((id) => {
-    let key = '';
-    if (id.startsWith(prefix)) {
-      const rest = id.slice(prefix.length);
-      const slash = rest.indexOf('/');
-      if (slash !== -1) key = rest.slice(0, slash);
-    }
-    if (!map.has(key)) map.set(key, []);
-    map.get(key).push(id);
+  if (!foldersObj || typeof foldersObj !== 'object') return map;
+  Object.entries(foldersObj).forEach(([name, ids]) => {
+    if (!Array.isArray(ids) || ids.length === 0) return;
+    const key = name === 'General' ? '' : name;
+    map.set(key, ids.slice());
   });
   return map;
 }
@@ -648,17 +646,18 @@ async function loadPhotos(year) {
   loading.style.display = 'block';
 
   try {
-    const res = await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${year}.json`);
+    const res = await fetch(`/api/photos?folder=${encodeURIComponent(year)}`);
     if (!res.ok) throw new Error('Failed');
     const data = await res.json();
-    const rawIds = (data.resources || []).map((r) => r.public_id);
+    if (data && data.error) throw new Error(String(data.error));
 
-    folderGroups = groupPublicIdsIntoFolders(rawIds, year);
+    folderGroups = foldersResponseToMap(data.folders);
     const keys = sortedFolderKeys(folderGroups);
+    const totalCount = [...folderGroups.values()].reduce((n, arr) => n + arr.length, 0);
 
     loading.style.display = 'none';
 
-    if (rawIds.length === 0) {
+    if (totalCount === 0) {
       photos = [];
       folderGroups = new Map();
       currentFolder = '';

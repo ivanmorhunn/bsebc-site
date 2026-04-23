@@ -51,8 +51,8 @@ const CONTENT = {
     emptyBody: { ru: "В этом разделе пока нет фотографий.", en: "There are no photos in this section yet." },
     errorTitle: { ru: "Не удалось загрузить фото", en: "Couldn’t load photos" },
     errorBody: {
-      ru: "Проверьте настройки Cloudinary — убедитесь, что \"Resource list\" не ограничен.",
-      en: "Check your Cloudinary settings — make sure “Resource list” access isn’t restricted."
+      ru: "Проверьте, что сайт открыт с того же домена, где работает /api/photos на Vercel, и что заданы переменные CLOUDINARY_*.",
+      en: "Open the site on the same origin as your Vercel deployment (so /api/photos works) and verify CLOUDINARY_* env vars are set."
     },
     download: { ru: "Скачать", en: "Download" },
     downloadAria: { ru: "Скачать это фото", en: "Download this photo" },
