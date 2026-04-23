@@ -51,8 +51,8 @@ const CONTENT = {
     emptyBody: { ru: "В этом разделе пока нет фотографий.", en: "There are no photos in this section yet." },
     errorTitle: { ru: "Не удалось загрузить фото", en: "Couldn’t load photos" },
     errorBody: {
-      ru: "Проверьте, что сайт открыт с того же домена, где работает /api/photos на Vercel, и что заданы переменные CLOUDINARY_*.",
-      en: "Open the site on the same origin as your Vercel deployment (so /api/photos works) and verify CLOUDINARY_* env vars are set."
+      ru: "Откройте сайт по адресу Vercel (не как файл с диска). В инструментах разработчика → «Сеть» найдите запрос /api/photos и проверьте код ответа. На Vercel должны быть заданы CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY и CLOUDINARY_API_SECRET.",
+      en: "Use your deployed Vercel URL (not a local file). In DevTools → Network, inspect /api/photos. On Vercel, set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET."
     },
     download: { ru: "Скачать", en: "Download" },
     downloadAria: { ru: "Скачать это фото", en: "Download this photo" },

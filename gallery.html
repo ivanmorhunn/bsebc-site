@@ -460,8 +460,9 @@
 <script>
 // ── CONFIG ────────────────────────────────────────────
 const CLOUD_NAME = 'dboyuj209';
-// Photo lists come from same-origin `/api/photos` (Vercel) — Cloudinary folder prefix, no per-image tags.
-// Thumbnails/full images still use delivery URLs below.
+// Photo lists: `/api/photos` on the same host (Vercel). Optional override when testing:
+//   window.__BSEBC_PHOTOS_API__ = 'https://your-project.vercel.app';
+// Thumbnails/full images still use Cloudinary delivery URLs (CLOUD_NAME) below.
 const YEARS = ['2024', '2023', '2022', '2021', '2020']; // add more as you upload
 let currentYear = '2024';
 /** @type {Map<string, string[]>} folder key → public_ids (key "" = year root) */
@@ -646,10 +647,33 @@ async function loadPhotos(year) {
   loading.style.display = 'block';
 
   try {
-    const res = await fetch(`/api/photos?folder=${encodeURIComponent(year)}`);
-    if (!res.ok) throw new Error('Failed');
-    const data = await res.json();
-    if (data && data.error) throw new Error(String(data.error));
+    const apiBase =
+      typeof window !== 'undefined' && window.__BSEBC_PHOTOS_API__
+        ? String(window.__BSEBC_PHOTOS_API__).replace(/\/$/, '')
+        : '';
+    const res = await fetch(
+      `${apiBase}/api/photos?folder=${encodeURIComponent(year)}`,
+    );
+    let data = {};
+    try {
+      data = await res.json();
+    } catch (_) {
+      data = {};
+    }
+    if (!res.ok || (data && data.error)) {
+      const detail =
+        (data && data.error && String(data.error)) ||
+        `${res.status} ${res.statusText || ''}`.trim();
+      loading.style.display = 'none';
+      if (grid) grid.style.display = 'none';
+      folderGroups = new Map();
+      currentFolder = '';
+      photos = [];
+      buildFolderNav([]);
+      renderGalleryErrorState(detail);
+      empty.style.display = 'block';
+      return;
+    }
 
     folderGroups = foldersResponseToMap(data.folders);
     const keys = sortedFolderKeys(folderGroups);
@@ -679,7 +703,7 @@ async function loadPhotos(year) {
     currentFolder = '';
     photos = [];
     buildFolderNav([]);
-    renderGalleryErrorState();
+    renderGalleryErrorState(e && e.message ? String(e.message) : '');
     empty.style.display = 'block';
   }
 }
@@ -771,10 +795,11 @@ function renderGalleryEmptyState() {
   setI18nText('gp-empty-body', t(G.emptyBody));
 }
 
-function renderGalleryErrorState() {
+function renderGalleryErrorState(detail) {
   const G = CONTENT.galleryPage || {};
+  const base = t(G.errorBody);
   setI18nText('gp-empty-title', t(G.errorTitle));
-  setI18nText('gp-empty-body', t(G.errorBody));
+  setI18nText('gp-empty-body', detail ? `${base}\n\n(${String(detail)})` : base);
 }
 
 function setLang(l) {
