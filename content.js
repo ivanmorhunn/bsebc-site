@@ -48,11 +48,14 @@ const CONTENT = {
     back: { ru: "← Вернуться на главную", en: "← Back to home" },
     loading: { ru: "Загрузка фотографий...", en: "Loading photos..." },
     emptyTitle: { ru: "Фото не найдены", en: "No photos found" },
-    emptyBody: { ru: "В этом разделе пока нет фотографий.", en: "There are no photos in this section yet." },
+    emptyBody: {
+      ru: "В этом разделе пока нет фотографий. В Cloudinary у каждого файла public_id должен начинаться с года и слэша (например 2024/… или 2024/Разное/…).",
+      en: "There are no photos here. In Cloudinary, each asset’s public_id should start with the year and a slash (e.g. 2024/… or 2024/Misc/…).",
+    },
     errorTitle: { ru: "Не удалось загрузить фото", en: "Couldn’t load photos" },
     errorBody: {
-      ru: "Откройте сайт по адресу Vercel (не как файл с диска). В инструментах разработчика → «Сеть» найдите запрос /api/photos и проверьте код ответа. На Vercel должны быть заданы CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY и CLOUDINARY_API_SECRET.",
-      en: "Use your deployed Vercel URL (not a local file). In DevTools → Network, inspect /api/photos. On Vercel, set CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET."
+      ru: "На localhost команда `npm run dev` не поднимает /api — используйте `npm run dev:vercel` или в gallery.html задайте meta bsebc-photos-api-origin на URL деплоя Vercel. На продакшене Vercel проверьте «Сеть» для /api/photos и переменные CLOUDINARY_*.",
+      en: "On localhost, `npm run dev` (static serve) has no /api — use `npm run dev:vercel` or set meta `bsebc-photos-api-origin` in gallery.html to your Vercel URL. On production, check Network for /api/photos and CLOUDINARY_* env vars."
     },
     download: { ru: "Скачать", en: "Download" },
     downloadAria: { ru: "Скачать это фото", en: "Download this photo" },

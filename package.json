@@ -4,6 +4,7 @@
   "description": "BSEBC Church Website",
   "scripts": {
     "dev": "npx serve . -p 3000",
+    "dev:vercel": "npx vercel dev",
     "start": "npx serve . -p 3000"
   }
 }
