@@ -40,11 +40,14 @@ const CONTENT = {
     sectionKicker: { ru: "Архив", en: "Archive" },
     sectionTitle: { ru: "Год за <em>годом</em>", en: "Year by <em>year</em>" },
     sectionLead: {
-      ru: "Выберите год, затем открывайте папки — вложенность в Media Library любой глубины поддерживается.",
-      en: "Choose a year, then open folders—nested Media Library folders of any depth are supported."
+      ru: "Выберите год. Строка «Сейчас вы здесь» и кнопка «На уровень выше» показывают, где вы находитесь. «Основное» — снимки в текущей папке; под пунктом «Подпапки» — вход глубже.",
+      en: "Pick a year. “You are here” and “Up one folder” show your place. “Main” is photos in the current folder; under “Subfolders” you go deeper."
     },
     folderTrailAria: { ru: "Путь к папке в архиве", en: "Folder path in the archive" },
-    folderNavLabel: { ru: "Папка", en: "Folder" },
+    folderTrailKicker: { ru: "Сейчас вы здесь", en: "You are here" },
+    folderUp: { ru: "↑ На уровень выше", en: "↑ Up one folder" },
+    folderNavMain: { ru: "Фото в этой папке", en: "Photos in this folder" },
+    folderNavSubfolders: { ru: "Подпапки — открыть и зайти внутрь", en: "Subfolders — open to go inside" },
     folderRoot: { ru: "Основное", en: "Main" },
     back: { ru: "← Вернуться на главную", en: "← Back to home" },
     loading: { ru: "Загрузка фотографий...", en: "Loading photos..." },
@@ -54,8 +57,8 @@ const CONTENT = {
       en: "No photos in this section yet.",
     },
     emptyPickSubfolderBody: {
-      ru: "Здесь нет снимков в корне папки — выберите вложенную папку выше.",
-      en: "No images in this folder’s root—pick a subfolder in the row above.",
+      ru: "В корне этой папки нет снимков — откройте подпапку в блоке ниже.",
+      en: "No photos in this folder’s root—open a subfolder in the section below.",
     },
     download: { ru: "Скачать", en: "Download" },
     downloadAria: { ru: "Скачать это фото", en: "Download this photo" },
