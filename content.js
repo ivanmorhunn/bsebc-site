@@ -40,8 +40,8 @@ const CONTENT = {
     sectionKicker: { ru: "Архив", en: "Archive" },
     sectionTitle: { ru: "Год за <em>годом</em>", en: "Year by <em>year</em>" },
     sectionLead: {
-      ru: "Выберите год и папку.",
-      en: "Choose a year and a folder."
+      ru: "Моменты из жизни церкви — служения, праздники, общение.",
+      en: "Moments from church life—services, holidays, fellowship."
     },
     folderTrailAria: { ru: "Путь к папке в архиве", en: "Folder path in the archive" },
     folderUp: { ru: "↑ Назад", en: "↑ Back" },
