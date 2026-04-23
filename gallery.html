@@ -1144,6 +1144,8 @@ function setLang(l) {
     localStorage.setItem('bsebc-lang', l);
     document.querySelectorAll('.lang-btn').forEach(b =>
       b.classList.toggle('active', b.dataset.lang === l));
+    const langWrap = document.querySelector('.nav-lang');
+    if (langWrap) langWrap.classList.toggle('is-en', l === 'en');
     document.documentElement.lang = l === 'ru' ? 'ru' : 'en';
     renderNav();
     renderGalleryChrome();
@@ -1444,6 +1446,8 @@ function closeMobile(){
 // ── INIT ──────────────────────────────────────────────
 document.querySelectorAll('.lang-btn').forEach(b =>
   b.classList.toggle('active', b.dataset.lang === lang));
+const initialLangWrap = document.querySelector('.nav-lang');
+if (initialLangWrap) initialLangWrap.classList.toggle('is-en', lang === 'en');
 renderNav();
 renderGalleryChrome();
 // Years come from Cloudinary so non-existent years never show.
