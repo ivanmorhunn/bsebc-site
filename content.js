@@ -49,8 +49,8 @@ const CONTENT = {
     loading: { ru: "Загрузка фотографий...", en: "Loading photos..." },
     emptyTitle: { ru: "Фото не найдены", en: "No photos found" },
     emptyBody: {
-      ru: "В этом разделе пока нет фотографий. В Cloudinary у каждого файла public_id должен начинаться с года и слэша (например 2024/… или 2024/Разное/…).",
-      en: "There are no photos here. In Cloudinary, each asset’s public_id should start with the year and a slash (e.g. 2024/… or 2024/Misc/…).",
+      ru: "В этом разделе пока нет фотографий. Должна существовать папка года в Media Library (например «2024») или public_id с префиксом 2024/… после деплоя последней версии API.",
+      en: "No photos in this section. Use a year folder in the Media Library (e.g. “2024”) or public_id paths starting with 2024/… . Redeploy so /api/photos includes dynamic-folder support.",
     },
     errorTitle: { ru: "Не удалось загрузить фото", en: "Couldn’t load photos" },
     errorBody: {
