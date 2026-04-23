@@ -133,7 +133,11 @@ a { color: inherit; text-decoration: none; }
 #nav {
   position: fixed; top: 0; left: 0; right: 0; z-index: 300;
   height: 64px;
-  display: flex; align-items: center; justify-content: space-between;
+  /* 1fr | auto | 1fr keeps menu links visually centered in the bar (not biased by wide right controls). */
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: 0.75rem;
   padding: 0 2.5rem;
   background: rgba(10,15,30,0.0);
   border-bottom: 1px solid transparent;
@@ -159,7 +163,11 @@ a { color: inherit; text-decoration: none; }
   flex-shrink: 0;
 }
 
-.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-brand {
+  display: flex; align-items: center; gap: 10px;
+  justify-self: start;
+  min-width: 0;
+}
 .brand-words {
   display: flex;
   flex-direction: column;
@@ -182,7 +190,14 @@ a { color: inherit; text-decoration: none; }
   color: rgba(212, 174, 106, 0.92);
 }
 
-.nav-links { display: flex; list-style: none; }
+.nav-links {
+  display: flex;
+  list-style: none;
+  justify-self: center;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+}
 .nav-links a {
   display: block; padding: 0 0.8rem; height: 64px; line-height: 64px;
   font-size: 10px; font-weight: 500; letter-spacing: 0.12em;
@@ -192,7 +207,13 @@ a { color: inherit; text-decoration: none; }
 }
 .nav-links a:hover { color: var(--gold-light); border-bottom-color: var(--gold); }
 
-.nav-right-group { display: flex; align-items: center; gap: 10px; }
+.nav-right-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-self: end;
+  min-width: 0;
+}
 
 /* FIX #8 — Live pill and lang toggle: solid backgrounds so always visible on photo */
 .nav-live {
@@ -613,6 +634,7 @@ html:lang(en) .ac-sub { font-size: 14px; }
   display: flex;
   flex-direction: column;
   padding: 1.25rem;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(6px) scale(0.985);
   transition: opacity 220ms ease, transform 220ms ease;
@@ -634,9 +656,39 @@ html:lang(en) .ac-sub { font-size: 14px; }
   transition: background var(--transition), border-color var(--transition);
 }
 .lightbox-close:hover { background: rgba(255,255,255,0.1); border-color: rgba(184,145,58,0.45); }
+.lightbox-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 72px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.92);
+  font-size: 34px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  transition: background var(--transition), border-color var(--transition), opacity var(--transition);
+  z-index: 2;
+}
+.lightbox-nav:hover:not(:disabled) {
+  background: rgba(255,255,255,0.1);
+  border-color: rgba(184,145,58,0.45);
+}
+.lightbox-nav:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.lightbox-prev { left: 12px; }
+.lightbox-next { right: 12px; }
 .lightbox-img {
   width: 100%;
-  height: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
   object-fit: contain;
   border: 1px solid rgba(255,255,255,0.06);
   background: rgba(0,0,0,0.15);
@@ -645,6 +697,7 @@ html:lang(en) .ac-sub { font-size: 14px; }
   display: flex;
   justify-content: center;
   padding-top: 1rem;
+  flex: 0 0 auto;
 }
 @media (prefers-reduced-motion: reduce) {
   .lightbox-backdrop,
@@ -849,8 +902,15 @@ footer { background: var(--night); padding: 5rem 3.5rem 2.5rem; border-top: 1px 
 /* ── RESPONSIVE ───────────────────────────────────────── */
 @media (max-width: 1100px) {
   /* Tablet widths (incl. iPad Pro 1024px): prevent nav link wrapping */
-  #nav { padding: 0 1.75rem; }
+  #nav {
+    padding: 0 1.75rem;
+    display: flex;
+    justify-content: space-between;
+    column-gap: normal;
+  }
+  .nav-brand { justify-self: auto; }
   .nav-links { display: none; }
+  .nav-right-group { justify-self: auto; margin-left: auto; }
   .nav-hamburger { display: flex; }
 }
 @media (max-width: 900px) {

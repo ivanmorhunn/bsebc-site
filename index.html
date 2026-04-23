@@ -31,6 +31,7 @@
     <li><a href="#gallery"  id="nl-gallery"></a></li>
     <li><a href="#donate"   id="nl-donate"></a></li>
     <li><a href="#contact"  id="nl-contact"></a></li>
+    <li><a href="gallery.html" id="nl-gallery-page"></a></li>
   </ul>
   <div class="nav-right-group">
     <a class="nav-live" id="nav-live" href="#" target="_blank">
@@ -54,6 +55,7 @@
   <a href="#gallery"  onclick="closeMobile()" id="nm-gallery"></a>
   <a href="#donate"   onclick="closeMobile()" id="nm-donate"></a>
   <a href="#contact"  onclick="closeMobile()" id="nm-contact"></a>
+  <a href="gallery.html" onclick="closeMobile()" id="nm-gallery-page"></a>
   <a href="#" id="nm-live" target="_blank" class="nm-live-link"></a>
 </nav>
 
@@ -140,11 +142,11 @@
   <h2 class="sec-title reveal" id="gal-heading"></h2>
   <p class="gal-notice reveal" id="gal-notice"></p>
   <div class="gallery-grid reveal">
-    <img class="gallery-img" src="assets/Picture1.png" alt="Church photo 1" onclick="openLightbox(this.src, this.alt)" />
-    <img class="gallery-img" src="assets/Picture2.png" alt="Church photo 2" onclick="openLightbox(this.src, this.alt)" />
-    <img class="gallery-img" src="assets/Picture3.png" alt="Church photo 3" onclick="openLightbox(this.src, this.alt)" />
-    <img class="gallery-img" src="assets/Picture4.png" alt="Church photo 4" onclick="openLightbox(this.src, this.alt)" />
-    <img class="gallery-img" src="assets/Picture5.JPG" alt="Church photo 5" onclick="openLightbox(this.src, this.alt)" />
+    <img class="gallery-img" src="assets/Picture1.png" alt="Church photo 1" onclick="openLightbox(this.src, this.alt, 0)" />
+    <img class="gallery-img" src="assets/Picture2.png" alt="Church photo 2" onclick="openLightbox(this.src, this.alt, 1)" />
+    <img class="gallery-img" src="assets/Picture3.png" alt="Church photo 3" onclick="openLightbox(this.src, this.alt, 2)" />
+    <img class="gallery-img" src="assets/Picture4.png" alt="Church photo 4" onclick="openLightbox(this.src, this.alt, 3)" />
+    <img class="gallery-img" src="assets/Picture5.JPG" alt="Church photo 5" onclick="openLightbox(this.src, this.alt, 4)" />
     <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
     <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
     <div class="gallery-placeholder" onclick="openGallery()"><svg viewBox="0 0 24 24"><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg></div>
@@ -262,7 +264,7 @@
       <a id="ft-audio"  href="https://soundcloud.com/bsebc/sets" target="_blank"></a>
       <a id="ft-video"  href="https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/videos" target="_blank">YouTube</a>
       <a id="ft-vimeo"  href="https://vimeo.com/bsebc" target="_blank">Vimeo</a>
-      <a id="ft-photos" href="http://bsebc.zenfolio.com/f781568629" target="_blank"></a>
+      <a id="ft-photos" href="gallery.html"></a>
     </div>
     <div class="f-col">
       <h5 id="ft-con-col"></h5>
@@ -283,6 +285,8 @@
   <div class="lightbox-backdrop" onclick="closeLightbox()"></div>
   <div class="lightbox-panel" role="dialog" aria-modal="true" aria-label="Photo preview">
     <button class="lightbox-close" onclick="closeLightbox()" aria-label="Close">×</button>
+    <button type="button" class="lightbox-nav lightbox-prev" onclick="lightboxPrev()" aria-label="Previous photo">‹</button>
+    <button type="button" class="lightbox-nav lightbox-next" onclick="lightboxNext()" aria-label="Next photo">›</button>
     <img id="lightbox-img" class="lightbox-img" alt="" />
     <div class="lightbox-actions">
       <a class="btn-primary" id="lightbox-open-archive" href="#" target="_blank" rel="noreferrer"></a>
@@ -502,17 +506,19 @@ function render() {
   document.getElementById('nl-schedule').textContent = t(C.nav.schedule);
   document.getElementById('nl-archive').textContent  = t(C.nav.archive);
   document.getElementById('nl-about').textContent    = t(C.nav.about);
-  document.getElementById('nl-gallery').textContent  = t(C.nav.gallery);
+  document.getElementById('nl-gallery').textContent  = t(C.nav.homeGallery);
   document.getElementById('nl-donate').textContent   = t(C.nav.donate);
   document.getElementById('nl-contact').textContent  = t(C.nav.contact);
+  document.getElementById('nl-gallery-page').textContent = t(C.nav.gallery);
   document.getElementById('nl-live').textContent     = t(C.nav.live);
   document.getElementById('nav-live').href           = s.youtubeLive;
   document.getElementById('nm-schedule').textContent = t(C.nav.schedule);
   document.getElementById('nm-archive').textContent  = t(C.nav.archive);
   document.getElementById('nm-about').textContent    = t(C.nav.about);
-  document.getElementById('nm-gallery').textContent  = t(C.nav.gallery);
+  document.getElementById('nm-gallery').textContent  = t(C.nav.homeGallery);
   document.getElementById('nm-donate').textContent   = t(C.nav.donate);
   document.getElementById('nm-contact').textContent  = t(C.nav.contact);
+  document.getElementById('nm-gallery-page').textContent = t(C.nav.gallery);
   document.getElementById('nm-live').textContent     = '▶ ' + t(C.nav.live);
   document.getElementById('nm-live').href            = s.youtubeLive;
 
@@ -576,7 +582,7 @@ function render() {
 
   // GALLERY
   document.getElementById('gal-label').textContent   = t(C.nav.gallery);
-  document.getElementById('gal-heading').textContent = lang==='ru'?'Фотогалерея':'Photo Gallery';
+  document.getElementById('gal-heading').textContent = t(C.nav.homeGallery);
   document.getElementById('gal-notice').textContent  = lang==='ru'
     ? 'Фотографии хранятся на Zenfolio — нажмите, чтобы открыть архив.'
     : 'Photos are hosted on Zenfolio — click any tile to open the archive.';
@@ -626,7 +632,7 @@ function render() {
   document.getElementById('ft-about').textContent    = t(C.nav.about);
   document.getElementById('ft-contact').textContent  = t(C.nav.contact);
   document.getElementById('ft-audio').textContent    = lang==='ru'?'Аудио':'Audio';
-  document.getElementById('ft-photos').textContent   = lang==='ru'?'Фотогалерея':'Photos';
+  document.getElementById('ft-photos').textContent   = t(C.nav.gallery);
   document.getElementById('ft-write').textContent    = t(C.nav.contact);
   document.getElementById('ft-give').textContent     = t(C.nav.donate);
   document.getElementById('ft-live').textContent     = t(C.nav.live);
@@ -668,13 +674,59 @@ function closeMobile(){
   if (btn) btn.classList.remove('active');
 }
 function openGallery(){window.open(CONTENT.site.photos,'_blank');}
-function openLightbox(src, alt){
+
+let galleryLightboxItems = [];
+let lightboxIndex = -1;
+
+function refreshGalleryLightboxItems() {
+  galleryLightboxItems = Array.from(document.querySelectorAll('.gallery-grid .gallery-img'))
+    .map(img => ({ src: img.getAttribute('src') || '', alt: img.getAttribute('alt') || '' }))
+    .filter(x => x.src);
+}
+
+function resolveLightboxIndex(src, preferredIndex) {
+  if (typeof preferredIndex === 'number' && Number.isFinite(preferredIndex)) return preferredIndex;
+  const idx = galleryLightboxItems.findIndex(x => x.src === src);
+  return idx >= 0 ? idx : 0;
+}
+
+function updateLightboxNavUi() {
+  const prev = document.querySelector('.lightbox-prev');
+  const next = document.querySelector('.lightbox-next');
+  const count = galleryLightboxItems.length;
+  const disable = count <= 1;
+  if (prev) prev.disabled = disable;
+  if (next) next.disabled = disable;
+}
+
+function showLightboxAt(index) {
+  if (!galleryLightboxItems.length) refreshGalleryLightboxItems();
+  if (!galleryLightboxItems.length) return;
+
+  const count = galleryLightboxItems.length;
+  const nextIndex = ((index % count) + count) % count;
+  lightboxIndex = nextIndex;
+
+  const img = document.getElementById('lightbox-img');
+  const item = galleryLightboxItems[nextIndex];
+  if (!img || !item) return;
+
+  // Instant swap (no dimming / transition)
+  img.src = item.src;
+  img.alt = item.alt || '';
+}
+
+function openLightbox(src, alt, startIndex){
+  refreshGalleryLightboxItems();
   const lb = document.getElementById('lightbox');
   const img = document.getElementById('lightbox-img');
   const open = document.getElementById('lightbox-open-archive');
-  img.src = src;
-  img.alt = alt || '';
+  lightboxIndex = resolveLightboxIndex(src, startIndex);
+  const item = galleryLightboxItems[lightboxIndex] || { src, alt: alt || '' };
+  img.src = item.src;
+  img.alt = item.alt || alt || '';
   open.href = CONTENT.site.photos;
+  updateLightboxNavUi();
   lb.setAttribute('aria-hidden','false');
   document.body.classList.add('no-scroll');
   // Ensure CSS transitions fire (avoid display:none -> block timing issues)
@@ -687,13 +739,42 @@ function closeLightbox(){
   document.body.classList.remove('no-scroll');
   img.src = '';
   lb.classList.remove('open');
+  lightboxIndex = -1;
+}
+
+function lightboxPrev() {
+  if (!galleryLightboxItems.length) refreshGalleryLightboxItems();
+  if (galleryLightboxItems.length <= 1) return;
+  showLightboxAt(lightboxIndex - 1);
+  updateLightboxNavUi();
+}
+
+function lightboxNext() {
+  if (!galleryLightboxItems.length) refreshGalleryLightboxItems();
+  if (galleryLightboxItems.length <= 1) return;
+  showLightboxAt(lightboxIndex + 1);
+  updateLightboxNavUi();
 }
 
 document.addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape') return;
   const lb = document.getElementById('lightbox');
   if (!lb || lb.getAttribute('aria-hidden') === 'true') return;
-  closeLightbox();
+
+  if (e.key === 'Escape') {
+    closeLightbox();
+    return;
+  }
+
+  if (e.key === 'ArrowLeft') {
+    e.preventDefault();
+    lightboxPrev();
+    return;
+  }
+  if (e.key === 'ArrowRight') {
+    e.preventDefault();
+    lightboxNext();
+    return;
+  }
 });
 function observeReveals(){
   const obs=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('visible');obs.unobserve(x.target);}}),{threshold:0.1});

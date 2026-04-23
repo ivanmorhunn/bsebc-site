@@ -23,10 +23,39 @@ const CONTENT = {
     schedule: { ru: "Расписание",   en: "Schedule" },
     archive:  { ru: "Архив",        en: "Archive" },
     about:    { ru: "О нас",        en: "About" },
-    gallery:  { ru: "Фото",         en: "Gallery" },
+    homeGallery: { ru: "Фото", en: "Photos" },
+    gallery:  { ru: "Галерея",      en: "Gallery" },
     donate:   { ru: "Пожертвовать", en: "Donate" },
     contact:  { ru: "Как нас найти", en: "Find Us" },
     live:     { ru: "Прямой эфир",  en: "Live Stream" },
+  },
+
+  galleryPage: {
+    title: { ru: "Фото <em>архив</em>", en: "Photo <em>archive</em>" },
+    eyebrow: { ru: "Брукхейвен, Пенсильвания", en: "BSEBC · Brookhaven, Pennsylvania" },
+    subtitle: {
+      ru: "Собрание моментов из жизни церкви — богослужения, праздники, служение и общение.",
+      en: "Moments from church life—worship, holidays, service, and fellowship."
+    },
+    sectionKicker: { ru: "Архив", en: "Archive" },
+    sectionTitle: { ru: "Год за <em>годом</em>", en: "Year by <em>year</em>" },
+    sectionLead: {
+      ru: "Выберите год, затем при необходимости папку — если в этом году в архиве несколько альбомов.",
+      en: "Choose a year, then pick a folder when that year has more than one album in the archive."
+    },
+    folderNavLabel: { ru: "Папка", en: "Folder" },
+    folderRoot: { ru: "Основное", en: "Main" },
+    back: { ru: "← Вернуться на главную", en: "← Back to home" },
+    loading: { ru: "Загрузка фотографий...", en: "Loading photos..." },
+    emptyTitle: { ru: "Фото не найдены", en: "No photos found" },
+    emptyBody: { ru: "В этом разделе пока нет фотографий.", en: "There are no photos in this section yet." },
+    errorTitle: { ru: "Не удалось загрузить фото", en: "Couldn’t load photos" },
+    errorBody: {
+      ru: "Проверьте настройки Cloudinary — убедитесь, что \"Resource list\" не ограничен.",
+      en: "Check your Cloudinary settings — make sure “Resource list” access isn’t restricted."
+    },
+    download: { ru: "Скачать", en: "Download" },
+    downloadAria: { ru: "Скачать это фото", en: "Download this photo" },
   },
 
   hero: {

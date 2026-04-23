@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Фотогалерея — BSEBC Brookhaven" />
+  <title>Фотогалерея — BSEBC</title>
+  <link rel="icon" href="assets/logo.png" type="image/png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="content.js"></script>
+  <style>
+    /* Gallery page — match About page visual language (scoped to this file) */
+    body { padding-top: 64px; }
+
+    /* Keep nav readable (same approach as About) */
+    #nav {
+      background: rgba(10,15,30,0.96);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(14px);
+    }
+
+    /* Hero (mirrors About page hero) */
+    .about-page-hero {
+      background: var(--night);
+      padding: 7.5rem 3.5rem 5rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-page-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url('assets/church.webp');
+      background-size: cover; background-position: center 30%;
+      opacity: 0.15;
+    }
+    .about-hero-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; }
+    .about-hero-eyebrow {
+      font-size: 9px; font-weight: 600; letter-spacing: 0.24em;
+      text-transform: uppercase; color: var(--gold); margin-bottom: 1.25rem;
+    }
+    .about-hero-inner h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 4.5vw, 3.8rem);
+      font-weight: 400; color: var(--white); line-height: 1.1; margin-bottom: 1rem;
+    }
+    .about-hero-inner h1 em { font-style: italic; color: var(--gold-light); }
+    .about-hero-inner p {
+      font-size: 15px; color: rgba(255,255,255,0.55); line-height: 1.75;
+      max-width: 620px; margin: 0 auto;
+    }
+
+    .back-bar {
+      position: absolute;
+      top: 64px; left: 0; right: 0;
+      z-index: 2;
+      background: transparent;
+      padding: 1rem 3.5rem;
+      text-align: center;
+    }
+    .back-bar a {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--gold); text-decoration: none;
+      display: inline-flex; align-items: center; gap: 7px;
+      transition: color var(--transition);
+    }
+    .back-bar a:hover { color: var(--gold-light); }
+
+    /* About-like section shells */
+    .abt-section { max-width: 780px; margin: 0 auto; padding: 5rem 2.5rem; }
+    .abt-section-wide { max-width: 1040px; margin: 0 auto; padding: 5rem 2.5rem; }
+    .abt-bg-white { background: var(--white); }
+    .abt-bg-parchment { background: var(--parchment); }
+
+    .abt-section h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.6rem);
+      font-weight: 400; color: var(--night);
+      line-height: 1.15; margin-bottom: 1.5rem;
+    }
+    .abt-section h2 em { font-style: italic; color: var(--gold); }
+
+    .abt-body p {
+      font-size: 15px; font-weight: 300; line-height: 1.85;
+      color: var(--stone); margin-bottom: 1.1rem;
+    }
+    .abt-body p:last-child { margin-bottom: 0; }
+
+    /* Year tabs */
+    .year-nav {
+      display: flex;
+      gap: 0.25rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 1.25rem 0 0.25rem;
+    }
+    .year-btn {
+      padding: 0.85rem 1.1rem;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--stone);
+      background: rgba(10,15,30,0.03);
+      border: 1px solid rgba(184,145,58,0.18);
+      border-radius: 2px;
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: background var(--transition), border-color var(--transition), color var(--transition), transform var(--transition);
+    }
+    .year-btn:hover { color: var(--night); border-color: rgba(184,145,58,0.45); transform: translateY(-1px); }
+    .year-btn.active {
+      color: var(--night);
+      background: rgba(184,145,58,0.16);
+      border-color: rgba(184,145,58,0.55);
+    }
+
+    .folder-nav-wrap {
+      display: none;
+      margin-top: 1.35rem;
+      text-align: center;
+    }
+    .folder-nav-wrap.is-visible { display: block; }
+    .folder-nav-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.7rem;
+    }
+    .folder-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+      justify-content: center;
+      align-items: center;
+    }
+    .folder-btn {
+      padding: 0.5rem 1rem;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      color: var(--stone);
+      background: rgba(10,15,30,0.04);
+      border: 1px solid rgba(10,15,30,0.12);
+      border-radius: 2px;
+      cursor: pointer;
+      font-family: var(--sans);
+      max-width: min(100%, 280px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      transition: background var(--transition), border-color var(--transition), color var(--transition);
+    }
+    .folder-btn:hover {
+      color: var(--night);
+      border-color: rgba(184,145,58,0.4);
+      background: rgba(184,145,58,0.08);
+    }
+    .folder-btn.active {
+      color: var(--night);
+      border-color: rgba(184,145,58,0.5);
+      background: rgba(184,145,58,0.14);
+    }
+
+    /* Gallery grid */
+    .gp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 4px;
+      max-width: 1200px; margin: 0 auto;
+    }
+    .gp-tile {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      background: var(--night-soft);
+    }
+    .gp-tile img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+      transition: transform 0.35s ease, opacity 0.3s;
+      opacity: 0;
+    }
+    .gp-tile img.loaded { opacity: 1; }
+    .gp-tile:hover img { transform: scale(1.04); }
+    .gp-tile-overlay {
+      position: absolute; inset: 0;
+      background: rgba(10,15,30,0);
+      transition: background 0.25s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .gp-tile:hover .gp-tile-overlay { background: rgba(10,15,30,0.25); }
+
+    /* Loading state */
+    .gp-loading {
+      text-align: center; padding: 5rem 2rem;
+      color: var(--stone); font-size: 14px;
+    }
+    .gp-loading-spinner {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid var(--gold-pale);
+      border-top-color: var(--gold);
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .gp-empty {
+      text-align: center; padding: 5rem 2rem;
+      color: var(--stone);
+    }
+    .gp-empty h3 {
+      font-family: var(--serif); font-size: 1.5rem;
+      font-weight: 400; color: var(--night); margin-bottom: .5rem;
+    }
+
+    /* Lightbox */
+    .lb-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 1200;
+      background: rgba(5, 7, 15, 0.96);
+      align-items: center; justify-content: center;
+    }
+    .lb-overlay.open { display: flex; }
+    .lb-img-wrap {
+      position: relative;
+      max-width: 90vw; max-height: 88vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .lb-img {
+      max-width: 90vw; max-height: 85vh;
+      object-fit: contain; display: block;
+      border: 1px solid rgba(184,145,58,0.15);
+    }
+    .lb-close {
+      position: fixed; top: 1.5rem; right: 2rem;
+      font-size: 28px; color: rgba(255,255,255,0.6);
+      cursor: pointer; background: none; border: none;
+      font-family: var(--sans); line-height: 1;
+      transition: color var(--transition);
+      z-index: 1201;
+    }
+    .lb-close:hover { color: var(--white); }
+    .lb-prev, .lb-next {
+      position: fixed; top: 50%; transform: translateY(-50%);
+      font-size: 28px; color: rgba(255,255,255,0.5);
+      cursor: pointer; background: rgba(10,15,30,0.5);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 2px;
+      padding: 1rem 1.25rem;
+      font-family: var(--sans); line-height: 1;
+      transition: color var(--transition), background var(--transition);
+      z-index: 1201;
+    }
+    .lb-prev:hover, .lb-next:hover {
+      color: var(--white); background: rgba(10,15,30,0.85);
+    }
+    .lb-prev { left: 12px; }
+    .lb-next { right: 12px; }
+    .lb-counter {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4);
+    }
+    .lb-download {
+      position: fixed;
+      bottom: 3.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1201;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 0.65rem 1.35rem;
+      border: 1px solid rgba(184,145,58,0.45);
+      border-radius: 2px;
+      background: rgba(10,15,30,0.72);
+      color: var(--gold);
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: color var(--transition), background var(--transition), border-color var(--transition);
+    }
+    .lb-download:hover {
+      background: rgba(10,15,30,0.92);
+      color: var(--gold-light);
+      border-color: rgba(184,145,58,0.7);
+    }
+    .lb-download:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+    .lb-download:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 700px) {
+      .about-page-hero { padding: 6.75rem 1.5rem 4rem; }
+      .back-bar { padding: 0.9rem 1.5rem; top: 64px; }
+      .abt-section, .abt-section-wide { padding: 3.5rem 1.5rem; }
+      .gp-grid { grid-template-columns: repeat(2, 1fr); gap: 3px; }
+      .lb-prev { padding: 0.75rem 0.9rem; }
+      .lb-next { padding: 0.75rem 0.9rem; }
+      .lb-download {
+        bottom: 3.1rem;
+        padding: 0.55rem 1rem;
+        font-size: 10px;
+      }
+    }
+  </style>
+</head>
+<body class="page-enter">
+
+<!-- NAV -->
+<nav id="nav">
+  <a class="nav-brand" href="index.html">
+    <img src="assets/logo.png" alt="BSEBC Logo" class="nav-logo-img" />
+    <div class="brand-words">
+      <strong id="nav-name"></strong>
+      <span id="nav-tagline"></span>
+    </div>
+  </a>
+  <ul class="nav-links" id="nav-links">
+    <li><a href="index.html#schedule" id="nl-schedule"></a></li>
+    <li><a href="index.html#archive"  id="nl-archive"></a></li>
+    <li><a href="about.html"          id="nl-about"></a></li>
+    <li><a href="index.html#gallery"  id="nl-gallery"></a></li>
+    <li><a href="index.html#donate"   id="nl-donate"></a></li>
+    <li><a href="index.html#contact"  id="nl-contact"></a></li>
+    <li><a href="gallery.html"        id="nl-gallery-page"></a></li>
+  </ul>
+  <div class="nav-right-group">
+    <a class="nav-live" id="nav-live" href="#" target="_blank">
+      <span class="live-dot"></span>
+      <span id="nl-live"></span>
+    </a>
+    <div class="nav-lang">
+      <button class="lang-btn active" data-lang="ru" onclick="setLang('ru')">РУ</button>
+      <button class="lang-btn"        data-lang="en" onclick="setLang('en')">EN</button>
+    </div>
+    <button class="nav-hamburger" onclick="toggleMobile()" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<nav class="nav-mobile" id="nav-mobile">
+  <a href="index.html#schedule" onclick="closeMobile()" id="nm-schedule"></a>
+  <a href="index.html#archive"  onclick="closeMobile()" id="nm-archive"></a>
+  <a href="about.html"          onclick="closeMobile()" id="nm-about"></a>
+  <a href="index.html#gallery"  onclick="closeMobile()" id="nm-gallery"></a>
+  <a href="index.html#donate"   onclick="closeMobile()" id="nm-donate"></a>
+  <a href="index.html#contact"  onclick="closeMobile()" id="nm-contact"></a>
+  <a href="gallery.html"        onclick="closeMobile()" id="nm-gallery-page"></a>
+  <a href="#" id="nm-live" target="_blank" class="nm-live-link"></a>
+</nav>
+
+<!-- HERO (About-style) -->
+<div class="about-page-hero lang-fade-target">
+  <div class="back-bar">
+    <a href="index.html" id="gp-back-link">← Вернуться на главную</a>
+  </div>
+  <div class="about-hero-inner">
+    <p class="about-hero-eyebrow" id="gp-hero-eyebrow">BSEBC · Brookhaven, PA</p>
+    <h1 id="gp-hero-title">Фото <em>архив</em></h1>
+    <p id="gp-hero-sub"></p>
+  </div>
+</div>
+
+<div class="gold-rule lang-fade-target"></div>
+
+<!-- YEARS + INTRO (About-style sections) -->
+<div class="abt-bg-white lang-fade-target">
+  <div class="abt-section">
+    <div class="sec-label"><span id="gp-section-kicker">Архив</span></div>
+    <h2 id="gp-section-title">Год за <em>годом</em></h2>
+    <div class="abt-body">
+      <p id="gp-section-lead"></p>
+    </div>
+
+    <div class="year-nav" id="year-nav"></div>
+    <div class="folder-nav-wrap" id="folder-nav-wrap">
+      <p class="folder-nav-label" id="gp-folder-label"></p>
+      <div class="folder-nav" id="folder-nav"></div>
+    </div>
+  </div>
+</div>
+
+<div class="gold-rule lang-fade-target"></div>
+
+<!-- GRID -->
+<div class="abt-bg-parchment lang-fade-target">
+  <div class="abt-section-wide">
+    <div class="gp-loading" id="gp-loading">
+      <div class="gp-loading-spinner"></div>
+      <p id="gp-loading-text">Загрузка фотографий...</p>
+    </div>
+    <div class="gp-grid" id="gp-grid" style="display:none"></div>
+    <div class="gp-empty" id="gp-empty" style="display:none">
+      <h3 id="gp-empty-title">Фото не найдены</h3>
+      <p id="gp-empty-body">В этом разделе пока нет фотографий.</p>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lb-overlay" id="lb" onclick="closeLB(event)">
+  <button type="button" class="lb-close" onclick="closeGpLightbox(event)">×</button>
+  <button type="button" class="lb-prev" onclick="lbNav(-1)">‹</button>
+  <div class="lb-img-wrap">
+    <img class="lb-img" id="lb-img" src="" alt="" />
+  </div>
+  <button type="button" class="lb-next" onclick="lbNav(1)">›</button>
+  <button type="button" id="lb-download" class="lb-download" onclick="event.stopPropagation(); downloadGalleryPhoto(event)">Скачать</button>
+  <div class="lb-counter" id="lb-counter"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="lang-fade-target">
+  <div class="footer-top">
+    <div class="f-brand">
+      <div class="f-brand-name">
+        <img src="assets/logo.png" alt="BSEBC Logo" class="ft-logo-img" />
+        <span id="ft-name"></span>
+      </div>
+      <p id="ft-tagline"></p>
+    </div>
+    <div class="f-col">
+      <h5 id="ft-nav-col"></h5>
+      <a href="index.html"          id="ft-home"></a>
+      <a href="index.html#schedule" id="ft-schedule"></a>
+      <a href="about.html"          id="ft-about"></a>
+      <a href="index.html#contact"  id="ft-contact"></a>
+    </div>
+    <div class="f-col">
+      <h5 id="ft-arc-col"></h5>
+      <a href="https://soundcloud.com/bsebc/sets" target="_blank" id="ft-audio"></a>
+      <a href="https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/videos" target="_blank">YouTube</a>
+      <a href="https://vimeo.com/bsebc" target="_blank">Vimeo</a>
+      <a href="gallery.html" id="ft-photos"></a>
+    </div>
+    <div class="f-col">
+      <h5 id="ft-con-col"></h5>
+      <a href="index.html#contact" id="ft-write"></a>
+      <a href="index.html#donate"  id="ft-give"></a>
+      <a href="https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/live" target="_blank" id="ft-live"></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p id="ft-copy"></p>
+    <p id="ft-year"></p>
+    <p id="ft-rights"></p>
+  </div>
+</footer>
+
+<script>
+// ── CONFIG ────────────────────────────────────────────
+const CLOUD_NAME = 'dboyuj209';
+// Year list API uses tag = year. Split into folders by public_id path: "2024/a.jpg" = root, "2024/Разное/b.jpg" = folder "Разное".
+const YEARS = ['2024', '2023', '2022', '2021', '2020']; // add more as you upload
+let currentYear = '2024';
+/** @type {Map<string, string[]>} folder key → public_ids (key "" = year root) */
+let folderGroups = new Map();
+let currentFolder = '';
+let photos = [];
+let lbIndex = 0;
+let lang = localStorage.getItem('bsebc-lang') || 'ru';
+
+// ── CLOUDINARY ────────────────────────────────────────
+function cloudUrl(publicId, opts = '') {
+  return `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/${opts}${publicId}`;
+}
+
+function thumbUrl(publicId) {
+  return cloudUrl(publicId, 'w_600,h_450,c_fill,q_auto,f_auto/');
+}
+
+function fullUrl(publicId) {
+  return cloudUrl(publicId, 'w_1600,q_auto,f_auto/');
+}
+
+function downloadAttachmentUrl(publicId, index) {
+  const base = `BSEBC_${currentYear}_${String(index + 1).padStart(3, '0')}`;
+  // Same delivery host as thumbnails; `fl_attachment` sets Content-Disposition: attachment.
+  // Do not use `f_original` here — it is not a valid image format token in the URL API and returns 400.
+  // Do not use `f_auto` here — it prefers WebP/AVIF; omitting `f_*` keeps the uploaded format (Cloudinary default).
+  return cloudUrl(publicId, `fl_attachment:${base}/q_100,w_2800,c_limit/`);
+}
+
+/**
+ * Trigger a real file save. We avoid fetch→blob→<a download> because after `await`
+ * the browser no longer treats the click as a user gesture, so `download` is ignored
+ * and you only get a blob: URL navigation.
+ * Cloudinary `fl_attachment` sends Content-Disposition: attachment; a hidden iframe
+ * starts the download without leaving the gallery page.
+ */
+function downloadPhotoByIndex(index) {
+  if (!photos.length || index < 0 || index >= photos.length) return;
+  const id = photos[index];
+  const url = downloadAttachmentUrl(id, index);
+
+  const iframe = document.createElement('iframe');
+  iframe.setAttribute('aria-hidden', 'true');
+  iframe.style.cssText = 'position:fixed;width:0;height:0;border:0;opacity:0;pointer-events:none;';
+  iframe.src = url;
+  document.body.appendChild(iframe);
+
+  window.setTimeout(() => {
+    try { iframe.remove(); } catch (_) {}
+  }, 300000);
+}
+
+function downloadGalleryPhoto(ev) {
+  if (ev && typeof ev.stopPropagation === 'function') ev.stopPropagation();
+  downloadPhotoByIndex(lbIndex);
+}
+
+/** Group by first subfolder under `YEAR/` in each public_id (e.g. 2024/a.jpg vs 2024/Разное/b.jpg). */
+function groupPublicIdsIntoFolders(publicIds, year) {
+  const map = new Map();
+  const prefix = String(year) + '/';
+
+  publicIds.forEach((id) => {
+    let key = '';
+    if (id.startsWith(prefix)) {
+      const rest = id.slice(prefix.length);
+      const slash = rest.indexOf('/');
+      if (slash !== -1) key = rest.slice(0, slash);
+    }
+    if (!map.has(key)) map.set(key, []);
+    map.get(key).push(id);
+  });
+  return map;
+}
+
+function sortedFolderKeys(map) {
+  return [...map.keys()]
+    .filter((k) => (map.get(k) || []).length > 0)
+    .sort((a, b) => {
+      if (a === b) return 0;
+      if (a === '') return -1;
+      if (b === '') return 1;
+      return a.localeCompare(b, undefined, { sensitivity: 'base' });
+    });
+}
+
+function labelForFolderKey(key) {
+  const G = CONTENT.galleryPage || {};
+  return key === '' ? t(G.folderRoot) : key;
+}
+
+function buildFolderNav(keys) {
+  const nav = document.getElementById('folder-nav');
+  const wrap = document.getElementById('folder-nav-wrap');
+  const labelEl = document.getElementById('gp-folder-label');
+  if (!nav || !wrap) return;
+
+  if (!keys || keys.length <= 1) {
+    nav.innerHTML = '';
+    wrap.classList.remove('is-visible');
+    if (labelEl) labelEl.textContent = '';
+    return;
+  }
+
+  wrap.classList.add('is-visible');
+  const G = CONTENT.galleryPage || {};
+  if (labelEl) labelEl.textContent = t(G.folderNavLabel);
+
+  nav.innerHTML = '';
+  keys.forEach((key) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'folder-btn' + (key === currentFolder ? ' active' : '');
+    btn.dataset.folder = key;
+    btn.textContent = labelForFolderKey(key);
+    btn.title = btn.textContent;
+    btn.addEventListener('click', () => selectFolder(key));
+    nav.appendChild(btn);
+  });
+}
+
+function selectFolder(key) {
+  currentFolder = key;
+  photos = folderGroups.get(key) || [];
+  document.querySelectorAll('.folder-btn').forEach((b) => {
+    b.classList.toggle('active', b.dataset.folder === key);
+  });
+  renderPhotoGrid();
+}
+
+function refreshFolderNavFromI18n() {
+  const wrap = document.getElementById('folder-nav-wrap');
+  if (!wrap || !wrap.classList.contains('is-visible')) return;
+  const G = CONTENT.galleryPage || {};
+  const labelEl = document.getElementById('gp-folder-label');
+  if (labelEl) labelEl.textContent = t(G.folderNavLabel);
+  document.querySelectorAll('.folder-btn').forEach((btn) => {
+    const key = btn.dataset.folder;
+    btn.textContent = key === '' ? t(G.folderRoot) : key;
+    btn.title = btn.textContent;
+  });
+}
+
+function renderPhotoGrid() {
+  const grid = document.getElementById('gp-grid');
+  const empty = document.getElementById('gp-empty');
+  if (!grid || !empty) return;
+
+  grid.innerHTML = '';
+
+  if (!photos.length) {
+    grid.style.display = 'none';
+    renderGalleryEmptyState();
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  grid.style.display = 'grid';
+
+  const folderLabel = currentFolder ? `${currentFolder} · ` : '';
+  photos.forEach((id, i) => {
+    const tile = document.createElement('div');
+    tile.className = 'gp-tile';
+    const alt =
+      (lang === 'ru' ? 'Фото' : 'Photo') +
+      ` ${i + 1} · ${folderLabel}${currentYear}`;
+    tile.innerHTML = `
+      <img src="${thumbUrl(id)}" alt="${alt.replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('loaded')" />
+      <div class="gp-tile-overlay"></div>
+    `;
+    tile.onclick = () => openGpLightbox(i);
+    grid.appendChild(tile);
+  });
+}
+
+async function loadPhotos(year) {
+  const grid = document.getElementById('gp-grid');
+  const loading = document.getElementById('gp-loading');
+  const empty = document.getElementById('gp-empty');
+
+  grid.style.display = 'none';
+  empty.style.display = 'none';
+  loading.style.display = 'block';
+
+  try {
+    const res = await fetch(`https://res.cloudinary.com/${CLOUD_NAME}/image/list/${year}.json`);
+    if (!res.ok) throw new Error('Failed');
+    const data = await res.json();
+    const rawIds = (data.resources || []).map((r) => r.public_id);
+
+    folderGroups = groupPublicIdsIntoFolders(rawIds, year);
+    const keys = sortedFolderKeys(folderGroups);
+
+    loading.style.display = 'none';
+
+    if (rawIds.length === 0) {
+      photos = [];
+      folderGroups = new Map();
+      currentFolder = '';
+      buildFolderNav([]);
+      renderGalleryEmptyState();
+      empty.style.display = 'block';
+      return;
+    }
+
+    currentFolder = keys[0] || '';
+    photos = folderGroups.get(currentFolder) || [];
+
+    buildFolderNav(keys);
+    renderPhotoGrid();
+  } catch (e) {
+    loading.style.display = 'none';
+    if (grid) grid.style.display = 'none';
+    folderGroups = new Map();
+    currentFolder = '';
+    photos = [];
+    buildFolderNav([]);
+    renderGalleryErrorState();
+    empty.style.display = 'block';
+  }
+}
+
+// ── YEAR TABS ─────────────────────────────────────────
+function buildYearNav() {
+  const nav = document.getElementById('year-nav');
+  nav.innerHTML = '';
+  YEARS.forEach(y => {
+    const btn = document.createElement('button');
+    btn.className = 'year-btn' + (y === currentYear ? ' active' : '');
+    btn.textContent = y;
+    btn.onclick = () => {
+      currentYear = y;
+      document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loadPhotos(y);
+    };
+    nav.appendChild(btn);
+  });
+}
+
+// ── LIGHTBOX ──────────────────────────────────────────
+function openGpLightbox(i) {
+  lbIndex = i;
+  document.getElementById('lb-img').src = fullUrl(photos[i]);
+  document.getElementById('lb-counter').textContent = `${i+1} / ${photos.length}`;
+  document.getElementById('lb').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeGpLightbox(ev) {
+  if (ev && typeof ev.stopPropagation === 'function') ev.stopPropagation();
+  document.getElementById('lb').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function closeLB(e) {
+  if (e.target === document.getElementById('lb')) closeGpLightbox();
+}
+
+function lbNav(dir) {
+  if (!photos.length) return;
+  lbIndex = (lbIndex + dir + photos.length) % photos.length;
+  document.getElementById('lb-img').src = fullUrl(photos[lbIndex]);
+  document.getElementById('lb-counter').textContent = `${lbIndex+1} / ${photos.length}`;
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lb').classList.contains('open')) return;
+  if (e.key === 'Escape') closeGpLightbox(e);
+  if (e.key === 'ArrowLeft') lbNav(-1);
+  if (e.key === 'ArrowRight') lbNav(1);
+  if (e.key === 'd' || e.key === 'D') {
+    e.preventDefault();
+    downloadGalleryPhoto(e);
+  }
+});
+
+// ── LANG + NAV ────────────────────────────────────────
+function t(obj){ return (obj&&obj[lang])||(obj&&obj['ru'])||''; }
+
+function setI18nText(id, value, asHtml=false){
+  const el = document.getElementById(id);
+  if(!el) return;
+  if(asHtml) el.innerHTML = value;
+  else el.textContent = value;
+}
+
+function renderGalleryChrome() {
+  const G = CONTENT.galleryPage || {};
+  setI18nText('gp-back-link', t(G.back));
+  setI18nText('gp-hero-eyebrow', t(G.eyebrow));
+  setI18nText('gp-hero-title', t(G.title), true);
+  setI18nText('gp-hero-sub', t(G.subtitle));
+  setI18nText('gp-section-kicker', t(G.sectionKicker));
+  setI18nText('gp-section-title', t(G.sectionTitle), true);
+  setI18nText('gp-section-lead', t(G.sectionLead));
+  setI18nText('gp-loading-text', t(G.loading));
+  setI18nText('lb-download', t(G.download));
+  const lbDl = document.getElementById('lb-download');
+  if (lbDl) lbDl.setAttribute('aria-label', t(G.downloadAria));
+  refreshFolderNavFromI18n();
+}
+
+function renderGalleryEmptyState() {
+  const G = CONTENT.galleryPage || {};
+  setI18nText('gp-empty-title', t(G.emptyTitle));
+  setI18nText('gp-empty-body', t(G.emptyBody));
+}
+
+function renderGalleryErrorState() {
+  const G = CONTENT.galleryPage || {};
+  setI18nText('gp-empty-title', t(G.errorTitle));
+  setI18nText('gp-empty-body', t(G.errorBody));
+}
+
+function setLang(l) {
+  if (lang === l) return;
+  if (document.body.classList.contains('lang-switching')) return;
+
+  normalizeLetterSwap();
+  const before = snapshotSimpleText();
+  document.body.classList.add('lang-switching','lang-lettering');
+  window.setTimeout(() => {
+    lang = l;
+    localStorage.setItem('bsebc-lang', l);
+    document.querySelectorAll('.lang-btn').forEach(b =>
+      b.classList.toggle('active', b.dataset.lang === l));
+    document.documentElement.lang = l === 'ru' ? 'ru' : 'en';
+    renderNav();
+    renderGalleryChrome();
+    const emptyEl = document.getElementById('gp-empty');
+    if (photos.length === 0 && emptyEl && emptyEl.style.display !== 'none') {
+      renderGalleryEmptyState();
+    }
+    animateTextDiff(before);
+    window.setTimeout(() => {
+      document.body.classList.remove('lang-switching','lang-lettering');
+    }, 320);
+  }, 110);
+}
+
+function normalizeLetterSwap() {
+  document.querySelectorAll('.letter-swap').forEach(el => {
+    const plain = el.getAttribute('data-plain-text') || (el.textContent || '');
+    el.classList.remove('letter-swap','is-in','is-out');
+    el.removeAttribute('data-plain-text');
+    el.style.removeProperty('minWidth');
+    el.textContent = plain;
+  });
+}
+
+function snapshotSimpleText() {
+  const items = [];
+  const ids = [
+    'gp-back-link',
+    'gp-hero-eyebrow',
+    'gp-hero-title',
+    'gp-hero-sub',
+    'gp-section-kicker',
+    'gp-section-title',
+    'gp-section-lead',
+    'gp-loading-text',
+    'gp-empty-title',
+    'gp-empty-body',
+  ];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!(el instanceof HTMLElement)) return;
+    const txt = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!txt) return;
+    if (txt.length < 3) return;
+    items.push({ el, txt });
+  });
+  return items;
+}
+
+function animateTextDiff(before) {
+  if (!before || !Array.isArray(before)) return;
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) return;
+
+  before.forEach(({ el, txt: oldTxt }) => {
+    if (!el || !(el instanceof HTMLElement)) return;
+    const newTxt = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
+    if (!newTxt || newTxt === oldTxt) return;
+    if (!isInViewport(el, 140)) return;
+
+    const finalHTML = el.innerHTML;
+    if (oldTxt.length > 140 || newTxt.length > 140) {
+      longFade(el, oldTxt, finalHTML);
+      return;
+    }
+    letterMorph(el, oldTxt, newTxt, finalHTML);
+  });
+}
+
+function isInViewport(el, pad = 0) {
+  const r = el.getBoundingClientRect();
+  const vh = window.innerHeight || document.documentElement.clientHeight || 0;
+  return r.bottom >= -pad && r.top <= vh + pad;
+}
+
+function longFade(el, oldTxt, finalHTML) {
+  const oldText = String(oldTxt || '');
+  const newHTML = typeof finalHTML === 'string' ? finalHTML : null;
+
+  if (oldText) el.textContent = oldText;
+
+  el.style.willChange = 'opacity, transform, filter';
+  el.style.transition = 'opacity 220ms ease, transform 260ms cubic-bezier(.16,1,.3,1), filter 260ms ease';
+  el.style.opacity = '1';
+  el.style.transform = 'translateY(0px)';
+  el.style.filter = 'blur(0px)';
+
+  el.getBoundingClientRect();
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(-4px)';
+    el.style.filter = 'blur(2px)';
+  }));
+
+  window.setTimeout(() => {
+    if (newHTML != null) el.innerHTML = newHTML;
+
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(6px)';
+    el.style.filter = 'blur(2px)';
+
+    el.getBoundingClientRect();
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.style.opacity = '1';
+      el.style.transform = 'translateY(0px)';
+      el.style.filter = 'blur(0px)';
+    }));
+  }, 230);
+
+  window.setTimeout(() => {
+    el.style.willChange = '';
+    el.style.transition = '';
+    el.style.opacity = '';
+    el.style.transform = '';
+    el.style.filter = '';
+  }, 600);
+}
+
+function letterMorph(el, oldText, newText, finalHTML) {
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduce) {
+    if (typeof finalHTML === 'string') el.innerHTML = finalHTML;
+    else el.textContent = newText;
+    return;
+  }
+
+  const oldLetters = Array.from(String(oldText));
+  const newLetters = Array.from(String(newText));
+  const w = el.getBoundingClientRect().width;
+  if (w) el.style.minWidth = `${Math.ceil(w)}px`;
+
+  el.classList.add('letter-swap');
+  el.setAttribute('data-plain-text', String(newText));
+
+  const makeLetter = (ch) => {
+    const s = document.createElement('span');
+    s.className = 'letter';
+    s.innerHTML = escapeHtml(ch);
+    const dx = (Math.random() * 26 - 13).toFixed(1);
+    const dy = (Math.random() * 22 - 18).toFixed(1);
+    const rot = (Math.random() * 28 - 14).toFixed(1);
+    s.style.setProperty('--dx', `${dx}px`);
+    s.style.setProperty('--dy', `${dy}px`);
+    s.style.setProperty('--rot', `${rot}deg`);
+    return s;
+  };
+
+  const renderWords = (text) => {
+    el.innerHTML = '';
+    const frag = document.createDocumentFragment();
+    const letters = [];
+    const parts = String(text).split(/(\s+)/);
+    let letterIdx = 0;
+    parts.forEach(part => {
+      if (!part) return;
+      if (/^\s+$/.test(part)) {
+        frag.appendChild(document.createTextNode(part));
+        return;
+      }
+      const word = document.createElement('span');
+      word.className = 'letter-word';
+      Array.from(part).forEach(ch => {
+        const letter = makeLetter(ch === ' ' ? '\u00A0' : ch);
+        word.appendChild(letter);
+        letter.style.transitionDelay = `${Math.min(260, letterIdx * 12)}ms`;
+        letters.push(letter);
+        letterIdx++;
+      });
+      frag.appendChild(word);
+    });
+    el.appendChild(frag);
+    return letters;
+  };
+
+  const outLetters = renderWords(oldText);
+  outLetters.forEach((s, i) => {
+    s.style.transitionDelay = `${Math.min(160, i * 8)}ms`;
+  });
+
+  requestAnimationFrame(() => {
+    el.classList.remove('is-in');
+    el.classList.add('is-out');
+  });
+
+  window.setTimeout(() => {
+    el.classList.remove('is-out');
+    const inSpans = renderWords(newText);
+    inSpans.forEach((s) => {
+      s.style.opacity = '0';
+      s.style.transform = 'translate(var(--dx), var(--dy)) rotate(var(--rot)) scale(0.96)';
+      s.style.filter = 'blur(3px)';
+    });
+
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      el.classList.add('is-in');
+      inSpans.forEach(s => {
+        s.style.opacity = '1';
+        s.style.transform = 'translate(0px, 0px) rotate(0deg) scale(1)';
+        s.style.filter = 'blur(0px)';
+      });
+    }));
+
+    window.setTimeout(() => {
+      el.classList.remove('letter-swap','is-in','is-out');
+      el.style.removeProperty('minWidth');
+      if (typeof finalHTML === 'string') el.innerHTML = finalHTML;
+      else el.textContent = String(newText);
+      el.removeAttribute('data-plain-text');
+    }, 900);
+  }, 240);
+}
+
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function renderNav() {
+  const C = CONTENT, s = C.site;
+  document.getElementById('nav-name').textContent    = t(s.name);
+  document.getElementById('nav-tagline').textContent = t(s.tagline);
+  document.getElementById('nl-schedule').textContent = t(C.nav.schedule);
+  document.getElementById('nl-archive').textContent  = t(C.nav.archive);
+  document.getElementById('nl-about').textContent    = t(C.nav.about);
+  document.getElementById('nl-gallery').textContent  = t(C.nav.homeGallery);
+  document.getElementById('nl-donate').textContent   = t(C.nav.donate);
+  document.getElementById('nl-contact').textContent  = t(C.nav.contact);
+  document.getElementById('nl-gallery-page').textContent = t(C.nav.gallery);
+  document.getElementById('nl-live').textContent     = t(C.nav.live);
+  document.getElementById('nav-live').href           = s.youtubeLive;
+  document.getElementById('nm-schedule').textContent = t(C.nav.schedule);
+  document.getElementById('nm-archive').textContent  = t(C.nav.archive);
+  document.getElementById('nm-about').textContent    = t(C.nav.about);
+  document.getElementById('nm-gallery').textContent  = t(C.nav.homeGallery);
+  document.getElementById('nm-donate').textContent   = t(C.nav.donate);
+  document.getElementById('nm-contact').textContent  = t(C.nav.contact);
+  document.getElementById('nm-gallery-page').textContent = t(C.nav.gallery);
+  document.getElementById('nm-live').textContent     = '▶ ' + t(C.nav.live);
+  document.getElementById('nm-live').href            = s.youtubeLive;
+  document.getElementById('ft-name').textContent     = t(s.name);
+  document.getElementById('ft-tagline').textContent  = t(C.footer.tagline);
+  document.getElementById('ft-nav-col').textContent  = t(C.footer.cols.nav);
+  document.getElementById('ft-arc-col').textContent  = t(C.footer.cols.archive);
+  document.getElementById('ft-con-col').textContent  = t(C.footer.cols.connect);
+  document.getElementById('ft-home').textContent     = t(C.nav.home);
+  document.getElementById('ft-schedule').textContent = t(C.nav.schedule);
+  document.getElementById('ft-about').textContent    = t(C.nav.about);
+  document.getElementById('ft-contact').textContent  = t(C.nav.contact);
+  document.getElementById('ft-audio').textContent    = lang==='ru'?'Аудио':'Audio';
+  document.getElementById('ft-photos').textContent   = t(C.nav.gallery);
+  document.getElementById('ft-write').textContent    = t(C.nav.contact);
+  document.getElementById('ft-give').textContent     = t(C.nav.donate);
+  document.getElementById('ft-live').textContent     = t(C.nav.live);
+  document.getElementById('ft-copy').textContent     = '© BSEBC';
+  const yearEl = document.getElementById('ft-year');
+  if (yearEl) yearEl.textContent = String(new Date().getFullYear());
+  document.getElementById('ft-rights').textContent   = t(C.footer.copyright);
+}
+
+// Page transition (fade between HTML pages)
+document.body.classList.add('page-enter');
+window.addEventListener('pageshow', () => {
+  requestAnimationFrame(() => document.body.classList.remove('page-enter'));
+});
+document.addEventListener('click', (e) => {
+  const a = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+  if (!a) return;
+  const href = a.getAttribute('href') || '';
+  if (!href || href.startsWith('#') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
+  if (a.target && a.target !== '_self') return;
+  const url = new URL(a.href, window.location.href);
+  if (url.origin !== window.location.origin) return;
+  if (url.pathname === window.location.pathname && url.search === window.location.search && url.hash) return;
+  e.preventDefault();
+  document.body.classList.add('page-leave');
+  window.setTimeout(() => { window.location.href = url.href; }, 180);
+});
+
+window.addEventListener('scroll', () =>
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60));
+function toggleMobile(){
+  const menu = document.getElementById('nav-mobile');
+  const btn = document.querySelector('.nav-hamburger');
+  const isOpen = menu.classList.toggle('open');
+  if (btn) btn.classList.toggle('active', isOpen);
+}
+function closeMobile(){
+  const menu = document.getElementById('nav-mobile');
+  const btn = document.querySelector('.nav-hamburger');
+  menu.classList.remove('open');
+  if (btn) btn.classList.remove('active');
+}
+
+// ── INIT ──────────────────────────────────────────────
+document.querySelectorAll('.lang-btn').forEach(b =>
+  b.classList.toggle('active', b.dataset.lang === lang));
+renderNav();
+renderGalleryChrome();
+buildYearNav();
+loadPhotos(currentYear);
+</script>
+</body>
+</html>

@@ -218,6 +218,7 @@
     <li><a href="index.html#gallery"  id="nl-gallery"></a></li>
     <li><a href="index.html#donate"   id="nl-donate"></a></li>
     <li><a href="index.html#contact"  id="nl-contact"></a></li>
+    <li><a href="gallery.html"        id="nl-gallery-page"></a></li>
   </ul>
   <div class="nav-right-group">
     <a class="nav-live" id="nav-live" href="#" target="_blank">
@@ -241,6 +242,7 @@
   <a href="index.html#gallery"  onclick="closeMobile()" id="nm-gallery"></a>
   <a href="index.html#donate"   onclick="closeMobile()" id="nm-donate"></a>
   <a href="index.html#contact"  onclick="closeMobile()" id="nm-contact"></a>
+  <a href="gallery.html"        onclick="closeMobile()" id="nm-gallery-page"></a>
   <a href="#" id="nm-live" target="_blank" class="nm-live-link"></a>
 </nav>
 
@@ -251,7 +253,7 @@
     <a href="index.html" id="abt-back-link">← Вернуться на главную</a>
   </div>
   <div class="about-hero-inner">
-    <p class="about-hero-eyebrow" id="abt-hero-eyebrow">Brookhaven, Pennsylvania</p>
+    <p class="about-hero-eyebrow" id="abt-hero-eyebrow">Брукхейвен, Пенсильвания</p>
     <h1 id="abt-hero-title">О нашей <em>церкви</em></h1>
     <p id="abt-hero-sub">Добровольное объединение верующих для совместного поклонения Живому, Истинному, Вечному Богу на основании Священного Писания — Библии.</p>
   </div>
@@ -466,7 +468,7 @@
       <a id="ft-audio"  href="https://soundcloud.com/bsebc/sets" target="_blank"></a>
       <a id="ft-video"  href="https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/videos" target="_blank">YouTube</a>
       <a id="ft-vimeo"  href="https://vimeo.com/bsebc" target="_blank">Vimeo</a>
-      <a id="ft-photos" href="http://bsebc.zenfolio.com/f781568629" target="_blank"></a>
+      <a id="ft-photos" href="gallery.html"></a>
     </div>
     <div class="f-col">
       <h5 id="ft-con-col"></h5>
@@ -573,6 +575,7 @@ function renderAboutPage(){
   const copy = {
     ru: {
       back: '← Вернуться на главную',
+      heroEyebrow: 'Брукхейвен, Пенсильвания',
       heroTitle: 'О нашей <em>церкви</em>',
       heroSub: 'Добровольное объединение верующих для совместного поклонения Живому, Истинному, Вечному Богу на основании Священного Писания — Библии.',
       histLabel: 'История',
@@ -615,6 +618,7 @@ function renderAboutPage(){
     },
     en: {
       back: '← Back to home',
+      heroEyebrow: 'Brookhaven, Pennsylvania',
       heroTitle: 'About our <em>church</em>',
       heroSub: 'A voluntary fellowship of believers united to worship the Living, True, Eternal God, founded on Holy Scripture — the Bible.',
       histLabel: 'History',
@@ -670,6 +674,7 @@ function renderAboutPage(){
 
   const C = copy[lang] || copy.ru;
   setI18nText('abt-back-link', C.back);
+  setI18nText('abt-hero-eyebrow', C.heroEyebrow);
   setI18nText('abt-hero-title', C.heroTitle, true);
   setI18nText('abt-hero-sub', C.heroSub);
   setI18nText('abt-hist-label', C.histLabel);
@@ -947,17 +952,19 @@ function renderNavFooter() {
   document.getElementById('nl-schedule').textContent = t(C.nav.schedule);
   document.getElementById('nl-archive').textContent  = t(C.nav.archive);
   document.getElementById('nl-about').textContent    = t(C.nav.about);
-  document.getElementById('nl-gallery').textContent  = t(C.nav.gallery);
+  document.getElementById('nl-gallery').textContent  = t(C.nav.homeGallery);
   document.getElementById('nl-donate').textContent   = t(C.nav.donate);
   document.getElementById('nl-contact').textContent  = t(C.nav.contact);
+  document.getElementById('nl-gallery-page').textContent = t(C.nav.gallery);
   document.getElementById('nl-live').textContent     = t(C.nav.live);
   document.getElementById('nav-live').href           = s.youtubeLive;
   document.getElementById('nm-schedule').textContent = t(C.nav.schedule);
   document.getElementById('nm-archive').textContent  = t(C.nav.archive);
   document.getElementById('nm-about').textContent    = t(C.nav.about);
-  document.getElementById('nm-gallery').textContent  = t(C.nav.gallery);
+  document.getElementById('nm-gallery').textContent  = t(C.nav.homeGallery);
   document.getElementById('nm-donate').textContent   = t(C.nav.donate);
   document.getElementById('nm-contact').textContent  = t(C.nav.contact);
+  document.getElementById('nm-gallery-page').textContent = t(C.nav.gallery);
   document.getElementById('nm-live').textContent     = '▶ ' + t(C.nav.live);
   document.getElementById('nm-live').href            = s.youtubeLive;
   document.getElementById('ft-name').textContent     = t(s.name);
@@ -970,7 +977,7 @@ function renderNavFooter() {
   document.getElementById('ft-about').textContent    = t(C.nav.about);
   document.getElementById('ft-contact').textContent  = t(C.nav.contact);
   document.getElementById('ft-audio').textContent    = lang==='ru'?'Аудио':'Audio';
-  document.getElementById('ft-photos').textContent   = lang==='ru'?'Фотогалерея':'Photos';
+  document.getElementById('ft-photos').textContent   = t(C.nav.gallery);
   document.getElementById('ft-write').textContent    = t(C.nav.contact);
   document.getElementById('ft-give').textContent     = t(C.nav.donate);
   document.getElementById('ft-live').textContent     = t(C.nav.live);
