@@ -177,18 +177,20 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 0.25rem 0.15rem;
+      gap: 0.2rem 0.35rem;
       max-width: 100%;
       font-family: var(--sans);
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 600;
       color: var(--stone);
-      line-height: 1.45;
+      line-height: 1.5;
     }
     .gp-folder-trail .gp-trail-sep {
-      color: rgba(10, 15, 30, 0.28);
+      color: rgba(10, 15, 30, 0.22);
       user-select: none;
-      padding: 0 0.1rem;
+      padding: 0 0.05rem;
+      font-weight: 500;
+      font-size: 0.92em;
     }
     .gp-folder-trail button {
       border: 0;
@@ -215,8 +217,8 @@
     .gp-folder-trail .gp-trail-current {
       color: var(--night);
       font-weight: 700;
-      padding: 0.15rem 0.35rem;
-      max-width: min(100%, 260px);
+      padding: 0.1rem 0;
+      max-width: min(100%, 280px);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -224,10 +226,18 @@
 
     .folder-nav-wrap {
       display: none;
-      margin-top: 1.15rem;
+      margin-top: 0.85rem;
       text-align: center;
     }
     .folder-nav-wrap.is-visible { display: block; }
+    .folder-nav--children {
+      gap: 0.35rem;
+    }
+    .folder-nav--children .folder-btn--drill {
+      padding: 0.42rem 0.95rem;
+      font-size: 12px;
+      font-weight: 600;
+    }
     .folder-nav-label {
       font-size: 9px;
       font-weight: 600;
@@ -574,7 +584,7 @@
       <nav class="gp-folder-trail" id="gp-folder-trail" aria-label=""></nav>
     </div>
     <div class="folder-nav-wrap" id="folder-nav-wrap">
-      <div class="folder-nav" id="folder-nav" role="toolbar"></div>
+      <div class="folder-nav folder-nav--children" id="folder-nav" role="toolbar"></div>
     </div>
   </div>
 </div>
@@ -657,7 +667,6 @@ let currentYear = '2024';
 let currentAssetPath = '2024';
 /** @type {Map<string, string[]>} folder key → public_ids (key "" = assets directly in currentAssetPath) */
 let folderGroups = new Map();
-let currentFolder = '';
 let photos = [];
 let lbIndex = 0;
 let lang = localStorage.getItem('bsebc-lang') || 'ru';
@@ -728,7 +737,7 @@ function getPhotosApiBase() {
 
 /**
  * `/api/photos` returns { folders: { General: [...ids], AlbumName: [...] } } (see api/photos.js).
- * "General" = assets in the requested folder path; map to "" for i18n folderRoot.
+ * "General" = assets in the requested folder path; mapped to key "" (photos for the current path).
  * Empty arrays are kept so nested folders without direct uploads still appear in the nav.
  */
 function foldersResponseToMap(foldersObj) {
@@ -783,7 +792,6 @@ function goUpOneFolder() {
   const p = parentAssetPath(currentAssetPath);
   if (!p) return;
   currentAssetPath = p;
-  currentFolder = '';
   loadPhotos();
 }
 
@@ -829,7 +837,6 @@ function renderFolderTrail() {
       btn.title = label;
       btn.addEventListener('click', () => {
         currentAssetPath = parts.slice(0, i + 1).join('/');
-        currentFolder = '';
         loadPhotos();
       });
       nav.appendChild(btn);
@@ -850,11 +857,6 @@ function syncYearNavButtons() {
   });
 }
 
-function labelForFolderKey(key) {
-  const G = CONTENT.galleryPage || {};
-  return key === '' ? t(G.folderRoot) : key;
-}
-
 function buildFolderNav(keys) {
   const wrap = document.getElementById('folder-nav-wrap');
   const nav = document.getElementById('folder-nav');
@@ -865,7 +867,8 @@ function buildFolderNav(keys) {
     wrap.classList.remove('is-visible');
   };
 
-  if (!keys || keys.length <= 1) {
+  const childKeys = (keys || []).filter((k) => k !== '');
+  if (!childKeys.length) {
     reset();
     return;
   }
@@ -875,48 +878,22 @@ function buildFolderNav(keys) {
   const G = CONTENT.galleryPage || {};
   nav.setAttribute('aria-label', t(G.folderNavToolbarAria) || '');
 
-  const subKeys = keys.filter((k) => k !== '');
-  const hasMain = keys.includes('');
-
-  if (hasMain) {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'folder-btn' + (currentFolder === '' ? ' active' : '');
-    btn.dataset.folder = '';
-    btn.textContent = labelForFolderKey('');
-    btn.title = btn.textContent;
-    btn.addEventListener('click', () => selectFolder(''));
-    nav.appendChild(btn);
-  }
-
-  subKeys.forEach((key) => {
+  childKeys.forEach((key) => {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'folder-btn folder-btn--drill';
     btn.dataset.folder = key;
-    btn.textContent = labelForFolderKey(key);
+    btn.textContent = key;
     btn.title =
       lang === 'ru'
         ? `Открыть папку «${key}»`
         : `Open folder “${key}”`;
-    btn.addEventListener('click', () => selectFolder(key));
+    btn.addEventListener('click', () => {
+      currentAssetPath = joinAssetPath(currentAssetPath, key);
+      loadPhotos();
+    });
     nav.appendChild(btn);
   });
-}
-
-function selectFolder(key) {
-  if (key !== '') {
-    currentAssetPath = joinAssetPath(currentAssetPath, key);
-    currentFolder = '';
-    loadPhotos();
-    return;
-  }
-  currentFolder = key;
-  photos = folderGroups.get(key) || [];
-  document.querySelectorAll('.folder-btn').forEach((b) => {
-    b.classList.toggle('active', b.dataset.folder === key);
-  });
-  renderPhotoGrid();
 }
 
 function refreshFolderNavFromI18n() {
@@ -929,16 +906,12 @@ function refreshFolderNavFromI18n() {
   if (up) up.textContent = t(G.folderUp);
   document.querySelectorAll('#folder-nav .folder-btn').forEach((btn) => {
     const key = btn.dataset.folder;
-    if (key === '') {
-      btn.textContent = t(G.folderRoot);
-      btn.title = btn.textContent;
-    } else {
-      btn.textContent = key;
-      btn.title =
-        lang === 'ru'
-          ? `Открыть папку «${key}»`
-          : `Open folder “${key}”`;
-    }
+    if (!key) return;
+    btn.textContent = key;
+    btn.title =
+      lang === 'ru'
+        ? `Открыть папку «${key}»`
+        : `Open folder “${key}”`;
   });
 }
 
@@ -951,9 +924,9 @@ function renderPhotoGrid() {
 
   if (!photos.length) {
     grid.style.display = 'none';
-    const keys = sortedFolderKeys(folderGroups);
+    const hasChildFolders = sortedFolderKeys(folderGroups).some((k) => k !== '');
     const G = CONTENT.galleryPage || {};
-    if (keys.length > 1) {
+    if (hasChildFolders) {
       setI18nText('gp-empty-title', t(G.emptyTitle));
       setI18nText('gp-empty-body', t(G.emptyPickSubfolderBody));
     } else {
@@ -966,14 +939,13 @@ function renderPhotoGrid() {
   empty.style.display = 'none';
   grid.style.display = 'grid';
 
-  const folderLabel = currentFolder ? `${currentFolder} · ` : '';
   const pathBit = currentAssetPath ? `${currentAssetPath.replace(/\//g, ' · ')} · ` : '';
   photos.forEach((id, i) => {
     const tile = document.createElement('div');
     tile.className = 'gp-tile';
     const alt =
       (lang === 'ru' ? 'Фото' : 'Photo') +
-      ` ${i + 1} · ${pathBit}${folderLabel}`;
+      ` ${i + 1} · ${pathBit}`;
     tile.innerHTML = `
       <img src="${thumbUrl(id)}" alt="${alt.replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('loaded')" />
       <div class="gp-tile-overlay"></div>
@@ -1013,7 +985,6 @@ async function loadPhotos() {
       loading.style.display = 'none';
       if (grid) grid.style.display = 'none';
       folderGroups = new Map();
-      currentFolder = '';
       photos = [];
       buildFolderNav([]);
       renderFolderTrail();
@@ -1026,25 +997,23 @@ async function loadPhotos() {
     folderGroups = foldersResponseToMap(data.folders);
     const keys = sortedFolderKeys(folderGroups);
     const totalCount = [...folderGroups.values()].reduce((n, arr) => n + arr.length, 0);
-    const hasSubfolderNav = keys.length > 1;
+    const hasChildFolders = keys.some((k) => k !== '');
 
     loading.style.display = 'none';
     syncYearFromAssetPath();
     renderFolderTrail();
     syncYearNavButtons();
 
-    if (totalCount === 0 && !hasSubfolderNav) {
+    if (totalCount === 0 && !hasChildFolders) {
       photos = [];
       folderGroups = new Map();
-      currentFolder = '';
       buildFolderNav([]);
       renderGalleryEmptyState();
       empty.style.display = 'block';
       return;
     }
 
-    currentFolder = '';
-    photos = folderGroups.get(currentFolder) || [];
+    photos = folderGroups.get('') || [];
 
     buildFolderNav(keys);
     renderPhotoGrid();
@@ -1055,7 +1024,6 @@ async function loadPhotos() {
     loading.style.display = 'none';
     if (grid) grid.style.display = 'none';
     folderGroups = new Map();
-    currentFolder = '';
     photos = [];
     buildFolderNav([]);
     renderFolderTrail();
