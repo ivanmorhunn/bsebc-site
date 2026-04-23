@@ -142,15 +142,6 @@
     .gp-folder-trail-wrap.gp-folder-trail-wrap--hidden {
       display: none;
     }
-    .gp-folder-trail-kicker {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.45rem;
-      opacity: 0.9;
-    }
     .gp-folder-trail-toolbar {
       display: flex;
       justify-content: center;
@@ -233,20 +224,10 @@
 
     .folder-nav-wrap {
       display: none;
-      margin-top: 1.35rem;
+      margin-top: 1.15rem;
       text-align: center;
     }
     .folder-nav-wrap.is-visible { display: block; }
-    .gp-fn-block {
-      margin-top: 1.1rem;
-    }
-    .gp-fn-block:first-child {
-      margin-top: 0;
-    }
-    .folder-nav-label--sub {
-      opacity: 0.88;
-      margin-top: 0.15rem;
-    }
     .folder-nav-label {
       font-size: 9px;
       font-weight: 600;
@@ -589,19 +570,11 @@
 
     <div class="year-nav" id="year-nav"></div>
     <div class="gp-folder-trail-wrap gp-folder-trail-wrap--hidden" id="gp-folder-trail-wrap">
-      <p class="gp-folder-trail-kicker" id="gp-folder-trail-kicker"></p>
       <div class="gp-folder-trail-toolbar" id="gp-folder-trail-toolbar"></div>
       <nav class="gp-folder-trail" id="gp-folder-trail" aria-label=""></nav>
     </div>
     <div class="folder-nav-wrap" id="folder-nav-wrap">
-      <div class="gp-fn-block" id="gp-fn-block-main" style="display:none">
-        <p class="folder-nav-label" id="gp-folder-label-main"></p>
-        <div class="folder-nav folder-nav--main" id="folder-nav-main"></div>
-      </div>
-      <div class="gp-fn-block" id="gp-fn-block-sub" style="display:none">
-        <p class="folder-nav-label folder-nav-label--sub" id="gp-folder-label-sub"></p>
-        <div class="folder-nav folder-nav--sub" id="folder-nav-sub"></div>
-      </div>
+      <div class="folder-nav" id="folder-nav" role="toolbar"></div>
     </div>
   </div>
 </div>
@@ -816,7 +789,6 @@ function goUpOneFolder() {
 
 function renderFolderTrail() {
   const wrap = document.getElementById('gp-folder-trail-wrap');
-  const kicker = document.getElementById('gp-folder-trail-kicker');
   const toolbar = document.getElementById('gp-folder-trail-toolbar');
   const nav = document.getElementById('gp-folder-trail');
   if (!wrap || !nav) return;
@@ -824,17 +796,12 @@ function renderFolderTrail() {
   const parts = assetPathSegments();
   if (!parts.length) {
     wrap.classList.add('gp-folder-trail-wrap--hidden');
-    if (kicker) kicker.textContent = '';
     if (toolbar) toolbar.innerHTML = '';
     nav.innerHTML = '';
     return;
   }
   wrap.classList.remove('gp-folder-trail-wrap--hidden');
   nav.setAttribute('aria-label', t(G.folderTrailAria) || '');
-  if (kicker) {
-    kicker.textContent = parts.length > 1 ? t(G.folderTrailKicker) || '' : '';
-    kicker.style.display = parts.length > 1 ? '' : 'none';
-  }
   if (toolbar) {
     toolbar.innerHTML = '';
     if (parts.length > 1) {
@@ -890,39 +857,28 @@ function labelForFolderKey(key) {
 
 function buildFolderNav(keys) {
   const wrap = document.getElementById('folder-nav-wrap');
-  const blockMain = document.getElementById('gp-fn-block-main');
-  const blockSub = document.getElementById('gp-fn-block-sub');
-  const navMain = document.getElementById('folder-nav-main');
-  const navSub = document.getElementById('folder-nav-sub');
-  const labelMain = document.getElementById('gp-folder-label-main');
-  const labelSub = document.getElementById('gp-folder-label-sub');
-  if (!wrap || !navMain || !navSub) return;
+  const nav = document.getElementById('folder-nav');
+  if (!wrap || !nav) return;
 
-  const resetBlocks = () => {
-    navMain.innerHTML = '';
-    navSub.innerHTML = '';
-    if (blockMain) blockMain.style.display = 'none';
-    if (blockSub) blockSub.style.display = 'none';
-    if (labelMain) labelMain.textContent = '';
-    if (labelSub) labelSub.textContent = '';
+  const reset = () => {
+    nav.innerHTML = '';
+    wrap.classList.remove('is-visible');
   };
 
   if (!keys || keys.length <= 1) {
-    resetBlocks();
-    wrap.classList.remove('is-visible');
+    reset();
     return;
   }
 
   wrap.classList.add('is-visible');
+  nav.innerHTML = '';
   const G = CONTENT.galleryPage || {};
-  resetBlocks();
+  nav.setAttribute('aria-label', t(G.folderNavToolbarAria) || '');
 
   const subKeys = keys.filter((k) => k !== '');
   const hasMain = keys.includes('');
 
   if (hasMain) {
-    if (blockMain) blockMain.style.display = 'block';
-    if (labelMain) labelMain.textContent = t(G.folderNavMain);
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'folder-btn' + (currentFolder === '' ? ' active' : '');
@@ -930,26 +886,22 @@ function buildFolderNav(keys) {
     btn.textContent = labelForFolderKey('');
     btn.title = btn.textContent;
     btn.addEventListener('click', () => selectFolder(''));
-    navMain.appendChild(btn);
+    nav.appendChild(btn);
   }
 
-  if (subKeys.length) {
-    if (blockSub) blockSub.style.display = 'block';
-    if (labelSub) labelSub.textContent = t(G.folderNavSubfolders);
-    subKeys.forEach((key) => {
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'folder-btn folder-btn--drill';
-      btn.dataset.folder = key;
-      btn.textContent = labelForFolderKey(key);
-      btn.title =
-        lang === 'ru'
-          ? `Открыть папку «${key}»`
-          : `Open folder “${key}”`;
-      btn.addEventListener('click', () => selectFolder(key));
-      navSub.appendChild(btn);
-    });
-  }
+  subKeys.forEach((key) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'folder-btn folder-btn--drill';
+    btn.dataset.folder = key;
+    btn.textContent = labelForFolderKey(key);
+    btn.title =
+      lang === 'ru'
+        ? `Открыть папку «${key}»`
+        : `Open folder “${key}”`;
+    btn.addEventListener('click', () => selectFolder(key));
+    nav.appendChild(btn);
+  });
 }
 
 function selectFolder(key) {
@@ -971,30 +923,11 @@ function refreshFolderNavFromI18n() {
   const wrap = document.getElementById('folder-nav-wrap');
   if (!wrap || !wrap.classList.contains('is-visible')) return;
   const G = CONTENT.galleryPage || {};
-  const labelMain = document.getElementById('gp-folder-label-main');
-  const labelSub = document.getElementById('gp-folder-label-sub');
-  const blockMain = document.getElementById('gp-fn-block-main');
-  const blockSub = document.getElementById('gp-fn-block-sub');
-  if (labelMain && blockMain && blockMain.style.display === 'block') {
-    labelMain.textContent = t(G.folderNavMain);
-  }
-  if (labelSub && blockSub && blockSub.style.display === 'block') {
-    labelSub.textContent = t(G.folderNavSubfolders);
-  }
+  const nav = document.getElementById('folder-nav');
+  if (nav) nav.setAttribute('aria-label', t(G.folderNavToolbarAria) || '');
   const up = document.querySelector('.gp-folder-up');
   if (up) up.textContent = t(G.folderUp);
-  const trailParts = assetPathSegments();
-  const kicker = document.getElementById('gp-folder-trail-kicker');
-  if (kicker) {
-    if (trailParts.length > 1) {
-      kicker.textContent = t(G.folderTrailKicker);
-      kicker.style.display = '';
-    } else {
-      kicker.textContent = '';
-      kicker.style.display = 'none';
-    }
-  }
-  document.querySelectorAll('.folder-btn').forEach((btn) => {
+  document.querySelectorAll('#folder-nav .folder-btn').forEach((btn) => {
     const key = btn.dataset.folder;
     if (key === '') {
       btn.textContent = t(G.folderRoot);
