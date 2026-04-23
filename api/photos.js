@@ -1,6 +1,6 @@
 /**
  * Vercel Function — Web Standard `fetch` export.
- * GET /api/photos?folder=2024
+ * GET /api/photos?folder=2024  or  ?folder=2024%2FAlbum%2FSubalbum
  *
  * 1) Fixed folder mode: public_id starts with "2024/" → Admin list by prefix.
  * 2) Dynamic folder mode (Media Library): public_id often has no folder path →
@@ -132,15 +132,16 @@ export default {
     }
 
     const auth = 'Basic ' + btoa(`${apiKey}:${apiSecret}`);
-    const year = String(folder).replace(/\/+$/, '');
-    const withSlash = year.endsWith('/') ? year : `${year}/`;
+    /** Full asset-folder path (e.g. `2024`, `2024/Разное/Разное 2`). */
+    const basePath = String(folder).replace(/^\/+|\/+$/g, '');
+    const withSlash = basePath.endsWith('/') ? basePath : `${basePath}/`;
     const folders = {};
 
     try {
       // ── A) Fixed folder mode: public_id path prefix ─────────────────────
       let resources = await listUploadsByPrefix(cloudName, auth, withSlash);
-      if (resources.length === 0 && withSlash !== year) {
-        resources = await listUploadsByPrefix(cloudName, auth, year);
+      if (resources.length === 0 && withSlash !== basePath) {
+        resources = await listUploadsByPrefix(cloudName, auth, basePath);
       }
 
       if (resources.length > 0) {
@@ -149,11 +150,11 @@ export default {
       } else {
         // ── B) Dynamic folder mode (Media Library) ───────────────────────
         try {
-          const rootAssets = await listByAssetFolder(cloudName, auth, year);
+          const rootAssets = await listByAssetFolder(cloudName, auth, basePath);
           if (!folders.General) folders.General = [];
           rootAssets.forEach((r) => folders.General.push(r.public_id));
 
-          const folderPathInUrl = year
+          const folderPathInUrl = basePath
             .split('/')
             .filter(Boolean)
             .map(encodeURIComponent)
@@ -167,14 +168,14 @@ export default {
 
           if (subRes.ok && Array.isArray(subJson.folders)) {
             for (const sub of subJson.folders) {
-              const path = sub.path || `${year}/${sub.name}`;
-              const name = sub.name || path.split('/').pop() || 'folder';
+              const childPath = sub.path || `${basePath}/${sub.name}`;
+              const name = sub.name || childPath.split('/').pop() || 'folder';
+              if (!folders[name]) folders[name] = [];
               try {
-                const subAssets = await listByAssetFolder(cloudName, auth, path);
-                if (!folders[name]) folders[name] = [];
+                const subAssets = await listByAssetFolder(cloudName, auth, childPath);
                 subAssets.forEach((r) => folders[name].push(r.public_id));
               } catch {
-                // skip unreadable subfolder
+                /* keep [] so the UI can still drill into nested Media Library folders */
               }
             }
           } else if (!subRes.ok && subRes.status !== 404) {

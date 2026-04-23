@@ -135,6 +135,64 @@
       box-shadow: 0 4px 20px rgba(184, 145, 58, 0.15);
     }
 
+    .gp-folder-trail-wrap {
+      display: none;
+      margin-top: 1.1rem;
+      text-align: center;
+    }
+    .gp-folder-trail-wrap.is-visible {
+      display: block;
+    }
+    .gp-folder-trail {
+      display: inline-flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.25rem 0.15rem;
+      max-width: 100%;
+      font-family: var(--sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--stone);
+      line-height: 1.45;
+    }
+    .gp-folder-trail .gp-trail-sep {
+      color: rgba(10, 15, 30, 0.28);
+      user-select: none;
+      padding: 0 0.1rem;
+    }
+    .gp-folder-trail button {
+      border: 0;
+      background: none;
+      padding: 0.15rem 0.25rem;
+      margin: 0;
+      font: inherit;
+      font-weight: 600;
+      color: var(--gold);
+      cursor: pointer;
+      border-radius: 4px;
+      max-width: min(100%, 220px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      text-decoration-color: rgba(184, 145, 58, 0.45);
+    }
+    .gp-folder-trail button:hover {
+      color: var(--night);
+      text-decoration-color: rgba(10, 15, 30, 0.35);
+    }
+    .gp-folder-trail .gp-trail-current {
+      color: var(--night);
+      font-weight: 700;
+      padding: 0.15rem 0.35rem;
+      max-width: min(100%, 260px);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .folder-nav-wrap {
       display: none;
       margin-top: 1.5rem;
@@ -467,6 +525,9 @@
     </div>
 
     <div class="year-nav" id="year-nav"></div>
+    <div class="gp-folder-trail-wrap" id="gp-folder-trail-wrap">
+      <nav class="gp-folder-trail" id="gp-folder-trail" aria-label=""></nav>
+    </div>
     <div class="folder-nav-wrap" id="folder-nav-wrap">
       <p class="folder-nav-label" id="gp-folder-label"></p>
       <div class="folder-nav" id="folder-nav"></div>
@@ -548,7 +609,9 @@ const CLOUD_NAME = 'dboyuj209';
 // Thumbnails/full images still use Cloudinary delivery URLs (CLOUD_NAME) below.
 const YEARS = ['2024', '2023', '2022', '2021', '2020']; // add more as you upload
 let currentYear = '2024';
-/** @type {Map<string, string[]>} folder key → public_ids (key "" = year root) */
+/** Full Cloudinary asset_folder path for the current view (e.g. `2024`, `2024/Разное/Разное 2`). */
+let currentAssetPath = '2024';
+/** @type {Map<string, string[]>} folder key → public_ids (key "" = assets directly in currentAssetPath) */
 let folderGroups = new Map();
 let currentFolder = '';
 let photos = [];
@@ -569,7 +632,8 @@ function fullUrl(publicId) {
 }
 
 function downloadAttachmentUrl(publicId, index) {
-  const base = `BSEBC_${currentYear}_${String(index + 1).padStart(3, '0')}`;
+  const yearRoot = (currentAssetPath || currentYear).split('/')[0] || currentYear;
+  const base = `BSEBC_${yearRoot}_${String(index + 1).padStart(3, '0')}`;
   // Same delivery host as thumbnails; `fl_attachment` sets Content-Disposition: attachment.
   // Do not use `f_original` here — it is not a valid image format token in the URL API and returns 400.
   // Do not use `f_auto` here — it prefers WebP/AVIF; omitting `f_*` keeps the uploaded format (Cloudinary default).
@@ -620,13 +684,14 @@ function getPhotosApiBase() {
 
 /**
  * `/api/photos` returns { folders: { General: [...ids], AlbumName: [...] } } (see api/photos.js).
- * "General" = images directly under the year prefix (e.g. 2024/photo); map to "" for i18n folderRoot.
+ * "General" = assets in the requested folder path; map to "" for i18n folderRoot.
+ * Empty arrays are kept so nested folders without direct uploads still appear in the nav.
  */
 function foldersResponseToMap(foldersObj) {
   const map = new Map();
   if (!foldersObj || typeof foldersObj !== 'object') return map;
   Object.entries(foldersObj).forEach(([name, ids]) => {
-    if (!Array.isArray(ids) || ids.length === 0) return;
+    if (!Array.isArray(ids)) return;
     const key = name === 'General' ? '' : name;
     map.set(key, ids.slice());
   });
@@ -634,14 +699,90 @@ function foldersResponseToMap(foldersObj) {
 }
 
 function sortedFolderKeys(map) {
-  return [...map.keys()]
-    .filter((k) => (map.get(k) || []).length > 0)
-    .sort((a, b) => {
-      if (a === b) return 0;
-      if (a === '') return -1;
-      if (b === '') return 1;
-      return a.localeCompare(b, undefined, { sensitivity: 'base' });
-    });
+  return [...map.keys()].sort((a, b) => {
+    if (a === b) return 0;
+    if (a === '') return -1;
+    if (b === '') return 1;
+    return a.localeCompare(b, undefined, { sensitivity: 'base' });
+  });
+}
+
+function assetPathSegments() {
+  return String(currentAssetPath || '')
+    .split('/')
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
+function joinAssetPath(base, segment) {
+  const b = String(base || '').replace(/\/+$/, '');
+  const s = String(segment || '').replace(/^\/+|\/+$/g, '');
+  if (!s) return b;
+  return b ? `${b}/${s}` : s;
+}
+
+function parentAssetPath(p) {
+  const parts = String(p || '')
+    .split('/')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  parts.pop();
+  return parts.join('/');
+}
+
+function syncYearFromAssetPath() {
+  const root = assetPathSegments()[0];
+  if (root && YEARS.includes(root)) currentYear = root;
+}
+
+function renderFolderTrail() {
+  const wrap = document.getElementById('gp-folder-trail-wrap');
+  const nav = document.getElementById('gp-folder-trail');
+  if (!wrap || !nav) return;
+  const G = CONTENT.galleryPage || {};
+  nav.setAttribute('aria-label', t(G.folderTrailAria) || '');
+  const parts = assetPathSegments();
+  if (parts.length <= 1) {
+    wrap.classList.remove('is-visible');
+    nav.innerHTML = '';
+    return;
+  }
+  wrap.classList.add('is-visible');
+  nav.innerHTML = '';
+  parts.forEach((label, i) => {
+    if (i > 0) {
+      const sep = document.createElement('span');
+      sep.className = 'gp-trail-sep';
+      sep.textContent = '/';
+      sep.setAttribute('aria-hidden', 'true');
+      nav.appendChild(sep);
+    }
+    if (i < parts.length - 1) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = label;
+      btn.title = label;
+      btn.addEventListener('click', () => {
+        currentAssetPath = parts.slice(0, i + 1).join('/');
+        currentFolder = '';
+        loadPhotos();
+      });
+      nav.appendChild(btn);
+    } else {
+      const cur = document.createElement('span');
+      cur.className = 'gp-trail-current';
+      cur.textContent = label;
+      cur.title = label;
+      nav.appendChild(cur);
+    }
+  });
+}
+
+function syncYearNavButtons() {
+  const root = assetPathSegments()[0] || currentYear;
+  document.querySelectorAll('.year-btn').forEach((b) => {
+    b.classList.toggle('active', b.textContent === root);
+  });
 }
 
 function labelForFolderKey(key) {
@@ -680,6 +821,12 @@ function buildFolderNav(keys) {
 }
 
 function selectFolder(key) {
+  if (key !== '') {
+    currentAssetPath = joinAssetPath(currentAssetPath, key);
+    currentFolder = '';
+    loadPhotos();
+    return;
+  }
   currentFolder = key;
   photos = folderGroups.get(key) || [];
   document.querySelectorAll('.folder-btn').forEach((b) => {
@@ -710,7 +857,14 @@ function renderPhotoGrid() {
 
   if (!photos.length) {
     grid.style.display = 'none';
-    renderGalleryEmptyState();
+    const keys = sortedFolderKeys(folderGroups);
+    const G = CONTENT.galleryPage || {};
+    if (keys.length > 1) {
+      setI18nText('gp-empty-title', t(G.emptyTitle));
+      setI18nText('gp-empty-body', t(G.emptyPickSubfolderBody));
+    } else {
+      renderGalleryEmptyState();
+    }
     empty.style.display = 'block';
     return;
   }
@@ -719,12 +873,13 @@ function renderPhotoGrid() {
   grid.style.display = 'grid';
 
   const folderLabel = currentFolder ? `${currentFolder} · ` : '';
+  const pathBit = currentAssetPath ? `${currentAssetPath.replace(/\//g, ' · ')} · ` : '';
   photos.forEach((id, i) => {
     const tile = document.createElement('div');
     tile.className = 'gp-tile';
     const alt =
       (lang === 'ru' ? 'Фото' : 'Photo') +
-      ` ${i + 1} · ${folderLabel}${currentYear}`;
+      ` ${i + 1} · ${pathBit}${folderLabel}`;
     tile.innerHTML = `
       <img src="${thumbUrl(id)}" alt="${alt.replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('loaded')" />
       <div class="gp-tile-overlay"></div>
@@ -734,7 +889,7 @@ function renderPhotoGrid() {
   });
 }
 
-async function loadPhotos(year) {
+async function loadPhotos() {
   const grid = document.getElementById('gp-grid');
   const loading = document.getElementById('gp-loading');
   const empty = document.getElementById('gp-empty');
@@ -746,7 +901,7 @@ async function loadPhotos(year) {
   try {
     const apiBase = getPhotosApiBase();
     const res = await fetch(
-      `${apiBase}/api/photos?folder=${encodeURIComponent(year)}`,
+      `${apiBase}/api/photos?folder=${encodeURIComponent(currentAssetPath)}`,
     );
     let data = {};
     try {
@@ -758,13 +913,18 @@ async function loadPhotos(year) {
       const detail =
         (data && data.error && String(data.error)) ||
         `${res.status} ${res.statusText || ''}`.trim();
+      if (typeof console !== 'undefined' && console.warn) {
+        console.warn('[gallery photos]', detail);
+      }
       loading.style.display = 'none';
       if (grid) grid.style.display = 'none';
       folderGroups = new Map();
       currentFolder = '';
       photos = [];
       buildFolderNav([]);
-      renderGalleryErrorState(detail);
+      renderFolderTrail();
+      syncYearNavButtons();
+      renderGalleryEmptyState();
       empty.style.display = 'block';
       return;
     }
@@ -772,10 +932,14 @@ async function loadPhotos(year) {
     folderGroups = foldersResponseToMap(data.folders);
     const keys = sortedFolderKeys(folderGroups);
     const totalCount = [...folderGroups.values()].reduce((n, arr) => n + arr.length, 0);
+    const hasSubfolderNav = keys.length > 1;
 
     loading.style.display = 'none';
+    syncYearFromAssetPath();
+    renderFolderTrail();
+    syncYearNavButtons();
 
-    if (totalCount === 0) {
+    if (totalCount === 0 && !hasSubfolderNav) {
       photos = [];
       folderGroups = new Map();
       currentFolder = '';
@@ -785,19 +949,24 @@ async function loadPhotos(year) {
       return;
     }
 
-    currentFolder = keys[0] || '';
+    currentFolder = '';
     photos = folderGroups.get(currentFolder) || [];
 
     buildFolderNav(keys);
     renderPhotoGrid();
   } catch (e) {
+    if (typeof console !== 'undefined' && console.warn) {
+      console.warn('[gallery photos]', e);
+    }
     loading.style.display = 'none';
     if (grid) grid.style.display = 'none';
     folderGroups = new Map();
     currentFolder = '';
     photos = [];
     buildFolderNav([]);
-    renderGalleryErrorState(e && e.message ? String(e.message) : '');
+    renderFolderTrail();
+    syncYearNavButtons();
+    renderGalleryEmptyState();
     empty.style.display = 'block';
   }
 }
@@ -806,15 +975,17 @@ async function loadPhotos(year) {
 function buildYearNav() {
   const nav = document.getElementById('year-nav');
   nav.innerHTML = '';
+  const root = assetPathSegments()[0] || currentYear;
   YEARS.forEach(y => {
     const btn = document.createElement('button');
-    btn.className = 'year-btn' + (y === currentYear ? ' active' : '');
+    btn.className = 'year-btn' + (y === root ? ' active' : '');
     btn.textContent = y;
     btn.onclick = () => {
       currentYear = y;
+      currentAssetPath = y;
       document.querySelectorAll('.year-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      loadPhotos(y);
+      loadPhotos();
     };
     nav.appendChild(btn);
   });
@@ -881,19 +1052,13 @@ function renderGalleryChrome() {
   const lbDl = document.getElementById('lb-download');
   if (lbDl) lbDl.setAttribute('aria-label', t(G.downloadAria));
   refreshFolderNavFromI18n();
+  renderFolderTrail();
 }
 
 function renderGalleryEmptyState() {
   const G = CONTENT.galleryPage || {};
   setI18nText('gp-empty-title', t(G.emptyTitle));
   setI18nText('gp-empty-body', t(G.emptyBody));
-}
-
-function renderGalleryErrorState(detail) {
-  const G = CONTENT.galleryPage || {};
-  const base = t(G.errorBody);
-  setI18nText('gp-empty-title', t(G.errorTitle));
-  setI18nText('gp-empty-body', detail ? `${base}\n\n(${String(detail)})` : base);
 }
 
 function setLang(l) {
@@ -913,7 +1078,7 @@ function setLang(l) {
     renderGalleryChrome();
     const emptyEl = document.getElementById('gp-empty');
     if (photos.length === 0 && emptyEl && emptyEl.style.display !== 'none') {
-      renderGalleryEmptyState();
+      renderPhotoGrid();
     }
     animateTextDiff(before);
     window.setTimeout(() => {
@@ -1211,7 +1376,8 @@ document.querySelectorAll('.lang-btn').forEach(b =>
 renderNav();
 renderGalleryChrome();
 buildYearNav();
-loadPhotos(currentYear);
+currentAssetPath = currentYear;
+loadPhotos();
 </script>
 </body>
 </html>

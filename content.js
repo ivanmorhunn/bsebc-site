@@ -40,22 +40,22 @@ const CONTENT = {
     sectionKicker: { ru: "Архив", en: "Archive" },
     sectionTitle: { ru: "Год за <em>годом</em>", en: "Year by <em>year</em>" },
     sectionLead: {
-      ru: "Выберите год, затем при необходимости папку — если в этом году в архиве несколько альбомов.",
-      en: "Choose a year, then pick a folder when that year has more than one album in the archive."
+      ru: "Выберите год, затем открывайте папки — вложенность в Media Library любой глубины поддерживается.",
+      en: "Choose a year, then open folders—nested Media Library folders of any depth are supported."
     },
+    folderTrailAria: { ru: "Путь к папке в архиве", en: "Folder path in the archive" },
     folderNavLabel: { ru: "Папка", en: "Folder" },
     folderRoot: { ru: "Основное", en: "Main" },
     back: { ru: "← Вернуться на главную", en: "← Back to home" },
     loading: { ru: "Загрузка фотографий...", en: "Loading photos..." },
     emptyTitle: { ru: "Фото не найдены", en: "No photos found" },
     emptyBody: {
-      ru: "В этом разделе пока нет фотографий. Должна существовать папка года в Media Library (например «2024») или public_id с префиксом 2024/… после деплоя последней версии API.",
-      en: "No photos in this section. Use a year folder in the Media Library (e.g. “2024”) or public_id paths starting with 2024/… . Redeploy so /api/photos includes dynamic-folder support.",
+      ru: "В этом разделе пока нет фотографий.",
+      en: "No photos in this section yet.",
     },
-    errorTitle: { ru: "Не удалось загрузить фото", en: "Couldn’t load photos" },
-    errorBody: {
-      ru: "На localhost команда `npm run dev` не поднимает /api — используйте `npm run dev:vercel` или в gallery.html задайте meta bsebc-photos-api-origin на URL деплоя Vercel. На продакшене Vercel проверьте «Сеть» для /api/photos и переменные CLOUDINARY_*.",
-      en: "On localhost, `npm run dev` (static serve) has no /api — use `npm run dev:vercel` or set meta `bsebc-photos-api-origin` in gallery.html to your Vercel URL. On production, check Network for /api/photos and CLOUDINARY_* env vars."
+    emptyPickSubfolderBody: {
+      ru: "Здесь нет снимков в корне папки — выберите вложенную папку выше.",
+      en: "No images in this folder’s root—pick a subfolder in the row above.",
     },
     download: { ru: "Скачать", en: "Download" },
     downloadAria: { ru: "Скачать это фото", en: "Download this photo" },
