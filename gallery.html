@@ -661,10 +661,10 @@
 const CLOUD_NAME = 'dboyuj209';
 // Photo lists: `/api/photos` (same host on Vercel, or see meta bsebc-photos-api-origin / __BSEBC_PHOTOS_API__).
 // Thumbnails/full images still use Cloudinary delivery URLs (CLOUD_NAME) below.
-const YEARS = ['2024', '2023', '2022', '2021', '2020']; // add more as you upload
-let currentYear = '2024';
+let YEARS = [];
+let currentYear = '';
 /** Full Cloudinary asset_folder path for the current view (e.g. `2024`, `2024/Разное/Разное 2`). */
-let currentAssetPath = '2024';
+let currentAssetPath = '';
 /** @type {Map<string, string[]>} folder key → public_ids (key "" = assets directly in currentAssetPath) */
 let folderGroups = new Map();
 let photos = [];
@@ -733,6 +733,15 @@ function getPhotosApiBase() {
     if (c) return c.replace(/\/$/, '');
   }
   return '';
+}
+
+async function fetchYears() {
+  const apiBase = getPhotosApiBase();
+  const res = await fetch(`${apiBase}/api/years`);
+  if (!res.ok) return [];
+  const data = await res.json().catch(() => ({}));
+  if (!data || !Array.isArray(data.years)) return [];
+  return data.years.map(String).filter(Boolean);
 }
 
 /**
@@ -1437,9 +1446,33 @@ document.querySelectorAll('.lang-btn').forEach(b =>
   b.classList.toggle('active', b.dataset.lang === lang));
 renderNav();
 renderGalleryChrome();
-buildYearNav();
-currentAssetPath = currentYear;
-loadPhotos();
+// Years come from Cloudinary so non-existent years never show.
+(async () => {
+  YEARS = await fetchYears();
+  if (!YEARS.length) {
+    const yearNav = document.getElementById('year-nav');
+    if (yearNav) yearNav.innerHTML = '';
+    const folderWrap = document.getElementById('folder-nav-wrap');
+    if (folderWrap) folderWrap.classList.remove('is-visible');
+    folderGroups = new Map();
+    photos = [];
+    currentYear = '';
+    currentAssetPath = '';
+    renderFolderTrail();
+    renderGalleryEmptyState();
+    const empty = document.getElementById('gp-empty');
+    const loading = document.getElementById('gp-loading');
+    const grid = document.getElementById('gp-grid');
+    if (loading) loading.style.display = 'none';
+    if (grid) grid.style.display = 'none';
+    if (empty) empty.style.display = 'block';
+    return;
+  }
+  currentYear = YEARS[0];
+  currentAssetPath = currentYear;
+  buildYearNav();
+  loadPhotos();
+})();
 </script>
 </body>
 </html>
