@@ -654,6 +654,10 @@
     </div>
 
     <div class="year-nav" id="year-nav"></div>
+    <!-- When inside a folder: keep sibling folders visible & highlight current -->
+    <div class="folder-nav-wrap" id="folder-sibling-nav-wrap">
+      <div class="folder-nav folder-nav--children" id="folder-sibling-nav" role="toolbar"></div>
+    </div>
     <div class="gp-folder-trail-wrap gp-folder-trail-wrap--hidden" id="gp-folder-trail-wrap">
       <div class="gp-folder-trail-toolbar" id="gp-folder-trail-toolbar"></div>
       <nav class="gp-folder-trail" id="gp-folder-trail" aria-label=""></nav>
@@ -914,7 +918,8 @@ function renderFolderTrail() {
   if (!wrap || !nav) return;
   const G = CONTENT.galleryPage || {};
   const parts = assetPathSegments();
-  if (!parts.length) {
+  // Don't show breadcrumb at year root (avoids duplicating the year pill).
+  if (parts.length <= 1) {
     wrap.classList.add('gp-folder-trail-wrap--hidden');
     if (toolbar) toolbar.innerHTML = '';
     nav.innerHTML = '';
@@ -965,6 +970,59 @@ function renderFolderTrail() {
       });
       nav.appendChild(cur);
     }
+  });
+}
+
+async function fetchTopFoldersForYear(year) {
+  const y = String(year || '').trim();
+  if (!y) return [];
+  try {
+    const apiBase = getPhotosApiBase();
+    const res = await fetch(`${apiBase}/api/photos?folder=${encodeURIComponent(y)}`);
+    const data = await res.json().catch(() => ({}));
+    const map = foldersResponseToMap(data && data.folders);
+    return sortedFolderKeys(map).filter((k) => k !== '');
+  } catch (_) {
+    return [];
+  }
+}
+
+function buildSiblingFolderNav(keys) {
+  const wrap = document.getElementById('folder-sibling-nav-wrap');
+  const nav = document.getElementById('folder-sibling-nav');
+  if (!wrap || !nav) return;
+
+  const parts = assetPathSegments();
+  const yearRoot = parts[0] || currentYear;
+  const active = parts[1] || '';
+
+  // Only show this bar once you are inside a folder.
+  if (parts.length < 2 || !Array.isArray(keys) || keys.length === 0) {
+    nav.innerHTML = '';
+    wrap.classList.remove('is-visible');
+    return;
+  }
+
+  wrap.classList.add('is-visible');
+  nav.innerHTML = '';
+  const G = CONTENT.galleryPage || {};
+  nav.setAttribute('aria-label', t(G.folderNavToolbarAria) || '');
+
+  keys.forEach((key) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'folder-btn folder-btn--drill' + (key === active ? ' active' : '');
+    btn.dataset.folder = key;
+    btn.textContent = key;
+    btn.title =
+      lang === 'ru'
+        ? `Открыть папку «${key}»`
+        : `Open folder “${key}”`;
+    btn.addEventListener('click', () => {
+      currentAssetPath = joinAssetPath(yearRoot, key);
+      loadPhotos();
+    });
+    nav.appendChild(btn);
   });
 }
 
@@ -1145,6 +1203,15 @@ async function loadPhotos() {
 
     loading.style.display = 'none';
     syncYearFromAssetPath();
+    const parts = assetPathSegments();
+    const yearRoot = parts[0] || currentYear;
+    // When inside a folder, keep the year’s top-level folders visible (sibling nav).
+    if (yearRoot && parts.length >= 2) {
+      const topFolders = await fetchTopFoldersForYear(yearRoot);
+      buildSiblingFolderNav(topFolders);
+    } else {
+      buildSiblingFolderNav([]);
+    }
     renderFolderTrail();
     syncYearNavButtons();
 
@@ -1171,6 +1238,7 @@ async function loadPhotos() {
     folderGroups = new Map();
     photos = [];
     buildFolderNav([]);
+    buildSiblingFolderNav([]);
     renderFolderTrail();
     syncYearNavButtons();
     renderGalleryEmptyState();
