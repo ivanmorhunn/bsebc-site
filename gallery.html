@@ -751,6 +751,8 @@ let folderGroups = new Map();
 let photos = [];
 let lbIndex = 0;
 let lang = localStorage.getItem('bsebc-lang') || 'ru';
+// Cache: year -> top-level folders (so folder opens don't block on an extra fetch)
+const topFoldersByYearCache = new Map();
 
 // ── CLOUDINARY ────────────────────────────────────────
 function cloudUrl(publicId, opts = '') {
@@ -918,8 +920,9 @@ function renderFolderTrail() {
   if (!wrap || !nav) return;
   const G = CONTENT.galleryPage || {};
   const parts = assetPathSegments();
-  // Don't show breadcrumb at year root (avoids duplicating the year pill).
-  if (parts.length <= 1) {
+  // Show breadcrumbs only when nested deeper than year/folder.
+  // (Year + active folder are already represented by the year pills + sibling folder chips.)
+  if (parts.length <= 2) {
     wrap.classList.add('gp-folder-trail-wrap--hidden');
     if (toolbar) toolbar.innerHTML = '';
     nav.innerHTML = '';
@@ -969,13 +972,17 @@ function renderFolderTrail() {
 async function fetchTopFoldersForYear(year) {
   const y = String(year || '').trim();
   if (!y) return [];
+  if (topFoldersByYearCache.has(y)) return topFoldersByYearCache.get(y) || [];
   try {
     const apiBase = getPhotosApiBase();
     const res = await fetch(`${apiBase}/api/photos?folder=${encodeURIComponent(y)}`);
     const data = await res.json().catch(() => ({}));
     const map = foldersResponseToMap(data && data.folders);
-    return sortedFolderKeys(map).filter((k) => k !== '');
+    const keys = sortedFolderKeys(map).filter((k) => k !== '');
+    topFoldersByYearCache.set(y, keys);
+    return keys;
   } catch (_) {
+    topFoldersByYearCache.set(y, []);
     return [];
   }
 }
@@ -1198,8 +1205,8 @@ async function loadPhotos() {
     const yearRoot = parts[0] || currentYear;
     // When inside a folder, keep the year’s top-level folders visible (sibling nav).
     if (yearRoot && parts.length >= 2) {
-      const topFolders = await fetchTopFoldersForYear(yearRoot);
-      buildSiblingFolderNav(topFolders);
+      // Don't block folder load on this extra fetch; update chips when ready.
+      void fetchTopFoldersForYear(yearRoot).then(buildSiblingFolderNav);
     } else {
       buildSiblingFolderNav([]);
     }
