@@ -927,19 +927,12 @@ function renderFolderTrail() {
   }
   wrap.classList.remove('gp-folder-trail-wrap--hidden');
   nav.setAttribute('aria-label', t(G.folderTrailAria) || '');
-  if (toolbar) {
-    toolbar.innerHTML = '';
-    if (parts.length > 1) {
-      const up = document.createElement('button');
-      up.type = 'button';
-      up.className = 'gp-folder-up';
-      up.textContent = t(G.folderUp);
-      up.addEventListener('click', goUpOneFolder);
-      toolbar.appendChild(up);
-    }
-  }
+  // Breadcrumbs are the navigation; avoid adding a separate "Back" button row.
+  if (toolbar) toolbar.innerHTML = '';
   nav.innerHTML = '';
-  parts.forEach((label, i) => {
+  const yearRoot = parts[0];
+  const trailParts = parts.slice(1); // avoid duplicating the year pill
+  trailParts.forEach((label, i) => {
     if (i > 0) {
       const sep = document.createElement('span');
       sep.className = 'gp-trail-sep';
@@ -947,14 +940,14 @@ function renderFolderTrail() {
       sep.setAttribute('aria-hidden', 'true');
       nav.appendChild(sep);
     }
-    if (i < parts.length - 1) {
+    if (i < trailParts.length - 1) {
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'gp-trail-pill';
       btn.textContent = label;
       btn.title = label;
       btn.addEventListener('click', () => {
-        currentAssetPath = parts.slice(0, i + 1).join('/');
+        currentAssetPath = [yearRoot, ...trailParts.slice(0, i + 1)].join('/');
         loadPhotos();
       });
       nav.appendChild(btn);
@@ -965,7 +958,7 @@ function renderFolderTrail() {
       cur.textContent = label;
       cur.title = label;
       cur.addEventListener('click', () => {
-        currentAssetPath = parts.join('/');
+        currentAssetPath = [yearRoot, ...trailParts].join('/');
         loadPhotos();
       });
       nav.appendChild(cur);
@@ -1078,8 +1071,6 @@ function refreshFolderNavFromI18n() {
   const G = CONTENT.galleryPage || {};
   const nav = document.getElementById('folder-nav');
   if (nav) nav.setAttribute('aria-label', t(G.folderNavToolbarAria) || '');
-  const up = document.querySelector('.gp-folder-up');
-  if (up) up.textContent = t(G.folderUp);
   document.querySelectorAll('#folder-nav .folder-btn').forEach((btn) => {
     const key = btn.dataset.folder;
     if (!key) return;
