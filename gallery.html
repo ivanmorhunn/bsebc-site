@@ -416,26 +416,27 @@
     }
     body.gp-view-album .gp-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
-      grid-auto-rows: 72px;
+      /* Larger thumbnails like the reference album pages */
+      grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+      grid-auto-rows: 96px;
       gap: 1px;
     }
     @media (min-width: 520px) {
       body.gp-view-album .gp-grid {
-        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-        grid-auto-rows: 82px;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        grid-auto-rows: 108px;
       }
     }
     @media (min-width: 900px) {
       body.gp-view-album .gp-grid {
-        grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
-        grid-auto-rows: 92px;
+        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+        grid-auto-rows: 122px;
       }
     }
     @media (min-width: 1300px) {
       body.gp-view-album .gp-grid {
-        grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
-        grid-auto-rows: 102px;
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+        grid-auto-rows: 138px;
       }
     }
     body.gp-view-album .gp-tile {
@@ -473,6 +474,7 @@
       font-family: var(--serif); font-size: 1.5rem;
       font-weight: 400; color: var(--night); margin-bottom: .5rem;
     }
+    .gp-empty h3:empty { display: none; }
 
     /* Lightbox */
     .lb-overlay {
@@ -1035,7 +1037,8 @@ function renderPhotoGrid() {
     const hasChildFolders = sortedFolderKeys(folderGroups).some((k) => k !== '');
     const G = CONTENT.galleryPage || {};
     if (hasChildFolders) {
-      setI18nText('gp-empty-title', t(G.emptyTitle));
+      // Root may intentionally have no direct uploads; guide users to choose a folder.
+      setI18nText('gp-empty-title', '');
       setI18nText('gp-empty-body', t(G.emptyPickSubfolderBody));
     } else {
       renderGalleryEmptyState();
