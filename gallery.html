@@ -118,6 +118,8 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      /* Bias framing upward so heads are less likely to be cropped */
+      object-position: 50% 18%;
       display: block;
       filter: saturate(1.02) contrast(1.02);
     }
@@ -809,6 +811,12 @@ function fullUrl(publicId) {
   return cloudUrl(publicId, 'w_2000,q_auto,f_auto/');
 }
 
+function heroUrl(publicId) {
+  // SmugMug-like banner: fixed aspect with smart gravity to keep faces in frame.
+  // g_auto:faces picks a face-based crop when possible; falls back to g_auto.
+  return cloudUrl(publicId, 'w_2600,h_920,c_fill,g_auto:faces,q_auto,f_auto/');
+}
+
 function downloadAttachmentUrl(publicId, index) {
   const yearRoot = (currentAssetPath || currentYear).split('/')[0] || currentYear;
   const base = `BSEBC_${yearRoot}_${String(index + 1).padStart(3, '0')}`;
@@ -1127,7 +1135,7 @@ function renderPhotoGrid() {
     const yearSafe = escapeHtml(assetPathSegments()[0] || currentYear || '');
     hero.innerHTML = `
       <div class="gp-album-hero-media" role="button" tabindex="0" aria-label="${titleSafe}">
-        <img src="${fullUrl(photos[0])}" alt="${titleSafe}" loading="eager" />
+        <img src="${heroUrl(photos[0])}" alt="${titleSafe}" loading="eager" />
         <div class="gp-album-hero-title">
           ${titleSafe}
           <small>${yearSafe}</small>
