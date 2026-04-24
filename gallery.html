@@ -997,7 +997,7 @@ function buildSiblingFolderNav(keys) {
   const active = parts[1] || '';
 
   // Only show this bar once you are inside a folder.
-  if (parts.length < 2 || !Array.isArray(keys) || keys.length === 0) {
+  if (parts.length < 2) {
     nav.innerHTML = '';
     wrap.classList.remove('is-visible');
     return;
@@ -1008,7 +1008,8 @@ function buildSiblingFolderNav(keys) {
   const G = CONTENT.galleryPage || {};
   nav.setAttribute('aria-label', t(G.folderNavToolbarAria) || '');
 
-  keys.forEach((key) => {
+  const list = Array.isArray(keys) && keys.length ? keys : active ? [active] : [];
+  list.forEach((key) => {
     const btn = document.createElement('button');
     btn.type = 'button';
     btn.className = 'folder-btn folder-btn--drill' + (key === active ? ' active' : '');
@@ -1198,6 +1199,10 @@ async function loadPhotos() {
     const keys = sortedFolderKeys(folderGroups);
     const totalCount = [...folderGroups.values()].reduce((n, arr) => n + arr.length, 0);
     const hasChildFolders = keys.some((k) => k !== '');
+    // If we're at the year root, cache its top-level folders for instant sibling nav.
+    if (assetPathSegments().length === 1) {
+      topFoldersByYearCache.set(currentAssetPath, keys.filter((k) => k !== ''));
+    }
 
     loading.style.display = 'none';
     syncYearFromAssetPath();
@@ -1205,6 +1210,8 @@ async function loadPhotos() {
     const yearRoot = parts[0] || currentYear;
     // When inside a folder, keep the year’s top-level folders visible (sibling nav).
     if (yearRoot && parts.length >= 2) {
+      // Render immediately from cache (or at least active) to avoid flicker.
+      buildSiblingFolderNav(topFoldersByYearCache.get(yearRoot) || []);
       // Don't block folder load on this extra fetch; update chips when ready.
       void fetchTopFoldersForYear(yearRoot).then(buildSiblingFolderNav);
     } else {
