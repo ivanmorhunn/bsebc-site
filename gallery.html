@@ -97,7 +97,9 @@
     /* Album view: full-bleed dense thumb wall (no hero banner — avoids awkward crops) */
     body.gp-view-album .abt-bg-parchment.gp-album-stage .gp-gallery-stage {
       max-width: 100%;
-      padding: 0;
+      /* Add padding around the thumbnail wall (matches reference) */
+      padding: clamp(0.9rem, 2.4vw, 1.6rem) clamp(0.9rem, 2.4vw, 1.6rem)
+        clamp(2.2rem, 4vw, 3.4rem);
     }
 
     .abt-section h2 {
@@ -265,71 +267,6 @@
       margin-bottom: 0.85rem;
       opacity: 0.92;
     }
-
-    /* Year folder switcher: jump between all folders in the year */
-    .gp-year-folder-switch {
-      margin: 1.05rem auto 0;
-      max-width: 980px;
-      padding: 0.25rem 0;
-    }
-    .gp-year-folder-switch-inner {
-      display: flex;
-      gap: 0.45rem;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .gp-year-folder-chip {
-      appearance: none;
-      border: 1px solid rgba(10, 15, 30, 0.12);
-      background: rgba(255, 255, 255, 0.75);
-      color: rgba(10, 15, 30, 0.78);
-      font-family: var(--sans);
-      font-size: 12px;
-      font-weight: 650;
-      padding: 0.55rem 0.95rem;
-      border-radius: 999px;
-      cursor: pointer;
-      max-width: min(100%, 260px);
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      transition: transform 0.2s ease, background var(--transition), border-color var(--transition), color var(--transition);
-    }
-    .gp-year-folder-chip:hover {
-      transform: translateY(-1px);
-      border-color: rgba(184, 145, 58, 0.42);
-      color: var(--night);
-      background: rgba(255, 255, 255, 0.95);
-    }
-    .gp-year-folder-chip.is-active {
-      border-color: rgba(184, 145, 58, 0.55);
-      background: linear-gradient(165deg, rgba(255, 248, 230, 0.95), rgba(184, 145, 58, 0.18));
-      color: var(--night);
-    }
-    .gp-year-folder-chip:focus-visible {
-      outline: 2px solid var(--gold);
-      outline-offset: 2px;
-    }
-    @media (max-width: 700px) {
-      .gp-year-folder-switch {
-        max-width: 100%;
-        padding: 0.15rem 0.25rem;
-      }
-      .gp-year-folder-switch-inner {
-        justify-content: flex-start;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        padding: 0.25rem 0.25rem 0.6rem;
-      }
-      .gp-year-folder-switch-inner::-webkit-scrollbar { height: 6px; }
-      .gp-year-folder-switch-inner::-webkit-scrollbar-thumb {
-        background: rgba(10, 15, 30, 0.12);
-        border-radius: 999px;
-      }
-      .gp-year-folder-chip { flex: 0 0 auto; }
-    }
     .folder-nav {
       display: flex;
       flex-wrap: wrap;
@@ -483,12 +420,12 @@
     /* Album view: big “wall” thumbnails (like reference) */
     body.gp-view-album .gp-grid-shell {
       display: block;
-      background: #e9e9e9;
+      background: transparent;
     }
     body.gp-view-album .gp-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1px;
+      gap: clamp(8px, 1.15vw, 14px);
     }
     @media (min-width: 520px) {
       body.gp-view-album .gp-grid {
@@ -717,7 +654,6 @@
     </div>
 
     <div class="year-nav" id="year-nav"></div>
-    <div class="gp-year-folder-switch" id="gp-year-folder-switch" style="display:none"></div>
     <div class="gp-folder-trail-wrap gp-folder-trail-wrap--hidden" id="gp-folder-trail-wrap">
       <div class="gp-folder-trail-toolbar" id="gp-folder-trail-toolbar"></div>
       <nav class="gp-folder-trail" id="gp-folder-trail" aria-label=""></nav>
@@ -808,8 +744,6 @@ let currentYear = '';
 let currentAssetPath = '';
 /** @type {Map<string, string[]>} folder key → public_ids (key "" = assets directly in currentAssetPath) */
 let folderGroups = new Map();
-/** @type {Map<string, string[]>} year → top-level folder names */
-const yearFolderIndex = new Map();
 let photos = [];
 let lbIndex = 0;
 let lang = localStorage.getItem('bsebc-lang') || 'ru';
@@ -901,58 +835,6 @@ function foldersResponseToMap(foldersObj) {
     map.set(key, ids.slice());
   });
   return map;
-}
-
-async function fetchFolderIndexForYear(year) {
-  const y = String(year || '').trim();
-  if (!y) return [];
-  if (yearFolderIndex.has(y)) return yearFolderIndex.get(y) || [];
-  try {
-    const apiBase = getPhotosApiBase();
-    const res = await fetch(`${apiBase}/api/photos?folder=${encodeURIComponent(y)}`);
-    const data = await res.json().catch(() => ({}));
-    const map = foldersResponseToMap(data && data.folders);
-    const keys = sortedFolderKeys(map).filter((k) => k !== '');
-    yearFolderIndex.set(y, keys);
-    return keys;
-  } catch (_) {
-    yearFolderIndex.set(y, []);
-    return [];
-  }
-}
-
-function renderYearFolderSwitch() {
-  const wrap = document.getElementById('gp-year-folder-switch');
-  if (!wrap) return;
-
-  const parts = assetPathSegments();
-  const yearRoot = parts[0] || currentYear;
-  const active = parts[1] || '';
-  const keys = yearFolderIndex.get(yearRoot) || [];
-
-  if (!yearRoot || !keys.length) {
-    wrap.style.display = 'none';
-    wrap.innerHTML = '';
-    return;
-  }
-
-  wrap.style.display = 'block';
-  wrap.innerHTML = `<div class="gp-year-folder-switch-inner"></div>`;
-  const inner = wrap.firstElementChild;
-  if (!inner) return;
-
-  keys.forEach((name) => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'gp-year-folder-chip' + (name === active ? ' is-active' : '');
-    btn.textContent = name;
-    btn.title = name;
-    btn.addEventListener('click', () => {
-      currentAssetPath = joinAssetPath(yearRoot, name);
-      loadPhotos();
-    });
-    inner.appendChild(btn);
-  });
 }
 
 function sortedFolderKeys(map) {
@@ -1091,7 +973,6 @@ function syncYearNavButtons() {
   document.querySelectorAll('.year-btn').forEach((b) => {
     b.classList.toggle('active', b.textContent === root);
   });
-  renderYearFolderSwitch();
 }
 
 function buildFolderNav(keys) {
@@ -1150,7 +1031,6 @@ function refreshFolderNavFromI18n() {
         ? `Открыть папку «${key}»`
         : `Open folder “${key}”`;
   });
-  renderYearFolderSwitch();
 }
 
 function renderPhotoGrid() {
@@ -1265,16 +1145,13 @@ async function loadPhotos() {
 
     loading.style.display = 'none';
     syncYearFromAssetPath();
-    await fetchFolderIndexForYear(assetPathSegments()[0] || currentYear);
     renderFolderTrail();
     syncYearNavButtons();
-    renderYearFolderSwitch();
 
     if (totalCount === 0 && !hasChildFolders) {
       photos = [];
       folderGroups = new Map();
       buildFolderNav([]);
-      renderYearFolderSwitch();
       setPhotoGridVisible(false);
       renderGalleryEmptyState();
       empty.style.display = 'block';
@@ -1285,7 +1162,6 @@ async function loadPhotos() {
 
     buildFolderNav(keys);
     renderPhotoGrid();
-    renderYearFolderSwitch();
   } catch (e) {
     if (typeof console !== 'undefined' && console.warn) {
       console.warn('[gallery photos]', e);
@@ -1297,7 +1173,6 @@ async function loadPhotos() {
     buildFolderNav([]);
     renderFolderTrail();
     syncYearNavButtons();
-    renderYearFolderSwitch();
     renderGalleryEmptyState();
     empty.style.display = 'block';
   }
