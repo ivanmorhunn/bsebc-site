@@ -94,64 +94,10 @@
         clamp(2.5rem, 5vw, 4rem);
     }
 
-    /* Album view (SmugMug-like): full-bleed hero + dense thumbs */
+    /* Album view: full-bleed dense thumb wall (no hero banner — avoids awkward crops) */
     body.gp-view-album .abt-bg-parchment.gp-album-stage .gp-gallery-stage {
       max-width: 100%;
       padding: 0;
-    }
-    .gp-album-hero {
-      width: 100%;
-      background: #0b1020;
-      position: relative;
-      overflow: hidden;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    }
-    body.gp-view-album .gp-album-hero {
-      display: block;
-    }
-    .gp-album-hero-media {
-      width: 100%;
-      height: clamp(220px, 30vw, 420px);
-      position: relative;
-    }
-    .gp-album-hero-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      /* Bias framing upward so heads are less likely to be cropped */
-      object-position: 50% 18%;
-      display: block;
-      filter: saturate(1.02) contrast(1.02);
-    }
-    .gp-album-hero-media::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.5) 100%);
-      pointer-events: none;
-    }
-    .gp-album-hero-title {
-      position: absolute;
-      left: clamp(14px, 3vw, 28px);
-      bottom: clamp(14px, 2.4vw, 24px);
-      z-index: 2;
-      font-family: var(--serif);
-      font-size: clamp(22px, 4vw, 44px);
-      font-weight: 400;
-      color: rgba(255,255,255,0.92);
-      text-shadow: 0 10px 28px rgba(0,0,0,0.45);
-      max-width: min(92vw, 1100px);
-      line-height: 1.05;
-      pointer-events: none;
-    }
-    .gp-album-hero-title small {
-      display: block;
-      margin-top: 0.45rem;
-      font-family: var(--sans);
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: rgba(255,255,255,0.7);
     }
 
     .abt-section h2 {
@@ -722,7 +668,6 @@
       <div class="gp-loading-spinner"></div>
       <p id="gp-loading-text">Загрузка фотографий...</p>
     </div>
-    <div class="gp-album-hero" id="gp-album-hero" style="display:none"></div>
     <div class="gp-grid-shell" id="gp-grid-shell">
       <div class="gp-grid" id="gp-grid" style="display:none"></div>
     </div>
@@ -809,12 +754,6 @@ function thumbUrl(publicId) {
 
 function fullUrl(publicId) {
   return cloudUrl(publicId, 'w_2000,q_auto,f_auto/');
-}
-
-function heroUrl(publicId) {
-  // SmugMug-like banner: fixed aspect with smart gravity to keep faces in frame.
-  // g_auto:faces picks a face-based crop when possible; falls back to g_auto.
-  return cloudUrl(publicId, 'w_2600,h_920,c_fill,g_auto:faces,q_auto,f_auto/');
 }
 
 function downloadAttachmentUrl(publicId, index) {
@@ -920,23 +859,11 @@ function isAlbumView() {
   return assetPathSegments().length > 1;
 }
 
-function albumDisplayTitle() {
-  const parts = assetPathSegments();
-  if (!parts.length) return '';
-  return parts[parts.length - 1];
-}
-
 function setPhotoGridVisible(visible) {
   const shell = document.getElementById('gp-grid-shell');
   const g = document.getElementById('gp-grid');
   if (g) g.style.display = visible ? 'grid' : 'none';
   if (shell) shell.style.display = visible ? 'block' : 'none';
-}
-
-function setAlbumHeroVisible(visible) {
-  const hero = document.getElementById('gp-album-hero');
-  if (!hero) return;
-  hero.style.display = visible ? 'block' : 'none';
 }
 
 function galleryPhotoChipSvg() {
@@ -1098,16 +1025,13 @@ function refreshFolderNavFromI18n() {
 function renderPhotoGrid() {
   const grid = document.getElementById('gp-grid');
   const empty = document.getElementById('gp-empty');
-  const hero = document.getElementById('gp-album-hero');
   if (!grid || !empty) return;
 
   grid.innerHTML = '';
-  if (hero) hero.innerHTML = '';
 
   if (!photos.length) {
     document.body.classList.remove('gp-view-album');
     setPhotoGridVisible(false);
-    setAlbumHeroVisible(false);
     const hasChildFolders = sortedFolderKeys(folderGroups).some((k) => k !== '');
     const G = CONTENT.galleryPage || {};
     if (hasChildFolders) {
@@ -1129,33 +1053,6 @@ function renderPhotoGrid() {
   const chipSvg = galleryPhotoChipSvg();
   const albumMode = isAlbumView();
   document.body.classList.toggle('gp-view-album', albumMode);
-
-  if (albumMode && hero) {
-    const titleSafe = escapeHtml(albumDisplayTitle());
-    const yearSafe = escapeHtml(assetPathSegments()[0] || currentYear || '');
-    hero.innerHTML = `
-      <div class="gp-album-hero-media" role="button" tabindex="0" aria-label="${titleSafe}">
-        <img src="${heroUrl(photos[0])}" alt="${titleSafe}" loading="eager" />
-        <div class="gp-album-hero-title">
-          ${titleSafe}
-          <small>${yearSafe}</small>
-        </div>
-      </div>
-    `;
-    setAlbumHeroVisible(true);
-    const media = hero.querySelector('.gp-album-hero-media');
-    if (media) {
-      media.onclick = () => openGpLightbox(0);
-      media.onkeydown = (ev) => {
-        if (ev.key === 'Enter' || ev.key === ' ') {
-          ev.preventDefault();
-          openGpLightbox(0);
-        }
-      };
-    }
-  } else {
-    setAlbumHeroVisible(false);
-  }
 
   photos.forEach((id, i) => {
     const tile = document.createElement('div');
@@ -1195,7 +1092,6 @@ async function loadPhotos() {
   const empty = document.getElementById('gp-empty');
 
   document.body.classList.remove('gp-view-album');
-  setAlbumHeroVisible(false);
   setPhotoGridVisible(false);
   empty.style.display = 'none';
   loading.style.display = 'block';
