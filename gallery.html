@@ -409,38 +409,33 @@
       white-space: nowrap;
     }
 
-    /* Dense thumbnail wall */
+    /* Album view: big “wall” thumbnails (like reference) */
     body.gp-view-album .gp-grid-shell {
       display: block;
       background: #e9e9e9;
     }
     body.gp-view-album .gp-grid {
       display: grid;
-      /* Larger thumbnails like the reference album pages */
-      grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
-      grid-auto-rows: 96px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 1px;
     }
     @media (min-width: 520px) {
       body.gp-view-album .gp-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        grid-auto-rows: 108px;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       }
     }
     @media (min-width: 900px) {
       body.gp-view-album .gp-grid {
-        grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
-        grid-auto-rows: 122px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       }
     }
     @media (min-width: 1300px) {
       body.gp-view-album .gp-grid {
-        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-        grid-auto-rows: 138px;
+        grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
       }
     }
     body.gp-view-album .gp-tile {
-      aspect-ratio: auto;
+      aspect-ratio: 4 / 3;
     }
     body.gp-view-album .gp-tile img {
       opacity: 1;
@@ -1037,9 +1032,9 @@ function renderPhotoGrid() {
     const hasChildFolders = sortedFolderKeys(folderGroups).some((k) => k !== '');
     const G = CONTENT.galleryPage || {};
     if (hasChildFolders) {
-      // Root may intentionally have no direct uploads; guide users to choose a folder.
-      setI18nText('gp-empty-title', '');
-      setI18nText('gp-empty-body', t(G.emptyPickSubfolderBody));
+      // If root has no direct photos but has albums, show just the folders UI (no empty message).
+      empty.style.display = 'none';
+      return;
     } else {
       renderGalleryEmptyState();
     }
