@@ -82,10 +82,15 @@
         linear-gradient(180deg, rgba(184, 145, 58, 0.06) 0%, transparent 28%),
         var(--parchment);
     }
-    .abt-bg-parchment .gp-gallery-stage {
-      max-width: min(1420px, 100%);
+    /* Album grid area — clean neutral “photo wall” like a classic church gallery */
+    .abt-bg-parchment.gp-album-stage {
+      background: #f0f0f0;
+    }
+    .abt-bg-parchment.gp-album-stage .gp-gallery-stage {
+      max-width: min(1280px, 100%);
       margin: 0 auto;
-      padding: clamp(3rem, 6vw, 5.5rem) clamp(1.25rem, 4vw, 3rem);
+      padding: clamp(1.75rem, 4vw, 2.75rem) clamp(0.5rem, 2vw, 1.25rem)
+        clamp(2.5rem, 5vw, 4rem);
     }
 
     .abt-section h2 {
@@ -301,81 +306,115 @@
       background: rgba(255, 252, 242, 0.98);
     }
 
-    /* Gallery grid — fewer, larger cells; centered row */
+    .gp-grid-shell {
+      display: none;
+      background: rgba(10, 15, 30, 0.1);
+      border-radius: 0;
+      overflow: hidden;
+    }
+    /* Dense tiled grid — thin “mortar” lines between cells */
     .gp-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
-      gap: clamp(12px, 2vw, 28px);
-      max-width: 100%;
-      margin: 0 auto;
-      justify-content: center;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1px;
+      width: 100%;
+      margin: 0;
       align-content: start;
     }
-    @media (min-width: 768px) {
+    @media (min-width: 520px) {
       .gp-grid {
-        grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+    @media (min-width: 720px) {
+      .gp-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+    }
+    @media (min-width: 960px) {
+      .gp-grid {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
       }
     }
     @media (min-width: 1200px) {
       .gp-grid {
-        grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+        grid-template-columns: repeat(6, minmax(0, 1fr));
       }
     }
     @media (min-width: 1500px) {
       .gp-grid {
-        grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+        grid-template-columns: repeat(8, minmax(0, 1fr));
       }
     }
 
     .gp-tile {
-      aspect-ratio: 4 / 3;
+      aspect-ratio: 3 / 2;
       overflow: hidden;
       cursor: pointer;
       position: relative;
-      background: linear-gradient(145deg, var(--night-soft), #151b2e);
-      border-radius: 12px;
-      border: 1px solid rgba(184, 145, 58, 0.14);
-      box-shadow:
-        0 2px 4px rgba(10, 15, 30, 0.04),
-        0 16px 40px rgba(10, 15, 30, 0.1);
-      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.4s ease, border-color 0.3s ease;
+      background: #1a2133;
+      border-radius: 0;
+      border: none;
+      box-shadow: none;
+      transition: box-shadow 0.25s ease;
     }
-    .gp-tile::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06);
-      pointer-events: none;
-      z-index: 1;
+    .gp-tile:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
     }
     .gp-tile:hover {
-      transform: translateY(-8px) scale(1.01);
-      border-color: rgba(184, 145, 58, 0.38);
-      box-shadow:
-        0 12px 28px rgba(10, 15, 30, 0.12),
-        0 32px 64px rgba(10, 15, 30, 0.14);
+      box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
     }
     .gp-tile img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease;
+      transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
       opacity: 0;
     }
-    .gp-tile img.loaded { opacity: 1; }
-    .gp-tile:hover img { transform: scale(1.07); }
-    .gp-tile-overlay {
+    .gp-tile img.loaded {
+      opacity: 1;
+    }
+    .gp-tile:hover img {
+      transform: scale(1.05);
+    }
+    .gp-tile-caption {
       position: absolute;
-      inset: 0;
-      z-index: 2;
-      background: linear-gradient(180deg, transparent 45%, rgba(10, 15, 30, 0.55) 100%);
-      opacity: 0;
-      transition: opacity 0.35s ease;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.45rem 0.55rem;
+      font-family: var(--sans);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: none;
+      color: rgba(255, 255, 255, 0.96);
+      background: rgba(10, 15, 30, 0.52);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
       pointer-events: none;
+      line-height: 1.25;
     }
-    .gp-tile:hover .gp-tile-overlay { opacity: 1; }
+    .gp-tile-caption-icon {
+      flex: 0 0 auto;
+      display: flex;
+      color: rgba(255, 255, 255, 0.88);
+    }
+    .gp-tile-caption-icon svg {
+      display: block;
+    }
+    .gp-tile-caption-text {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
 
     /* Loading state */
     .gp-loading {
@@ -485,26 +524,19 @@
       .about-page-hero { padding: 6.75rem 1.5rem 4rem; }
       .back-bar { padding: 0.9rem 1.5rem; top: 64px; }
       .abt-section, .abt-section-wide { padding: 3.5rem 1.5rem; }
-      .abt-bg-parchment .gp-gallery-stage { padding: 3rem 1.25rem 3.5rem; }
-      .gp-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 10px;
+      .abt-bg-parchment.gp-album-stage .gp-gallery-stage {
+        padding: 1.5rem 0.35rem 2.75rem;
       }
-      .gp-tile { border-radius: 10px; }
-      .gp-tile:hover { transform: translateY(-4px) scale(1.005); }
+      .gp-tile-caption {
+        font-size: 9px;
+        padding: 0.4rem 0.45rem;
+      }
       .lb-prev { padding: 0.75rem 0.9rem; }
       .lb-next { padding: 0.75rem 0.9rem; }
       .lb-download {
         bottom: 3.1rem;
         padding: 0.55rem 1rem;
         font-size: 10px;
-      }
-    }
-
-    @media (max-width: 420px) {
-      .gp-grid {
-        grid-template-columns: 1fr;
-        gap: 14px;
       }
     }
   </style>
@@ -592,13 +624,15 @@
 <div class="gold-rule lang-fade-target"></div>
 
 <!-- GRID -->
-<div class="abt-bg-parchment lang-fade-target">
+<div class="abt-bg-parchment gp-album-stage lang-fade-target">
   <div class="abt-section-wide gp-gallery-stage">
     <div class="gp-loading" id="gp-loading">
       <div class="gp-loading-spinner"></div>
       <p id="gp-loading-text">Загрузка фотографий...</p>
     </div>
-    <div class="gp-grid" id="gp-grid" style="display:none"></div>
+    <div class="gp-grid-shell" id="gp-grid-shell">
+      <div class="gp-grid" id="gp-grid" style="display:none"></div>
+    </div>
     <div class="gp-empty" id="gp-empty" style="display:none">
       <h3 id="gp-empty-title">Фото не найдены</h3>
       <p id="gp-empty-body">В этом разделе пока нет фотографий.</p>
@@ -776,6 +810,28 @@ function assetPathSegments() {
     .filter(Boolean);
 }
 
+function tileCaptionLabel() {
+  const parts = assetPathSegments();
+  if (!parts.length) return '';
+  if (parts.length === 1) return parts[0];
+  return parts.slice(1).join(' · ');
+}
+
+function setPhotoGridVisible(visible) {
+  const shell = document.getElementById('gp-grid-shell');
+  const g = document.getElementById('gp-grid');
+  if (g) g.style.display = visible ? 'grid' : 'none';
+  if (shell) shell.style.display = visible ? 'block' : 'none';
+}
+
+function galleryPhotoChipSvg() {
+  return (
+    '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">' +
+    '<path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM5 19l4.5-5.31 2.16 2.59L14 12l5 7H5zm2.5-9.5c-.83 0-1.5-.67-1.5-1.5S6.67 6 7.5 6 9 6.67 9 7.5 8.33 9 7.5 9 6.67 8.33 6 7.5 6z"/>' +
+    '</svg>'
+  );
+}
+
 function joinAssetPath(base, segment) {
   const b = String(base || '').replace(/\/+$/, '');
   const s = String(segment || '').replace(/^\/+|\/+$/g, '');
@@ -932,7 +988,7 @@ function renderPhotoGrid() {
   grid.innerHTML = '';
 
   if (!photos.length) {
-    grid.style.display = 'none';
+    setPhotoGridVisible(false);
     const hasChildFolders = sortedFolderKeys(folderGroups).some((k) => k !== '');
     const G = CONTENT.galleryPage || {};
     if (hasChildFolders) {
@@ -946,20 +1002,34 @@ function renderPhotoGrid() {
   }
 
   empty.style.display = 'none';
-  grid.style.display = 'grid';
+  setPhotoGridVisible(true);
 
   const pathBit = currentAssetPath ? `${currentAssetPath.replace(/\//g, ' · ')} · ` : '';
+  const cap = tileCaptionLabel();
+  const capSafe = escapeHtml(cap);
+  const chipSvg = galleryPhotoChipSvg();
   photos.forEach((id, i) => {
     const tile = document.createElement('div');
     tile.className = 'gp-tile';
+    tile.setAttribute('role', 'button');
+    tile.setAttribute('tabindex', '0');
     const alt =
       (lang === 'ru' ? 'Фото' : 'Photo') +
       ` ${i + 1} · ${pathBit}`;
     tile.innerHTML = `
       <img src="${thumbUrl(id)}" alt="${alt.replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('loaded')" />
-      <div class="gp-tile-overlay"></div>
+      <div class="gp-tile-caption">
+        <span class="gp-tile-caption-icon">${chipSvg}</span>
+        <span class="gp-tile-caption-text">${capSafe}</span>
+      </div>
     `;
     tile.onclick = () => openGpLightbox(i);
+    tile.onkeydown = (ev) => {
+      if (ev.key === 'Enter' || ev.key === ' ') {
+        ev.preventDefault();
+        openGpLightbox(i);
+      }
+    };
     grid.appendChild(tile);
   });
 }
@@ -969,7 +1039,7 @@ async function loadPhotos() {
   const loading = document.getElementById('gp-loading');
   const empty = document.getElementById('gp-empty');
 
-  grid.style.display = 'none';
+  setPhotoGridVisible(false);
   empty.style.display = 'none';
   loading.style.display = 'block';
 
@@ -992,7 +1062,7 @@ async function loadPhotos() {
         console.warn('[gallery photos]', detail);
       }
       loading.style.display = 'none';
-      if (grid) grid.style.display = 'none';
+      setPhotoGridVisible(false);
       folderGroups = new Map();
       photos = [];
       buildFolderNav([]);
@@ -1017,6 +1087,7 @@ async function loadPhotos() {
       photos = [];
       folderGroups = new Map();
       buildFolderNav([]);
+      setPhotoGridVisible(false);
       renderGalleryEmptyState();
       empty.style.display = 'block';
       return;
@@ -1031,7 +1102,7 @@ async function loadPhotos() {
       console.warn('[gallery photos]', e);
     }
     loading.style.display = 'none';
-    if (grid) grid.style.display = 'none';
+    setPhotoGridVisible(false);
     folderGroups = new Map();
     photos = [];
     buildFolderNav([]);
@@ -1466,9 +1537,8 @@ renderGalleryChrome();
     renderGalleryEmptyState();
     const empty = document.getElementById('gp-empty');
     const loading = document.getElementById('gp-loading');
-    const grid = document.getElementById('gp-grid');
     if (loading) loading.style.display = 'none';
-    if (grid) grid.style.display = 'none';
+    setPhotoGridVisible(false);
     if (empty) empty.style.display = 'block';
     return;
   }
