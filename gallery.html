@@ -94,6 +94,64 @@
         clamp(2.5rem, 5vw, 4rem);
     }
 
+    /* Album view (SmugMug-like): full-bleed hero + dense thumbs */
+    body.gp-view-album .abt-bg-parchment.gp-album-stage .gp-gallery-stage {
+      max-width: 100%;
+      padding: 0;
+    }
+    .gp-album-hero {
+      width: 100%;
+      background: #0b1020;
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    body.gp-view-album .gp-album-hero {
+      display: block;
+    }
+    .gp-album-hero-media {
+      width: 100%;
+      height: clamp(220px, 30vw, 420px);
+      position: relative;
+    }
+    .gp-album-hero-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: saturate(1.02) contrast(1.02);
+    }
+    .gp-album-hero-media::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.5) 100%);
+      pointer-events: none;
+    }
+    .gp-album-hero-title {
+      position: absolute;
+      left: clamp(14px, 3vw, 28px);
+      bottom: clamp(14px, 2.4vw, 24px);
+      z-index: 2;
+      font-family: var(--serif);
+      font-size: clamp(22px, 4vw, 44px);
+      font-weight: 400;
+      color: rgba(255,255,255,0.92);
+      text-shadow: 0 10px 28px rgba(0,0,0,0.45);
+      max-width: min(92vw, 1100px);
+      line-height: 1.05;
+      pointer-events: none;
+    }
+    .gp-album-hero-title small {
+      display: block;
+      margin-top: 0.45rem;
+      font-family: var(--sans);
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.7);
+    }
+
     .abt-section h2 {
       font-family: var(--serif);
       font-size: clamp(1.8rem, 3.5vw, 2.6rem);
@@ -403,6 +461,48 @@
       white-space: nowrap;
     }
 
+    /* Dense thumbnail wall */
+    body.gp-view-album .gp-grid-shell {
+      display: block;
+      background: #e9e9e9;
+    }
+    body.gp-view-album .gp-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+      grid-auto-rows: 72px;
+      gap: 1px;
+    }
+    @media (min-width: 520px) {
+      body.gp-view-album .gp-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+        grid-auto-rows: 82px;
+      }
+    }
+    @media (min-width: 900px) {
+      body.gp-view-album .gp-grid {
+        grid-template-columns: repeat(auto-fill, minmax(124px, 1fr));
+        grid-auto-rows: 92px;
+      }
+    }
+    @media (min-width: 1300px) {
+      body.gp-view-album .gp-grid {
+        grid-template-columns: repeat(auto-fill, minmax(136px, 1fr));
+        grid-auto-rows: 102px;
+      }
+    }
+    body.gp-view-album .gp-tile {
+      aspect-ratio: auto;
+    }
+    body.gp-view-album .gp-tile img {
+      opacity: 1;
+    }
+    body.gp-view-album .gp-tile img.loaded {
+      opacity: 1;
+    }
+    body.gp-view-album .gp-tile-caption {
+      display: none;
+    }
+
     /* Loading state */
     .gp-loading {
       text-align: center; padding: 5rem 2rem;
@@ -620,6 +720,7 @@
       <div class="gp-loading-spinner"></div>
       <p id="gp-loading-text">Загрузка фотографий...</p>
     </div>
+    <div class="gp-album-hero" id="gp-album-hero" style="display:none"></div>
     <div class="gp-grid-shell" id="gp-grid-shell">
       <div class="gp-grid" id="gp-grid" style="display:none"></div>
     </div>
@@ -807,11 +908,27 @@ function tileCaptionLabel() {
   return parts.slice(1).join(' · ');
 }
 
+function isAlbumView() {
+  return assetPathSegments().length > 1;
+}
+
+function albumDisplayTitle() {
+  const parts = assetPathSegments();
+  if (!parts.length) return '';
+  return parts[parts.length - 1];
+}
+
 function setPhotoGridVisible(visible) {
   const shell = document.getElementById('gp-grid-shell');
   const g = document.getElementById('gp-grid');
   if (g) g.style.display = visible ? 'grid' : 'none';
   if (shell) shell.style.display = visible ? 'block' : 'none';
+}
+
+function setAlbumHeroVisible(visible) {
+  const hero = document.getElementById('gp-album-hero');
+  if (!hero) return;
+  hero.style.display = visible ? 'block' : 'none';
 }
 
 function galleryPhotoChipSvg() {
@@ -973,12 +1090,16 @@ function refreshFolderNavFromI18n() {
 function renderPhotoGrid() {
   const grid = document.getElementById('gp-grid');
   const empty = document.getElementById('gp-empty');
+  const hero = document.getElementById('gp-album-hero');
   if (!grid || !empty) return;
 
   grid.innerHTML = '';
+  if (hero) hero.innerHTML = '';
 
   if (!photos.length) {
+    document.body.classList.remove('gp-view-album');
     setPhotoGridVisible(false);
+    setAlbumHeroVisible(false);
     const hasChildFolders = sortedFolderKeys(folderGroups).some((k) => k !== '');
     const G = CONTENT.galleryPage || {};
     if (hasChildFolders) {
@@ -998,6 +1119,36 @@ function renderPhotoGrid() {
   const cap = tileCaptionLabel();
   const capSafe = escapeHtml(cap);
   const chipSvg = galleryPhotoChipSvg();
+  const albumMode = isAlbumView();
+  document.body.classList.toggle('gp-view-album', albumMode);
+
+  if (albumMode && hero) {
+    const titleSafe = escapeHtml(albumDisplayTitle());
+    const yearSafe = escapeHtml(assetPathSegments()[0] || currentYear || '');
+    hero.innerHTML = `
+      <div class="gp-album-hero-media" role="button" tabindex="0" aria-label="${titleSafe}">
+        <img src="${fullUrl(photos[0])}" alt="${titleSafe}" loading="eager" />
+        <div class="gp-album-hero-title">
+          ${titleSafe}
+          <small>${yearSafe}</small>
+        </div>
+      </div>
+    `;
+    setAlbumHeroVisible(true);
+    const media = hero.querySelector('.gp-album-hero-media');
+    if (media) {
+      media.onclick = () => openGpLightbox(0);
+      media.onkeydown = (ev) => {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          openGpLightbox(0);
+        }
+      };
+    }
+  } else {
+    setAlbumHeroVisible(false);
+  }
+
   photos.forEach((id, i) => {
     const tile = document.createElement('div');
     tile.className = 'gp-tile';
@@ -1006,13 +1157,19 @@ function renderPhotoGrid() {
     const alt =
       (lang === 'ru' ? 'Фото' : 'Photo') +
       ` ${i + 1} · ${pathBit}`;
-    tile.innerHTML = `
-      <img src="${thumbUrl(id)}" alt="${alt.replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('loaded')" />
-      <div class="gp-tile-caption">
-        <span class="gp-tile-caption-icon">${chipSvg}</span>
-        <span class="gp-tile-caption-text">${capSafe}</span>
-      </div>
-    `;
+    if (albumMode) {
+      tile.innerHTML = `
+        <img src="${thumbUrl(id)}" alt="${alt.replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('loaded')" />
+      `;
+    } else {
+      tile.innerHTML = `
+        <img src="${thumbUrl(id)}" alt="${alt.replace(/"/g, '&quot;')}" loading="lazy" onload="this.classList.add('loaded')" />
+        <div class="gp-tile-caption">
+          <span class="gp-tile-caption-icon">${chipSvg}</span>
+          <span class="gp-tile-caption-text">${capSafe}</span>
+        </div>
+      `;
+    }
     tile.onclick = () => openGpLightbox(i);
     tile.onkeydown = (ev) => {
       if (ev.key === 'Enter' || ev.key === ' ') {
@@ -1029,6 +1186,8 @@ async function loadPhotos() {
   const loading = document.getElementById('gp-loading');
   const empty = document.getElementById('gp-empty');
 
+  document.body.classList.remove('gp-view-album');
+  setAlbumHeroVisible(false);
   setPhotoGridVisible(false);
   empty.style.display = 'none';
   loading.style.display = 'block';
