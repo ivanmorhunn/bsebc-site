@@ -12,7 +12,7 @@ const CONTENT = {
     youtubeLive:    "https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/live",
     vimeo:          "https://vimeo.com/bsebc",
     soundcloud:     "https://soundcloud.com/bsebc",
-    photos:         "http://bsebc.zenfolio.com/f781568629",
+    photos:         "https://bsebc.zenfolio.com/",
     venmo:          "https://www.venmo.com/u/bsebc",
     charter:        "https://drive.google.com/file/d/1Y_Ifss3Tri7w-Wrjmes3FUVg1Pn3xHEi/view?usp=sharing",
     address:        "415 Edwards Dr, Brookhaven, PA 19015",
@@ -115,7 +115,7 @@ const CONTENT = {
       { title: { ru: "YouTube архив", en: "YouTube Archive" },  sub: { ru: "Видеозаписи служений",        en: "Video recordings" },            url: "https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/videos", icon: "youtube" },
       { title: { ru: "Vimeo архив",   en: "Vimeo Archive" },    sub: { ru: "Дополнительные записи",       en: "Additional recordings" },       url: "https://vimeo.com/bsebc",                                  icon: "video"   },
       { title: { ru: "Хоровое пение", en: "Choir" },            sub: { ru: "Записи хора",                 en: "Choir recordings" },            url: "https://soundcloud.com/bsebc/sets/vywqy64m3exb",            icon: "choir"   },
-      { title: { ru: "Фотогалерея",   en: "Photo Gallery" },    sub: { ru: "Zenfolio — архив фото",       en: "Zenfolio — photo archive" },    url: "http://bsebc.zenfolio.com/f781568629",                      icon: "photo"   },
+      { title: { ru: "Фотогалерея",   en: "Photo Gallery" },    sub: { ru: "Zenfolio — архив фото",       en: "Zenfolio — photo archive" },    url: "https://bsebc.zenfolio.com/",                               icon: "photo"   },
     ]
   },
 

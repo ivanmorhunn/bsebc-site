@@ -215,10 +215,9 @@
     <li><a href="index.html#schedule" id="nl-schedule"></a></li>
     <li><a href="index.html#archive"  id="nl-archive"></a></li>
     <li><a href="about.html"          id="nl-about"></a></li>
-    <li><a href="index.html#gallery"  id="nl-gallery"></a></li>
+    <li><a href="https://bsebc.zenfolio.com/" id="nl-gallery" target="_blank" rel="noreferrer"></a></li>
     <li><a href="index.html#donate"   id="nl-donate"></a></li>
     <li><a href="index.html#contact"  id="nl-contact"></a></li>
-    <li><a href="gallery.html"        id="nl-gallery-page"></a></li>
   </ul>
   <div class="nav-right-group">
     <a class="nav-live" id="nav-live" href="#" target="_blank">
@@ -239,10 +238,9 @@
   <a href="index.html#schedule" onclick="closeMobile()" id="nm-schedule"></a>
   <a href="index.html#archive"  onclick="closeMobile()" id="nm-archive"></a>
   <a href="about.html"          onclick="closeMobile()" id="nm-about"></a>
-  <a href="index.html#gallery"  onclick="closeMobile()" id="nm-gallery"></a>
+  <a href="https://bsebc.zenfolio.com/" onclick="closeMobile()" id="nm-gallery" target="_blank" rel="noreferrer"></a>
   <a href="index.html#donate"   onclick="closeMobile()" id="nm-donate"></a>
   <a href="index.html#contact"  onclick="closeMobile()" id="nm-contact"></a>
-  <a href="gallery.html"        onclick="closeMobile()" id="nm-gallery-page"></a>
   <a href="#" id="nm-live" target="_blank" class="nm-live-link"></a>
 </nav>
 
@@ -468,7 +466,7 @@
       <a id="ft-audio"  href="https://soundcloud.com/bsebc/sets" target="_blank"></a>
       <a id="ft-video"  href="https://www.youtube.com/channel/UCgAOqEYimhA21nN2zQkOcYQ/videos" target="_blank">YouTube</a>
       <a id="ft-vimeo"  href="https://vimeo.com/bsebc" target="_blank">Vimeo</a>
-      <a id="ft-photos" href="gallery.html"></a>
+      <a id="ft-photos" href="https://bsebc.zenfolio.com/" target="_blank" rel="noreferrer"></a>
     </div>
     <div class="f-col">
       <h5 id="ft-con-col"></h5>
@@ -957,7 +955,6 @@ function renderNavFooter() {
   document.getElementById('nl-gallery').textContent  = t(C.nav.homeGallery);
   document.getElementById('nl-donate').textContent   = t(C.nav.donate);
   document.getElementById('nl-contact').textContent  = t(C.nav.contact);
-  document.getElementById('nl-gallery-page').textContent = t(C.nav.gallery);
   document.getElementById('nl-live').textContent     = t(C.nav.live);
   document.getElementById('nav-live').href           = s.youtubeLive;
   document.getElementById('nm-schedule').textContent = t(C.nav.schedule);
@@ -966,7 +963,6 @@ function renderNavFooter() {
   document.getElementById('nm-gallery').textContent  = t(C.nav.homeGallery);
   document.getElementById('nm-donate').textContent   = t(C.nav.donate);
   document.getElementById('nm-contact').textContent  = t(C.nav.contact);
-  document.getElementById('nm-gallery-page').textContent = t(C.nav.gallery);
   document.getElementById('nm-live').textContent     = '▶ ' + t(C.nav.live);
   document.getElementById('nm-live').href            = s.youtubeLive;
   document.getElementById('ft-name').textContent     = t(s.name);
@@ -979,7 +975,7 @@ function renderNavFooter() {
   document.getElementById('ft-about').textContent    = t(C.nav.about);
   document.getElementById('ft-contact').textContent  = t(C.nav.contact);
   document.getElementById('ft-audio').textContent    = lang==='ru'?'Аудио':'Audio';
-  document.getElementById('ft-photos').textContent   = t(C.nav.gallery);
+  document.getElementById('ft-photos').textContent   = t(C.nav.homeGallery);
   document.getElementById('ft-write').textContent    = t(C.nav.contact);
   document.getElementById('ft-give').textContent     = t(C.nav.donate);
   document.getElementById('ft-live').textContent     = t(C.nav.live);
