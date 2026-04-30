@@ -103,7 +103,7 @@ const CONTENT = {
       ru: "Мы проповедуем Христа распятого, воскресшего и вновь грядущего",
       en: "We preach Christ crucified, risen, and coming again"
     },
-    ref: { ru: "Девиз церкви BSEBC", en: "The mission of BSEBC" }
+    ref: { ru: "То, чем мы живём", en: "What we live by" }
   },
 
   archive: {
