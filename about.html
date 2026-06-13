@@ -749,6 +749,15 @@ function normalizeLetterSwap() {
   });
 }
 
+function isLangAnimExcluded(el) {
+  if (!(el instanceof HTMLElement)) return true;
+  if (el.classList.contains('lang-btn')) return true;
+  // Never animate layout containers (homepage skips elements with children; about must too for nav).
+  const id = el.id;
+  if (id === 'nav' || id === 'nav-mobile' || id === 'nav-links' || id === 'nav-live') return true;
+  return false;
+}
+
 function snapshotSimpleText() {
   // About page uses markup (<em>, <a>) and accordion titles without ids.
   // Snapshot by element reference + visible text, not only by id.
@@ -756,8 +765,7 @@ function snapshotSimpleText() {
   const els = Array.from(document.querySelectorAll('[id], [data-ba-title]'));
   els.forEach(el => {
     if (!(el instanceof HTMLElement)) return;
-    // Skip language buttons themselves
-    if (el.classList && el.classList.contains('lang-btn')) return;
+    if (isLangAnimExcluded(el)) return;
     const txt = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
     if (!txt) return;
     if (txt.length < 3) return;
@@ -773,6 +781,7 @@ function animateTextDiff(before) {
 
   before.forEach(({ el, txt: oldTxt }) => {
     if (!el || !(el instanceof HTMLElement)) return;
+    if (isLangAnimExcluded(el)) return;
     const newTxt = (el.innerText || el.textContent || '').replace(/\s+/g, ' ').trim();
     if (!newTxt || newTxt === oldTxt) return;
     if (!isInViewport(el, 140)) return;
