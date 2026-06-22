@@ -1,6 +1,6 @@
 # BSEBC Website
 
-**Live site:** https://bsebc.ivanmorhun.com
+**Live site:** https://bsebc..com
 
 ## Updating Content
 
